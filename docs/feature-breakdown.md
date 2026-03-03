@@ -75,34 +75,58 @@ Create, manage, and distribute employee schedules.
 
 ### 1.3 Forms & Checklists
 
-Digital forms and checklists for field operations.
+Digital forms and checklists for field operations. Replaces paper-based reporting, inspections, and requests with mobile-first digital workflows.
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
-| 1 | **Form Builder** | Drag-and-drop form builder with multiple field types (text, number, dropdown, checkbox, image, file, signature, location stamp) | 🔴 High |
+| 1 | **Form Builder** | Drag-and-drop form builder with multiple field types: free text, multiple choice, yes/no, number, dropdown, image upload, scanner, file upload, signature, location stamp, video upload, date/time | 🔴 High |
 | 2 | **Checklist Builder** | Task-based checklists employees complete on the job | 🔴 High |
-| 3 | **Templates Library** | Pre-built and custom templates for common workflows (safety inspections, reports, etc.) | 🟡 Medium |
-| 4 | **Required Fields / Proof of Completion** | Mark fields as required; image/signature/location as proof | 🔴 High |
-| 5 | **Real-Time Submission Feed** | Managers see completed forms instantly in a dashboard | 🔴 High |
-| 6 | **PDF Export** | Auto-generate PDF reports from form submissions | 🟡 Medium |
-| 7 | **Conditional Logic** | Show/hide fields based on previous answers | 🟡 Medium |
-| 8 | **Form Assignment** | Assign forms to specific employees, teams, or shifts | 🔴 High |
-| 9 | **Submission History & Audit Trail** | Full history of all submissions with timestamps | 🟡 Medium |
+| 3 | **AI Form Creation** | Generate forms from a file or text prompt using AI ("Create From File") | 🟡 Medium |
+| 4 | **Templates Library** | Pre-built and custom templates; save any form as a reusable template | 🟡 Medium |
+| 5 | **Required Fields / Proof of Completion** | Mark fields as required (submission blocked without them); location stamp capture per field; image source control (camera-only vs gallery) | 🔴 High |
+| 6 | **Conditional Logic** | Show/hide fields based on previous answers (e.g., if "Yes" → show follow-up) | 🟡 Medium |
+| 7 | **Multiple Selection** | Allow employees to select multiple values in choice fields (e.g., merchandise orders) | 🔴 High |
+| 8 | **Multiple Uploads** | Allow multiple image/file uploads per field | 🟡 Medium |
+| 9 | **Form Sections** | Divide forms into logical sections; organize forms into folders/categories (HR Forms, Compliance Forms, etc.) | 🔴 High |
+| 10 | **Bulk Field Management** | Select multiple fields → duplicate, group into sections, set as required, or delete in bulk | 🟡 Medium |
+| 11 | **Form Assignment** | Assign forms to specific employees, Smart Groups, or shifts | 🔴 High |
+| 12 | **Form Permissions (Asset Admins)** | Assign specific admins to manage individual forms with granular permissions | 🔴 High |
+| 13 | **Real-Time Submission Feed** | Managers see completed forms instantly; Activity tab shows submission percentage and per-user entry counts | 🔴 High |
+| 14 | **Submission Views** | View submissions in Table view or Inbox view; group by Smart Groups or user details (role, location, department, branch, direct manager) | 🟡 Medium |
+| 15 | **Manager Fields** | Managers can add fields to submissions: tag members, sign off, add status, notes — serves as user feedback | 🟡 Medium |
+| 16 | **Sharing Options** | Share completed form with internal or external stakeholders via a button at submission end | 🟡 Medium |
+| 17 | **PDF / Bulk Export** | Download individual entries or select multiple for bulk download | 🟡 Medium |
+| 18 | **Automatic Form Reminders** | Schedule reminders on specific days/times to ensure timely form completion | 🟡 Medium |
+| 19 | **Automatic Form Reports** | Auto-generate and email form reports at specific times based on configurable criteria | 🟢 Low |
+| 20 | **User Tracking & Follow-Up** | See which employees have/haven't submitted; send targeted reminder notifications | 🔴 High |
+| 21 | **Anonymous Forms** | Option to make form submissions anonymous | 🟢 Low |
+| 22 | **Entry Limits** | Limit the number of entries per user per form | 🟢 Low |
+| 23 | **Mobile Preview** | Live mobile preview while building forms in the admin dashboard | 🔴 High |
+| 24 | **Submission History & Audit Trail** | Full history of all submissions with timestamps | 🟡 Medium |
 
-### 1.4 Task Management
+### 1.4 Task Management (Quick Tasks)
 
-Assign and track tasks for individuals or teams.
+Assign and track day-to-day tasks for individuals or teams. Provides full transparency into team execution.
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
-| 1 | **Create & Assign Tasks** | Create tasks with descriptions, due dates, checklists; assign to individuals or teams | 🔴 High |
-| 2 | **Real-Time Progress Tracking** | See task status (not started, in progress, completed) in real time | 🔴 High |
-| 3 | **Task Reminders & Notifications** | Automated reminders for upcoming/overdue tasks | 🔴 High |
-| 4 | **Recurring Tasks** | Tasks that repeat on a schedule | 🟡 Medium |
-| 5 | **Task Comments & Chat** | In-task communication thread | 🟡 Medium |
-| 6 | **File Attachments** | Attach images, documents, and files to tasks | 🟡 Medium |
-| 7 | **Task Dashboard** | Manager overview of all tasks across teams with filters | 🔴 High |
-| 8 | **Batch Task Creation** | Create and assign multiple tasks at once | 🟢 Low |
+| 1 | **Create & Assign Single Tasks** | Create a task with title, description, location, start/end time, due date; assign to one or multiple users | 🔴 High |
+| 2 | **Batch Task Creation** | Create and assign multiple tasks at once via "Add Multiple Tasks" flow | 🔴 High |
+| 3 | **Task Details** | Add more details: location, start/end time, description, images, files, subtasks | 🔴 High |
+| 4 | **Sub-Tasks** | Break tasks into smaller sub-tasks within a parent task | 🟡 Medium |
+| 5 | **Real-Time Progress Tracking** | See task status (open, in progress, completed) in real time; mark single or multiple tasks as done | 🔴 High |
+| 6 | **Task Status Management** | Mark tasks done individually or in bulk (select → Actions → Mark as done); revert completed tasks back to open | 🔴 High |
+| 7 | **Task Reminders & Notifications** | All users notified on activation; get notified when tasks are seen and completed | 🔴 High |
+| 8 | **Recurring Tasks** | Set task frequency (daily, weekly, monthly); define start date, repeat interval, and end condition (specific date or after N occurrences); choose start time and due time | 🟡 Medium |
+| 9 | **Recurring Task Editing** | Edit single occurrence or all future tasks in series; unlinking a task from its series when frequency changes | 🟡 Medium |
+| 10 | **Task Permissions** | Configure who can create tasks in the mobile app: admins only, specific users, or all users; control task delegation | 🔴 High |
+| 11 | **Default Due Date** | Set a default due date for all newly created tasks | 🟢 Low |
+| 12 | **Week Start Configuration** | Define when the work week begins (for task calendar views) | 🟢 Low |
+| 13 | **Draft Tasks** | Save tasks as drafts before publishing | 🟡 Medium |
+| 14 | **Task Comments & Chat** | In-task communication thread | 🟡 Medium |
+| 15 | **File Attachments** | Attach images, documents, and files to tasks | 🟡 Medium |
+| 16 | **Task Dashboard** | Manager overview of all tasks across teams with filters and viewing capabilities | 🔴 High |
+| 17 | **Mobile Task Creation** | Create, assign, and manage tasks directly from the mobile app | 🔴 High |
 
 ---
 
@@ -127,18 +151,31 @@ Secure, work-only instant messaging.
 
 ### 2.2 Updates Feed
 
-Social media-style company communication feed.
+Social media-style company communication feed. Think of it as your company's internal social media — every update appears on the company feed and can be viewed from mobile or desktop.
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
-| 1 | **Company Updates Feed** | Post announcements visible to all or targeted groups | 🔴 High |
-| 2 | **Rich Media Posts** | Support for images, videos, GIFs, links | 🔴 High |
-| 3 | **Reactions & Comments** | Employees can react (like, love, etc.) and comment on posts | 🔴 High |
-| 4 | **Read Tracking** | See who viewed/read each update | 🟡 Medium |
-| 5 | **Targeted Distribution** | Send updates to specific teams, departments, or locations | 🟡 Medium |
-| 6 | **SMS Fallback** | Send updates via SMS for employees without the app | 🟢 Low |
-| 7 | **Pinned Posts** | Pin important updates to the top of the feed | 🟡 Medium |
-| 8 | **Scheduled Posts** | Schedule updates to publish at a future date/time | 🟢 Low |
+| 1 | **Company Updates Feed** | Post announcements visible to all or targeted groups; feed is the first thing users see on login | 🔴 High |
+| 2 | **Feed Topics** | Categorize updates by topic (e.g., "CEO Updates", "Company Events", "HR News") to organize the feed | 🟡 Medium |
+| 3 | **Rich Media Attachments** | Attach to any update: images, videos, GIFs, files, YouTube embeds, location (with map/directions), links, polls, and shortcuts (deep links to other platform features) | 🔴 High |
+| 4 | **Reactions & Comments** | Employees can react (like, love, etc.) and comment on posts; configurable per update | 🔴 High |
+| 5 | **Read Tracking** | See who viewed/read each update; overview of all activity at the top of each update | 🟡 Medium |
+| 6 | **Targeted Distribution** | Send updates to specific users, Smart Groups, teams, departments, or locations | 🟡 Medium |
+| 7 | **Scheduled Publishing** | Schedule updates to publish at a future date/time via "Schedule Publish" toggle | 🟡 Medium |
+| 8 | **Recurring Updates** | Set updates to repeat daily, weekly, or monthly with an end date; manage all scheduled updates from a "Scheduled" tab; delete single or all future in a series | 🟡 Medium |
+| 9 | **Pop-Up Updates** | Critical updates that pop up immediately when users open the app; users must click a confirmation button (customizable text: "I understood", "Approve", etc.) or "Remind Me Later"; configurable auto-expire after 1/3/7/14/30 days | 🔴 High |
+| 10 | **Pop-Up Confirmation Tracking** | Track who confirmed vs. who hasn't; send targeted reminders to non-confirmers; filter updates by pop-up status (active/expired) | 🔴 High |
+| 11 | **Cancel/Stop Pop-Up** | Convert a pop-up update back to a regular feed update at any time | 🟡 Medium |
+| 12 | **Auto-Translation** | Automatically offer a "See Translation" button when the user's device language differs from the post language; translates to the device's language; enable globally or per-update | 🟡 Medium |
+| 13 | **Pinned Posts** | Pin important updates to the top of the feed | 🟡 Medium |
+| 14 | **Shortcuts in Updates** | Embed deep links (shortcuts) to any platform feature/asset (time clock, form, knowledge base article, etc.) as a button within an update; users click to navigate directly | 🟡 Medium |
+| 15 | **Polls in Updates** | Embed quick polls directly in an update for live feedback (e.g., food orders, team votes) | 🟡 Medium |
+| 16 | **Location in Updates** | Attach a location to updates with map integration (Apple Maps, Google Maps directions) | 🟢 Low |
+| 17 | **Update Templates** | Pre-built templates (e.g., "New Teammates", "How-To") to speed up update creation | 🟢 Low |
+| 18 | **Scheduled Removal** | Schedule an update to auto-remove from the feed after a set time | 🟢 Low |
+| 19 | **SMS Fallback** | Send updates via SMS for employees without the app | 🟢 Low |
+| 20 | **Reminder Notifications** | Notify users who haven't viewed an update; bulk remind from the admin dashboard | 🟡 Medium |
+| 21 | **Mobile Update Creation** | Create and publish updates (including shortcuts) directly from the mobile app Admin tab | 🔴 High |
 
 ### 2.3 Employee Directory
 
@@ -212,18 +249,42 @@ Internal employee ticketing system.
 
 ### 3.1 Training & Onboarding
 
-Mobile-first employee training platform.
+Mobile-first employee training platform. Courses are digital training programs employees can complete from anywhere at any time — no need to gather teams in a classroom.
+
+#### 3.1.1 Courses
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
-| 1 | **Course Builder** | Create training courses with modules, sections, and multimedia content | 🔴 High |
-| 2 | **Quizzes & Assessments** | Add quizzes to test understanding; pass/fail thresholds | 🔴 High |
-| 3 | **Onboarding Workflows** | Structured onboarding sequences for new hires | 🔴 High |
-| 4 | **Mobile Learning** | Employees complete training from their mobile devices | 🔴 High |
-| 5 | **Progress Tracking** | Real-time dashboard showing completion status per employee | 🔴 High |
-| 6 | **Mandatory Training Records** | Track and record all mandatory/compliance training | 🟡 Medium |
-| 7 | **Certificate Generation** | Auto-generate completion certificates | 🟢 Low |
-| 8 | **Training Reminders** | Automated reminders for incomplete or recurring training | 🟡 Medium |
+| 1 | **Course Builder** | Create courses organized into sections (e.g., Introduction, Explanation, Customer Needs); each section contains multiple "objects" (content items) | 🔴 High |
+| 2 | **Course Objects** | Add various content types to a course section: text, documents, videos, quizzes, forms, images, PDFs, links, and more | 🔴 High |
+| 3 | **AI Course Generation** | Generate a complete multi-section course from a text prompt; provide topic and key details, AI builds the full course in seconds | 🟡 Medium |
+| 4 | **Course Segments / Grouping** | Group courses into segments (e.g., "Waiters", "Managers") to organize training by role, department, or team; add segments with "+ Add Segment" | 🔴 High |
+| 5 | **Course Categories** | Create named course categories (e.g., "Onboarding"); add new courses within each category | 🔴 High |
+| 6 | **Draft & Publish Workflow** | Save courses in draft mode; publish when ready; assign to specific users or Smart Groups | 🔴 High |
+| 7 | **Course Sharing Link** | Copy a shareable link for each course; logged-in employees clicking the link go directly to that course (useful for emails, presentations) | 🟡 Medium |
+| 8 | **Object Timing** | Schedule when specific objects become available within a course (e.g., a new quiz published every day) | 🟡 Medium |
+| 9 | **Onboarding Workflows** | Structured onboarding sequences for new hires using courses, sections, and progressive content release | 🔴 High |
+| 10 | **Mobile Learning** | Employees complete training from their mobile devices or computer, from anywhere | 🔴 High |
+| 11 | **Progress Tracking** | Real-time dashboard showing completion status per employee; monitor who started, who's in progress, and who's completed | 🔴 High |
+| 12 | **Mandatory Training Records** | Track and record all mandatory/compliance training with completion evidence | 🟡 Medium |
+| 13 | **Certificate Generation** | Auto-generate completion certificates | 🟢 Low |
+| 14 | **Training Reminders** | Automated reminders for incomplete or recurring training | 🟡 Medium |
+| 15 | **Course Admin Permissions** | Granular permissions for who can create/edit/manage courses | 🟡 Medium |
+
+#### 3.1.2 Quizzes
+
+| # | Feature | Description | Priority |
+|---|---------|-------------|----------|
+| 1 | **Quiz Builder** | Create multiple-choice quizzes; add questions with text or image answers; mark the single correct answer per question | 🔴 High |
+| 2 | **Pass/Fail Threshold** | Set a passing score (questions scored equally, 1–100 scale) | 🔴 High |
+| 3 | **Quiz Feedback Settings** | Configure whether users see: their final score, feedback per question, and/or the correct answer for incorrect responses | 🔴 High |
+| 4 | **Question Randomization** | Randomize question order per user to prevent cheating | 🟡 Medium |
+| 5 | **Attempt Limitations** | Limit the number of attempts a user has to pass; set a due date for completion | 🟡 Medium |
+| 6 | **Quiz in Courses** | Embed quizzes as objects within courses; use Object Timing for daily recurring quizzes | 🔴 High |
+| 7 | **Mobile Preview** | Preview exactly how the quiz looks from the user's mobile device | 🟡 Medium |
+| 8 | **Quiz Statistics & Insights** | View quiz stats: filter by result, entries, submission date; drill into per-question scores via "Show Entries" | 🔴 High |
+| 9 | **One-Time Pass Rule** | Employees can pass a quiz only once (for recurring, use courses with Object Timing) | 🟡 Medium |
+| 10 | **Quiz Assignment** | Assign quizzes to Smart Groups or individual users; confirm and publish | 🔴 High |
 
 ### 3.2 Document Management
 
