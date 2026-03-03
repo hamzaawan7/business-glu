@@ -1,23 +1,60 @@
 # Business Glu — Feature Breakdown
 
-> Comprehensive feature mapping based on Connecteam's platform.
-> Each feature is documented with a description and implementation priority.
+> Comprehensive feature catalog organized by implementation phase.
+> Each feature includes a description and priority level.
+>
+> **Legend:** 🔴 High · 🟡 Medium · 🟢 Low
 
 ---
 
 ## Table of Contents
 
-1. [Hub 1 — Operations](#hub-1--operations)
-2. [Hub 2 — Communications](#hub-2--communications)
-3. [Hub 3 — HR & People Management](#hub-3--hr--people-management)
-4. [Cross-Cutting Concerns](#cross-cutting-concerns)
-5. [Implementation Roadmap](#implementation-roadmap)
+1. [Phase 1 — Foundation (MVP)](#phase-1--foundation-mvp)
+2. [Phase 2 — Operations Hub](#phase-2--operations-hub)
+3. [Phase 3 — Communications Hub](#phase-3--communications-hub)
+4. [Phase 4 — HR & People Management](#phase-4--hr--people-management)
+5. [Phase 5 — Integrations & Polish](#phase-5--integrations--polish)
 
 ---
 
-## Hub 1 — Operations
+## Phase 1 — Foundation (MVP)
 
-### 1.1 Employee Time Clock
+> Core platform infrastructure that all other features depend on.
+
+### 1.1 Authentication & User Management
+
+| # | Feature | Description | Priority |
+|---|---------|-------------|----------|
+| 1 | **User Registration & Login** | Email/password, SSO, social login | 🔴 High |
+| 2 | **Role-Based Access Control (RBAC)** | Admin, Manager, Employee roles with configurable permissions | 🔴 High |
+| 3 | **Multi-Tenancy** | Each company is an isolated tenant | 🔴 High |
+| 4 | **User Profiles** | Employee profiles with custom fields, photo, department, etc. | 🔴 High |
+| 5 | **Smart Groups / Tags** | Auto-group users by department, location, role, custom tags | 🟡 Medium |
+
+### 1.2 Admin Dashboard
+
+| # | Feature | Description | Priority |
+|---|---------|-------------|----------|
+| 1 | **Web Admin Panel** | Full-featured web dashboard for admins/managers | 🔴 High |
+| 2 | **Activity Log** | Track all actions across the platform | 🟡 Medium |
+| 3 | **Analytics & Reporting** | Cross-feature analytics (attendance, engagement, training, etc.) | 🟡 Medium |
+| 4 | **Company Settings** | Configure company-wide settings, branding, policies | 🔴 High |
+
+### 1.3 Mobile App Shell
+
+| # | Feature | Description | Priority |
+|---|---------|-------------|----------|
+| 1 | **iOS & Android App** | Native or cross-platform mobile app for employees | 🔴 High |
+| 2 | **Push Notifications** | Real-time notifications for all relevant events | 🔴 High |
+| 3 | **Offline Support** | Basic functionality when offline; sync when reconnected | 🟡 Medium |
+
+---
+
+## Phase 2 — Operations Hub
+
+> The day-to-day tools managers and employees use every shift.
+
+### 2.1 Employee Time Clock
 
 Track precise employee work hours and produce payroll-ready timesheets.
 
@@ -44,7 +81,7 @@ Track precise employee work hours and produce payroll-ready timesheets.
 | 19 | **Planned vs. Actual Hours** | Compare scheduled hours against actual hours worked | 🟡 Medium |
 | 20 | **Weekly Timesheet Email** | Automated weekly summary emailed to employees and managers | 🟢 Low |
 
-### 1.2 Employee Scheduling
+### 2.2 Employee Scheduling
 
 Create, manage, and distribute employee schedules.
 
@@ -73,7 +110,7 @@ Create, manage, and distribute employee schedules.
 | 21 | **Scheduling Layers** | Additional information layers on shifts for resource management | 🟢 Low |
 | 22 | **Mobile Schedule Editing** | Full schedule management from the mobile app | 🔴 High |
 
-### 1.3 Forms & Checklists
+### 2.3 Forms & Checklists
 
 Digital forms and checklists for field operations. Replaces paper-based reporting, inspections, and requests with mobile-first digital workflows.
 
@@ -104,7 +141,7 @@ Digital forms and checklists for field operations. Replaces paper-based reportin
 | 23 | **Mobile Preview** | Live mobile preview while building forms in the admin dashboard | 🔴 High |
 | 24 | **Submission History & Audit Trail** | Full history of all submissions with timestamps | 🟡 Medium |
 
-### 1.4 Task Management (Quick Tasks)
+### 2.4 Quick Tasks
 
 Assign and track day-to-day tasks for individuals or teams. Provides full transparency into team execution.
 
@@ -130,9 +167,11 @@ Assign and track day-to-day tasks for individuals or teams. Provides full transp
 
 ---
 
-## Hub 2 — Communications
+## Phase 3 — Communications Hub
 
-### 2.1 Team Chat
+> Internal communication suite to keep everyone connected and informed.
+
+### 3.1 Team Chat
 
 Secure, work-only instant messaging.
 
@@ -149,7 +188,7 @@ Secure, work-only instant messaging.
 | 9 | **Push Notifications** | Real-time push notifications for new messages | 🔴 High |
 | 10 | **Search** | Search across all conversations | 🟡 Medium |
 
-### 2.2 Updates Feed
+### 3.2 Updates Feed
 
 Social media-style company communication feed. Think of it as your company's internal social media — every update appears on the company feed and can be viewed from mobile or desktop.
 
@@ -177,7 +216,7 @@ Social media-style company communication feed. Think of it as your company's int
 | 20 | **Reminder Notifications** | Notify users who haven't viewed an update; bulk remind from the admin dashboard | 🟡 Medium |
 | 21 | **Mobile Update Creation** | Create and publish updates (including shortcuts) directly from the mobile app Admin tab | 🔴 High |
 
-### 2.3 Employee Directory
+### 3.3 Employee Directory
 
 Digital company phonebook.
 
@@ -190,7 +229,7 @@ Digital company phonebook.
 | 5 | **Access Control** | Control which users can see which contact information | 🟡 Medium |
 | 6 | **Custom Fields** | Add custom profile fields per organization needs | 🟡 Medium |
 
-### 2.4 Knowledge Base
+### 3.4 Knowledge Base
 
 Centralized company knowledge repository.
 
@@ -204,7 +243,7 @@ Centralized company knowledge repository.
 | 6 | **Access Permissions** | Control who can view/edit content by role or team | 🟡 Medium |
 | 7 | **Version Control** | Track changes and maintain a single source of truth | 🟢 Low |
 
-### 2.5 Surveys & Polls
+### 3.5 Surveys & Polls
 
 Collect employee feedback.
 
@@ -218,7 +257,7 @@ Collect employee feedback.
 | 6 | **Completion Tracking** | See who has/hasn't completed a survey; send reminders | 🟡 Medium |
 | 7 | **Export Results** | Export survey data to CSV/Excel | 🟢 Low |
 
-### 2.6 Events
+### 3.6 Events
 
 Company event management.
 
@@ -230,7 +269,7 @@ Company event management.
 | 4 | **Attendee Tracking** | View who's attending, declined, or hasn't responded | 🟡 Medium |
 | 5 | **Event Notifications** | Push notification reminders before events | 🟢 Low |
 
-### 2.7 Help Desk
+### 3.7 Help Desk
 
 Internal employee ticketing system.
 
@@ -245,13 +284,15 @@ Internal employee ticketing system.
 
 ---
 
-## Hub 3 — HR & People Management
+## Phase 4 — HR & People Management
 
-### 3.1 Training & Onboarding
+> Complete HR platform for training, compliance, and employee lifecycle.
+
+### 4.1 Courses & Training
 
 Mobile-first employee training platform. Courses are digital training programs employees can complete from anywhere at any time — no need to gather teams in a classroom.
 
-#### 3.1.1 Courses
+#### Courses
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
@@ -271,7 +312,7 @@ Mobile-first employee training platform. Courses are digital training programs e
 | 14 | **Training Reminders** | Automated reminders for incomplete or recurring training | 🟡 Medium |
 | 15 | **Course Admin Permissions** | Granular permissions for who can create/edit/manage courses | 🟡 Medium |
 
-#### 3.1.2 Quizzes
+### 4.2 Quizzes
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
@@ -286,7 +327,7 @@ Mobile-first employee training platform. Courses are digital training programs e
 | 9 | **One-Time Pass Rule** | Employees can pass a quiz only once (for recurring, use courses with Object Timing) | 🟡 Medium |
 | 10 | **Quiz Assignment** | Assign quizzes to Smart Groups or individual users; confirm and publish | 🔴 High |
 
-### 3.2 Document Management
+### 4.3 Document Management
 
 Secure employee document storage.
 
@@ -300,7 +341,7 @@ Secure employee document storage.
 | 6 | **Access Control** | Role-based access to sensitive documents | 🔴 High |
 | 7 | **Bulk Upload** | Upload multiple documents at once | 🟢 Low |
 
-### 3.3 Time Off Management
+### 4.4 Time Off Management
 
 Leave request and policy management.
 
@@ -315,7 +356,7 @@ Leave request and policy management.
 | 7 | **Compliance Notifications** | Auto-notify about regulatory requirements | 🟡 Medium |
 | 8 | **Team Availability View** | Managers see team availability at a glance when reviewing requests | 🟡 Medium |
 
-### 3.4 Recognition & Rewards
+### 4.5 Recognition & Rewards
 
 Employee motivation and appreciation tools.
 
@@ -329,7 +370,7 @@ Employee motivation and appreciation tools.
 | 6 | **Milestone Celebrations** | Auto-celebrate birthdays, work anniversaries, etc. | 🟢 Low |
 | 7 | **Recognition Wall / Feed** | Dedicated space for all recognitions visible to the team | 🟡 Medium |
 
-### 3.5 Employee Timeline
+### 4.6 Employee Timeline
 
 Track employee lifecycle milestones.
 
@@ -340,7 +381,7 @@ Track employee lifecycle milestones.
 | 3 | **Upcoming Events** | View upcoming milestones (annual reviews, probation end) | 🟡 Medium |
 | 4 | **History View** | Full chronological view of an employee's journey | 🟡 Medium |
 
-### 3.6 Org Chart
+### 4.7 Org Chart
 
 Visual company structure.
 
@@ -350,7 +391,7 @@ Visual company structure.
 | 2 | **Interactive Navigation** | Click to view employee profiles, contact info | 🟢 Low |
 | 3 | **Department Views** | Filter by department or location | 🟢 Low |
 
-### 3.7 Digital Employee ID
+### 4.8 Digital Employee ID
 
 Mobile employee identification.
 
@@ -362,36 +403,11 @@ Mobile employee identification.
 
 ---
 
-## Cross-Cutting Concerns
+## Phase 5 — Integrations & Polish
 
-### 4.1 Authentication & User Management
+> Third-party integrations, advanced features, and platform refinement.
 
-| # | Feature | Description | Priority |
-|---|---------|-------------|----------|
-| 1 | **User Registration & Login** | Email/password, SSO, social login | 🔴 High |
-| 2 | **Role-Based Access Control (RBAC)** | Admin, Manager, Employee roles with configurable permissions | 🔴 High |
-| 3 | **Multi-Tenancy** | Each company is an isolated tenant | 🔴 High |
-| 4 | **User Profiles** | Employee profiles with custom fields, photo, department, etc. | 🔴 High |
-| 5 | **Smart Groups / Tags** | Auto-group users by department, location, role, custom tags | 🟡 Medium |
-
-### 4.2 Admin Dashboard
-
-| # | Feature | Description | Priority |
-|---|---------|-------------|----------|
-| 1 | **Web Admin Panel** | Full-featured web dashboard for admins/managers | 🔴 High |
-| 2 | **Activity Log** | Track all actions across the platform | 🟡 Medium |
-| 3 | **Analytics & Reporting** | Cross-feature analytics (attendance, engagement, training, etc.) | 🟡 Medium |
-| 4 | **Company Settings** | Configure company-wide settings, branding, policies | 🔴 High |
-
-### 4.3 Mobile App
-
-| # | Feature | Description | Priority |
-|---|---------|-------------|----------|
-| 1 | **iOS & Android App** | Native or cross-platform mobile app for employees | 🔴 High |
-| 2 | **Push Notifications** | Real-time notifications for all relevant events | 🔴 High |
-| 3 | **Offline Support** | Basic functionality when offline; sync when reconnected | 🟡 Medium |
-
-### 4.4 Integrations & API
+### 5.1 Integrations & API
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
@@ -401,7 +417,7 @@ Mobile employee identification.
 | 4 | **Zapier Integration** | Connect with 5,000+ apps via Zapier | 🟢 Low |
 | 5 | **Calendar Sync** | Google Calendar, Apple Calendar, Outlook | 🟢 Low |
 
-### 4.5 Security & Compliance
+### 5.2 Security & Compliance
 
 | # | Feature | Description | Priority |
 |---|---------|-------------|----------|
@@ -411,32 +427,32 @@ Mobile employee identification.
 | 4 | **Audit Trail** | Immutable logs of all data changes | 🟡 Medium |
 | 5 | **Data Backup & Recovery** | Regular backups with point-in-time recovery | 🔴 High |
 
+### 5.3 Advanced Features
+
+| # | Feature | Description | Priority |
+|---|---------|-------------|----------|
+| 1 | **Kiosk Mode** | Shared-device clock-in for job sites / warehouses | 🟢 Low |
+| 2 | **AI / Auto-Scheduling** | Smart schedule suggestions based on availability, skills, & labor laws | 🟢 Low |
+| 3 | **Advanced Analytics** | Cross-module dashboards (attendance trends, engagement, training completion) | 🟡 Medium |
+| 4 | **Offline Support** | Basic mobile functionality when offline; sync when reconnected | 🟡 Medium |
+
 ---
 
-## Implementation Roadmap
+## Implementation Checklist
 
 ### Phase 1 — Foundation (MVP)
-> Core platform, auth, and the first operational features.
-
 - [ ] Authentication & User Management (registration, login, RBAC, multi-tenancy)
-- [ ] Admin Dashboard (web panel, company settings)
-- [ ] Employee Time Clock (clock in/out, timesheets, breaks, overtime)
-- [ ] Employee Scheduling (schedule builder, templates, publish/notify)
-- [ ] Team Chat (1:1, group, push notifications)
-- [ ] Mobile App shell (iOS & Android)
+- [ ] Admin Dashboard (web panel, company settings, activity log)
+- [ ] Mobile App Shell (iOS & Android, push notifications)
 
-### Phase 2 — Operations Expansion
-> Complete the operations hub.
-
-- [ ] Task Management (create, assign, track, reminders)
-- [ ] Forms & Checklists (builder, submissions, templates)
-- [ ] GPS & Geofencing for Time Clock
-- [ ] Conflict Detection & Compliance (scheduling + timeclock)
-- [ ] Reporting & Exports
+### Phase 2 — Operations Hub
+- [ ] Employee Time Clock (clock in/out, GPS, geofencing, timesheets, breaks, overtime)
+- [ ] Employee Scheduling (schedule builder, templates, publish/notify, conflict detection)
+- [ ] Forms & Checklists (builder, submissions, templates, reporting)
+- [ ] Quick Tasks (create, assign, track, sub-tasks, reminders)
 
 ### Phase 3 — Communications Hub
-> Full internal communication suite.
-
+- [ ] Team Chat (1:1, group, channels, file sharing)
 - [ ] Updates Feed (posts, reactions, comments, read tracking)
 - [ ] Employee Directory (profiles, search, contact actions)
 - [ ] Knowledge Base (content management, categories, search)
@@ -445,25 +461,24 @@ Mobile employee identification.
 - [ ] Help Desk (ticketing system)
 
 ### Phase 4 — HR & People Management
-> Complete the HR platform.
-
-- [ ] Training & Onboarding (course builder, quizzes, progress tracking)
-- [ ] Document Management (upload, expiration, compliance)
+- [ ] Courses & Training (course builder, sections, progress tracking, certificates)
+- [ ] Quizzes (question banks, scoring, pass/fail, retakes)
+- [ ] Document Management (upload, e-signatures, expiration tracking)
 - [ ] Time Off Management (requests, policies, balances, accrual)
 - [ ] Recognition & Rewards (badges, points, gift cards)
 - [ ] Employee Timeline (milestones, history)
-- [ ] Org Chart & Digital ID
+- [ ] Org Chart (visual hierarchy, reporting lines)
+- [ ] Digital Employee ID (mobile badge, QR code)
 
 ### Phase 5 — Integrations & Polish
-> Third-party integrations and platform refinement.
-
-- [ ] Payroll Integrations (Gusto, QuickBooks, Xero, ADP)
 - [ ] REST API & Webhooks
+- [ ] Payroll Integrations (Gusto, QuickBooks, Xero, ADP)
 - [ ] Zapier Integration
 - [ ] Calendar Sync
+- [ ] Security & Compliance (encryption, GDPR, SOC 2, audit trail)
 - [ ] Advanced Analytics
 - [ ] Kiosk Mode
-- [ ] AI/Auto-Scheduling
+- [ ] AI / Auto-Scheduling
 - [ ] Offline Support
 
 ---

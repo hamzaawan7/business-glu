@@ -6,13 +6,15 @@
 
 **Business Glu** is an all-in-one workforce management platform for deskless and frontline teams. It combines operations, communications, and HR tools into a single application — inspired by platforms like Connecteam, but built from the ground up.
 
-The platform is organized into **three core hubs**:
+The platform is delivered across **five implementation phases**:
 
-| Hub | What It Covers |
-|-----|----------------|
-| **🔧 Operations** | Time Clock, Scheduling, Forms & Checklists, Task Management |
-| **💬 Communications** | Team Chat, Updates Feed, Directory, Knowledge Base, Surveys, Events, Help Desk |
-| **👥 HR & People** | Training & Onboarding, Documents, Time Off, Recognition & Rewards, Timeline, Org Chart |
+| Phase | Focus | Modules |
+|-------|-------|---------|
+| **Phase 1 — Foundation** | Core platform infrastructure | Auth & User Management, Admin Dashboard, Mobile App Shell |
+| **Phase 2 — Operations** | Day-to-day workforce operations | Time Clock, Scheduling, Forms & Checklists, Quick Tasks |
+| **Phase 3 — Communications** | Internal communication suite | Team Chat, Updates Feed, Directory, Knowledge Base, Surveys, Events, Help Desk |
+| **Phase 4 — HR & People** | Training, compliance, & employee lifecycle | Courses, Quizzes, Documents, Time Off, Recognition, Timeline, Org Chart, Digital ID |
+| **Phase 5 — Integrations** | Third-party connections & polish | REST API, Webhooks, Payroll, Zapier, Calendar Sync, Security, Analytics, Kiosk, AI Scheduling |
 
 ## Getting Started
 
@@ -29,13 +31,13 @@ Project documentation lives in the [`docs/`](./docs) directory:
 
 ## Implementation Roadmap
 
-| Phase | Focus | Status |
-|-------|-------|--------|
-| **Phase 1** | Foundation — Auth, Admin Dashboard, Time Clock, Scheduling, Chat, Mobile Shell | 🔲 Not Started |
-| **Phase 2** | Operations Expansion — Tasks, Forms, GPS/Geofencing, Reporting | 🔲 Not Started |
-| **Phase 3** | Communications Hub — Updates, Directory, Knowledge Base, Surveys, Events, Help Desk | 🔲 Not Started |
-| **Phase 4** | HR & People — Training, Documents, Time Off, Recognition, Timeline, Org Chart | 🔲 Not Started |
-| **Phase 5** | Integrations & Polish — Payroll, API, Zapier, AI Scheduling, Offline | 🔲 Not Started |
+| Phase | Focus | Key Deliverables | Status |
+|-------|-------|-----------------|--------|
+| **Phase 1** | Foundation (MVP) | Auth, RBAC, Multi-Tenancy, Admin Dashboard, Mobile Shell | 🔲 Not Started |
+| **Phase 2** | Operations Hub | Time Clock, Scheduling, Forms & Checklists, Quick Tasks | 🔲 Not Started |
+| **Phase 3** | Communications Hub | Chat, Updates Feed, Directory, Knowledge Base, Surveys, Events, Help Desk | 🔲 Not Started |
+| **Phase 4** | HR & People | Courses, Quizzes, Documents, Time Off, Recognition, Timeline, Org Chart, Digital ID | 🔲 Not Started |
+| **Phase 5** | Integrations & Polish | API, Webhooks, Payroll, Zapier, Calendar Sync, Security, Analytics, Kiosk, AI | 🔲 Not Started |
 
 ## Contributing
 
