@@ -27,7 +27,8 @@ Project documentation lives in the [`docs/`](./docs) directory:
 | Document | Description |
 | --- | --- |
 | [Project Overview](./docs/project-overview.md) | High-level goals, scope, and vision |
-| [Feature Breakdown](./docs/feature-breakdown.md) | Full feature catalog organized by hub with priorities and implementation roadmap |
+| [Feature Breakdown](./docs/feature-breakdown.md) | Full feature catalog organized by phase with priorities |
+| [Brand Guidelines](./docs/brand-guidelines.md) | Colors, typography, voice, logo usage, and content strategy |
 
 ## Implementation Roadmap
 
