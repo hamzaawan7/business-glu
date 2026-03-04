@@ -123,26 +123,52 @@ Third-party integrations, advanced features, and platform hardening.
 
 ## Tech Stack
 
-_To be decided — will be finalized once design elements are provided. Potential candidates:_
+| Layer | Choice | Details |
+|-------|--------|---------|
+| **Backend** | Laravel 12 (PHP 8.2) | Elegant MVC framework, built-in auth, queues, events, broadcasting |
+| **Frontend** | React + TypeScript via Inertia.js | Server-driven SPA — Laravel routes render React pages directly |
+| **Build Tool** | Vite | Fast HMR, Laravel Vite plugin for asset bundling |
+| **Styling** | Tailwind CSS | Utility-first, brand colors/fonts configured in `tailwind.config.js` |
+| **Auth** | Laravel Breeze (Inertia/React stack) | Registration, login, password reset, email verification, profile management |
+| **Database** | SQLite (dev) → PostgreSQL (prod) | Eloquent ORM, migrations, seeders |
+| **Real-Time** | Laravel Broadcasting + Reverb | WebSocket server for chat, live updates, notifications |
+| **File Storage** | Laravel Storage (local dev) → AWS S3 (prod) | Documents, images, training media |
+| **Mobile (future)** | React Native (Expo) | Shared React/TS knowledge; Laravel API routes for mobile clients |
+| **Deployment** | Laravel Forge / Railway → AWS | Start simple, scale when needed |
 
-| Layer | Options |
-|-------|---------|
-| **Frontend (Web)** | React / Next.js, Tailwind CSS |
-| **Frontend (Mobile)** | React Native / Flutter |
-| **Backend** | Node.js (Express/Fastify) or Laravel |
-| **Database** | PostgreSQL + Redis |
-| **Real-Time** | WebSockets (Socket.io) or Pusher |
-| **File Storage** | AWS S3 / Cloudflare R2 |
-| **Auth** | JWT + OAuth2 / Auth0 |
-| **Deployment** | Docker, AWS / Vercel / Railway |
+### Project Structure
+
+```
+business-glu/
+├── app/                  → Laravel application (Models, Controllers, Services, etc.)
+│   ├── Http/Controllers/ → Route controllers
+│   ├── Models/           → Eloquent models
+│   └── Services/         → Business logic
+├── database/
+│   ├── migrations/       → Database schema migrations
+│   └── seeders/          → Test data seeders
+├── resources/
+│   ├── js/               → React frontend (Inertia pages, components, layouts)
+│   │   ├── components/   → Reusable React components
+│   │   ├── layouts/      → AuthenticatedLayout, GuestLayout
+│   │   └── pages/        → Inertia pages (Auth/, Dashboard, Profile/)
+│   └── css/              → Tailwind CSS with brand theme
+├── routes/
+│   ├── web.php           → Inertia page routes
+│   └── api.php           → JSON API routes (for future mobile app)
+├── docs/                 → Project documentation
+├── tailwind.config.js    → Brand colors & typography
+└── vite.config.js        → Vite build configuration
+```
 
 ## Key Documents
 
 | Document | Path |
 |----------|------|
 | Feature Breakdown | [`docs/feature-breakdown.md`](./feature-breakdown.md) |
+| Brand Guidelines | [`docs/brand-guidelines.md`](./brand-guidelines.md) |
 | Project Overview | This file |
 
 ---
 
-> This document will be updated as design elements are provided and architecture decisions are made.
+> This document will be updated as architecture decisions evolve.

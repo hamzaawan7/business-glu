@@ -1,71 +1,25 @@
-# =========================
-# Operating System Files
-# =========================
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
-.Spotlight-V100
-.Trashes
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Linux
-*~
-
-# =========================
-# Editor / IDE
-# =========================
-.vscode/
-.idea/
-*.swp
-*.swo
-*.sublime-workspace
-*.sublime-project
-
-# =========================
-# Dependencies
-# =========================
-node_modules/
-vendor/
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# =========================
-# Environment / Secrets
-# =========================
-.env
-.env.*
-!.env.example
-
-# =========================
-# Build & Output
-# =========================
-dist/
-build/
-out/
-tmp/
 *.log
-
-# =========================
-# Testing / Coverage
-# =========================
-coverage/
-.nyc_output/
-
-# =========================
-# Misc
-# =========================
-*.bak
-*.tmp
-*.cache
+.DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+/database/*.sqlite
+Homestead.json
+Homestead.yaml
+Thumbs.db

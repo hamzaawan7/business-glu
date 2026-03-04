@@ -1,53 +1,59 @@
-# Business Glu
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-> Connecting the pieces that make your business stick.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Overview
+## About Laravel
 
-**Business Glu** is an all-in-one workforce management platform for deskless and frontline teams. It combines operations, communications, and HR tools into a single application — inspired by platforms like Connecteam, but built from the ground up.
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-The platform is delivered across **five implementation phases**:
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-| Phase | Focus | Modules |
-|-------|-------|---------|
-| **Phase 1 — Foundation** | Core platform infrastructure | Auth & User Management, Admin Dashboard, Mobile App Shell |
-| **Phase 2 — Operations** | Day-to-day workforce operations | Time Clock, Scheduling, Forms & Checklists, Quick Tasks |
-| **Phase 3 — Communications** | Internal communication suite | Team Chat, Updates Feed, Directory, Knowledge Base, Surveys, Events, Help Desk |
-| **Phase 4 — HR & People** | Training, compliance, & employee lifecycle | Courses, Quizzes, Documents, Time Off, Recognition, Timeline, Org Chart, Digital ID |
-| **Phase 5 — Integrations** | Third-party connections & polish | REST API, Webhooks, Payroll, Zapier, Calendar Sync, Security, Analytics, Kiosk, AI Scheduling |
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Getting Started
+## Learning Laravel
 
-_Coming soon — setup and installation instructions will be added as the project takes shape._
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-## Documentation
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-Project documentation lives in the [`docs/`](./docs) directory:
+## Laravel Sponsors
 
-| Document | Description |
-| --- | --- |
-| [Project Overview](./docs/project-overview.md) | High-level goals, scope, and vision |
-| [Feature Breakdown](./docs/feature-breakdown.md) | Full feature catalog organized by phase with priorities |
-| [Brand Guidelines](./docs/brand-guidelines.md) | Colors, typography, voice, logo usage, and content strategy |
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-## Implementation Roadmap
+### Premium Partners
 
-| Phase | Focus | Key Deliverables | Status |
-|-------|-------|-----------------|--------|
-| **Phase 1** | Foundation (MVP) | Auth, RBAC, Multi-Tenancy, Admin Dashboard, Mobile Shell | 🔲 Not Started |
-| **Phase 2** | Operations Hub | Time Clock, Scheduling, Forms & Checklists, Quick Tasks | 🔲 Not Started |
-| **Phase 3** | Communications Hub | Chat, Updates Feed, Directory, Knowledge Base, Surveys, Events, Help Desk | 🔲 Not Started |
-| **Phase 4** | HR & People | Courses, Quizzes, Documents, Time Off, Recognition, Timeline, Org Chart, Digital ID | 🔲 Not Started |
-| **Phase 5** | Integrations & Polish | API, Webhooks, Payroll, Zapier, Calendar Sync, Security, Analytics, Kiosk, AI | 🔲 Not Started |
+- **[Vehikl](https://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Redberry](https://redberry.international/laravel-development)**
+- **[Active Logic](https://activelogic.com)**
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
-_TBD_
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
