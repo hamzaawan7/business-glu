@@ -7,10 +7,14 @@ export interface User {
     tenant_id?: string | null;
 }
 
+export type ActiveView = 'admin' | 'user';
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     auth: {
         user: User;
     };
+    activeView: ActiveView;
+    canSwitchView: boolean;
 };

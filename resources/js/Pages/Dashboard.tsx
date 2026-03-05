@@ -1,4 +1,4 @@
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 const Icon = ({ d, className = 'w-5 h-5' }: { d: string; className?: string }) => (
@@ -32,36 +32,36 @@ export default function Dashboard({ stats }: DashboardProps) {
             value: stats?.teamMembers ?? 0,
             icon: statIcons.users,
             color: 'bg-blue-50 text-blue-600',
-            href: '/team',
+            href: '/admin/team',
         },
         {
             label: 'Clocked In',
             value: stats?.clockedIn ?? 0,
             icon: statIcons.clock,
             color: 'bg-green-50 text-green-600',
-            href: '/time-clock',
+            href: '/admin/time-clock',
         },
         {
             label: 'Open Tasks',
             value: stats?.openTasks ?? 0,
             icon: statIcons.tasks,
             color: 'bg-amber-50 text-amber-600',
-            href: '/tasks',
+            href: '/admin/tasks',
         },
         {
             label: 'Messages',
             value: stats?.unreadMessages ?? 0,
             icon: statIcons.chat,
             color: 'bg-purple-50 text-purple-600',
-            href: '/chat',
+            href: '/admin/chat',
         },
     ];
 
     const quickActions = [
-        { label: 'Clock In', href: '/time-clock', icon: statIcons.clock, color: 'bg-green-500 hover:bg-green-600' },
-        { label: 'Create Task', href: '/tasks', icon: statIcons.tasks, color: 'bg-amber-500 hover:bg-amber-600' },
-        { label: 'Send Message', href: '/chat', icon: statIcons.chat, color: 'bg-purple-500 hover:bg-purple-600' },
-        { label: 'View Team', href: '/team', icon: statIcons.users, color: 'bg-blue-500 hover:bg-blue-600' },
+        { label: 'Clock In', href: '/admin/time-clock', icon: statIcons.clock, color: 'bg-green-500 hover:bg-green-600' },
+        { label: 'Create Task', href: '/admin/tasks', icon: statIcons.tasks, color: 'bg-amber-500 hover:bg-amber-600' },
+        { label: 'Send Message', href: '/admin/chat', icon: statIcons.chat, color: 'bg-purple-500 hover:bg-purple-600' },
+        { label: 'View Team', href: '/admin/team', icon: statIcons.users, color: 'bg-blue-500 hover:bg-blue-600' },
     ];
 
     const greeting = () => {
@@ -72,7 +72,7 @@ export default function Dashboard({ stats }: DashboardProps) {
     };
 
     return (
-        <AppLayout title="Dashboard">
+        <AdminLayout title="Dashboard">
             <Head title="Dashboard" />
 
             <div className="max-w-7xl mx-auto space-y-6">
@@ -163,12 +163,12 @@ export default function Dashboard({ stats }: DashboardProps) {
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {[
-                            { name: 'Time Clock', desc: 'Track hours with GPS & geofencing', href: '/time-clock', status: 'ready' },
-                            { name: 'Scheduling', desc: 'Create shifts & manage availability', href: '/scheduling', status: 'ready' },
-                            { name: 'Team Chat', desc: 'Communicate with your team', href: '/chat', status: 'ready' },
-                            { name: 'Quick Tasks', desc: 'Assign and track tasks', href: '/tasks', status: 'ready' },
-                            { name: 'Forms', desc: 'Digital forms & checklists', href: '/forms', status: 'ready' },
-                            { name: 'Courses', desc: 'Train & onboard your team', href: '/courses', status: 'coming-soon' },
+                            { name: 'Time Clock', desc: 'Track hours with GPS & geofencing', href: '/admin/time-clock', status: 'ready' },
+                            { name: 'Scheduling', desc: 'Create shifts & manage availability', href: '/admin/scheduling', status: 'ready' },
+                            { name: 'Team Chat', desc: 'Communicate with your team', href: '/admin/chat', status: 'ready' },
+                            { name: 'Quick Tasks', desc: 'Assign and track tasks', href: '/admin/tasks', status: 'ready' },
+                            { name: 'Forms', desc: 'Digital forms & checklists', href: '/admin/forms', status: 'ready' },
+                            { name: 'Courses', desc: 'Train & onboard your team', href: '/admin/courses', status: 'coming-soon' },
                         ].map((module) => (
                             <Link
                                 key={module.name}
@@ -194,6 +194,6 @@ export default function Dashboard({ stats }: DashboardProps) {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }

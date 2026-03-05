@@ -1,4 +1,4 @@
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { PageProps } from '@/types';
 import { Head } from '@inertiajs/react';
 import DeleteUserForm from './Partials/DeleteUserForm';
@@ -10,7 +10,7 @@ export default function Edit({
     status,
 }: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
     return (
-        <AppLayout title="Profile">
+        <AdminLayout title="Profile">
             <Head title="Profile" />
 
             <div className="max-w-4xl mx-auto space-y-6">
@@ -30,6 +30,6 @@ export default function Edit({
                     <DeleteUserForm className="max-w-xl" />
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }

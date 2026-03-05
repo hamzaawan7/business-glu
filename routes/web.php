@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ViewSwitchController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -17,10 +18,37 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Authenticated Routes
+| Smart Dashboard Redirect
+|--------------------------------------------------------------------------
+| Redirects to the correct dashboard based on the user's role and
+| active view preference stored in session.
+*/
+Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
+    $user = auth()->user();
+    $activeView = session('active_view', $user->isAdmin() ? 'admin' : 'user');
+
+    if ($activeView === 'admin' && $user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('user.home');
+})->name('dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| View Switching
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware('auth')->post('/switch-view', [ViewSwitchController::class, '__invoke'])->name('switch-view');
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes — /admin/*
+|--------------------------------------------------------------------------
+| Protected by the 'admin' middleware alias (EnsureAdminAccess).
+| Full management dashboard with sidebar layout.
+*/
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', function () {
@@ -80,6 +108,36 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('settings.index');
 });
 
+/*
+|--------------------------------------------------------------------------
+| User / Employee Routes — /app/*
+|--------------------------------------------------------------------------
+| Simplified mobile-first view for all authenticated users.
+*/
+Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(function () {
+    Route::get('/', fn () => Inertia::render('User/Home'))->name('home');
+    Route::get('/time-clock', fn () => Inertia::render('User/MyTimeClock'))->name('time-clock');
+    Route::get('/schedule', fn () => Inertia::render('User/MySchedule'))->name('schedule');
+    Route::get('/chat', fn () => Inertia::render('User/MyChat'))->name('chat');
+    Route::get('/tasks', fn () => Inertia::render('User/MyTasks'))->name('tasks');
+    Route::get('/more', fn () => Inertia::render('User/More'))->name('more');
+    Route::get('/forms', fn () => Inertia::render('User/UserForms'))->name('forms');
+    Route::get('/updates', fn () => Inertia::render('User/UserUpdates'))->name('updates');
+    Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
+    Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
+    Route::get('/directory', fn () => Inertia::render('User/UserDirectory'))->name('directory');
+    Route::get('/knowledge-base', fn () => Inertia::render('User/UserKnowledgeBase'))->name('knowledge-base');
+    Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
+        'mustVerifyEmail' => ! auth()->user()->hasVerifiedEmail(),
+        'status' => session('status'),
+    ]))->name('profile');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Profile Routes (shared)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

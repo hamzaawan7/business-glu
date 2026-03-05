@@ -1,4 +1,4 @@
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, usePage } from '@inertiajs/react';
 
 interface SettingsProps {
@@ -13,7 +13,7 @@ export default function Settings({ company }: SettingsProps) {
     const user = usePage().props.auth.user;
 
     return (
-        <AppLayout title="Settings">
+        <AdminLayout title="Settings">
             <Head title="Settings" />
 
             <div className="max-w-4xl mx-auto space-y-6">
@@ -147,6 +147,6 @@ export default function Settings({ company }: SettingsProps) {
                     </button>
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }

@@ -1,4 +1,4 @@
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, usePage } from '@inertiajs/react';
 import { User } from '@/types';
 
@@ -18,7 +18,7 @@ export default function Team({ members = [] }: TeamProps) {
     const user = usePage().props.auth.user;
 
     return (
-        <AppLayout title="Team">
+        <AdminLayout title="Team">
             <Head title="Team" />
 
             <div className="max-w-6xl mx-auto space-y-6">
@@ -126,6 +126,6 @@ export default function Team({ members = [] }: TeamProps) {
                     )}
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }

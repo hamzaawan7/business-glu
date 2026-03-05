@@ -1,4 +1,4 @@
-import AppLayout from '@/Layouts/AppLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode } from 'react';
 
@@ -21,7 +21,7 @@ export default function ModulePage({
     children,
 }: PropsWithChildren<ModulePageProps>) {
     return (
-        <AppLayout title={title}>
+        <AdminLayout title={title}>
             <Head title={title} />
 
             <div className="max-w-5xl mx-auto space-y-6">
@@ -82,7 +82,7 @@ export default function ModulePage({
                                         This module is being built. Check back soon for updates!
                                     </p>
                                     <Link
-                                        href="/dashboard"
+                                        href="/admin/dashboard"
                                         className="text-sm text-brand-primary font-medium hover:underline"
                                     >
                                         ← Back to Dashboard
@@ -93,6 +93,6 @@ export default function ModulePage({
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </AdminLayout>
     );
 }

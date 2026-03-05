@@ -1,4 +1,5 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import ViewSwitcher from '@/Components/ViewSwitcher';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
@@ -48,44 +49,44 @@ const navigation: { section: string; items: NavItem[] }[] = [
     {
         section: '',
         items: [
-            { label: 'Dashboard', icon: 'dashboard', href: '/dashboard', routeName: 'dashboard' },
+            { label: 'Dashboard', icon: 'dashboard', href: '/admin/dashboard', routeName: 'admin.dashboard' },
         ],
     },
     {
         section: 'Operations',
         items: [
-            { label: 'Time Clock', icon: 'clock', href: '/time-clock', routeName: 'time-clock.*' },
-            { label: 'Scheduling', icon: 'calendar', href: '/scheduling', routeName: 'scheduling.*' },
-            { label: 'Quick Tasks', icon: 'tasks', href: '/tasks', routeName: 'tasks.*' },
-            { label: 'Forms', icon: 'forms', href: '/forms', routeName: 'forms.*' },
+            { label: 'Time Clock', icon: 'clock', href: '/admin/time-clock', routeName: 'admin.time-clock.*' },
+            { label: 'Scheduling', icon: 'calendar', href: '/admin/scheduling', routeName: 'admin.scheduling.*' },
+            { label: 'Quick Tasks', icon: 'tasks', href: '/admin/tasks', routeName: 'admin.tasks.*' },
+            { label: 'Forms', icon: 'forms', href: '/admin/forms', routeName: 'admin.forms.*' },
         ],
     },
     {
         section: 'Communication',
         items: [
-            { label: 'Chat', icon: 'chat', href: '/chat', routeName: 'chat.*' },
-            { label: 'Updates', icon: 'updates', href: '/updates', routeName: 'updates.*' },
-            { label: 'Directory', icon: 'directory', href: '/directory', routeName: 'directory.*' },
-            { label: 'Knowledge Base', icon: 'knowledge', href: '/knowledge-base', routeName: 'knowledge-base.*' },
-            { label: 'Surveys', icon: 'surveys', href: '/surveys', routeName: 'surveys.*' },
-            { label: 'Events', icon: 'events', href: '/events', routeName: 'events.*' },
-            { label: 'Help Desk', icon: 'helpdesk', href: '/help-desk', routeName: 'help-desk.*' },
+            { label: 'Chat', icon: 'chat', href: '/admin/chat', routeName: 'admin.chat.*' },
+            { label: 'Updates', icon: 'updates', href: '/admin/updates', routeName: 'admin.updates.*' },
+            { label: 'Directory', icon: 'directory', href: '/admin/directory', routeName: 'admin.directory.*' },
+            { label: 'Knowledge Base', icon: 'knowledge', href: '/admin/knowledge-base', routeName: 'admin.knowledge-base.*' },
+            { label: 'Surveys', icon: 'surveys', href: '/admin/surveys', routeName: 'admin.surveys.*' },
+            { label: 'Events', icon: 'events', href: '/admin/events', routeName: 'admin.events.*' },
+            { label: 'Help Desk', icon: 'helpdesk', href: '/admin/help-desk', routeName: 'admin.help-desk.*' },
         ],
     },
     {
         section: 'HR & People',
         items: [
-            { label: 'Courses', icon: 'courses', href: '/courses', routeName: 'courses.*' },
-            { label: 'Documents', icon: 'documents', href: '/documents', routeName: 'documents.*' },
-            { label: 'Time Off', icon: 'timeoff', href: '/time-off', routeName: 'time-off.*' },
-            { label: 'Recognition', icon: 'recognition', href: '/recognition', routeName: 'recognition.*' },
+            { label: 'Courses', icon: 'courses', href: '/admin/courses', routeName: 'admin.courses.*' },
+            { label: 'Documents', icon: 'documents', href: '/admin/documents', routeName: 'admin.documents.*' },
+            { label: 'Time Off', icon: 'timeoff', href: '/admin/time-off', routeName: 'admin.time-off.*' },
+            { label: 'Recognition', icon: 'recognition', href: '/admin/recognition', routeName: 'admin.recognition.*' },
         ],
     },
     {
         section: 'Admin',
         items: [
-            { label: 'Team', icon: 'users', href: '/team', routeName: 'team.*' },
-            { label: 'Settings', icon: 'settings', href: '/settings', routeName: 'settings.*' },
+            { label: 'Team', icon: 'users', href: '/admin/team', routeName: 'admin.team.*' },
+            { label: 'Settings', icon: 'settings', href: '/admin/settings', routeName: 'admin.settings.*' },
         ],
     },
 ];
@@ -118,7 +119,7 @@ function SidebarLink({
 }
 
 /* ─── Main Layout ─── */
-export default function AppLayout({
+export default function AdminLayout({
     title,
     children,
 }: PropsWithChildren<{ title?: string }>) {
@@ -221,6 +222,9 @@ export default function AppLayout({
                     )}
 
                     <div className="flex-1" />
+
+                    {/* View switcher */}
+                    <ViewSwitcher />
 
                     {/* User menu */}
                     <div className="relative">
