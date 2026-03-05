@@ -3,6 +3,8 @@ export interface User {
     name: string;
     email: string;
     email_verified_at?: string;
+    role: 'super_admin' | 'owner' | 'admin' | 'manager' | 'member';
+    tenant_id?: string | null;
 }
 
 export type PageProps<
