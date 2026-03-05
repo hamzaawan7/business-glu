@@ -33,9 +33,9 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 │              │  Help Desk       │  Digital ID            │
 ├──────────────┴──────────────────┴────────────────────────┤
 │              CROSS-CUTTING INFRASTRUCTURE                │
-│  Auth & RBAC · Multi-Tenancy · Admin Dashboard           │
-│  Mobile App · REST API · Webhooks · Integrations         │
-│  Security & Compliance · Analytics & Reporting           │
+│  Auth & RBAC · Multi-Tenancy (stancl/tenancy)            │
+│  Admin Dashboard · Mobile App · REST API · Webhooks      │
+│  Security & Compliance · Analytics & Reporting            │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -43,15 +43,24 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 
 ## Implementation Plan
 
-### Phase 1 — Foundation (MVP)
+### Phase 1 — Foundation (MVP) — 🟡 In Progress
 
 Set up the core platform infrastructure that all other features depend on.
 
-| Module | What It Includes |
-|--------|-----------------|
-| **Auth & User Management** | Registration, login, RBAC (Admin / Manager / Employee), multi-tenancy, user profiles, Smart Groups & Tags |
-| **Admin Dashboard** | Web panel, company settings, branding, activity log |
-| **Mobile App Shell** | iOS & Android app with push notifications |
+| Module | What It Includes | Status |
+|--------|-----------------|--------|
+| **Auth & User Management** | Registration, login, RBAC (super_admin / owner / admin / manager / member), multi-tenancy (database-per-tenant via stancl/tenancy), user profiles, Smart Groups & Tags | ✅ Base complete |
+| **Admin Dashboard** | Web panel, company settings, branding, activity log | 🟡 Scaffolded |
+| **Mobile App Shell** | iOS & Android app with push notifications | ⬜ Planned |
+
+**What's been built so far:**
+- Laravel 12 + Breeze (React/Inertia) scaffolded with brand theme
+- Multi-tenancy: `Tenant` model, database-per-tenant architecture, auto-provisioning lifecycle
+- User roles: `super_admin` → `owner` → `admin` → `manager` → `member`
+- Central DB: `users` (with `tenant_id`), `tenants`, `domains`
+- Tenant DB: scoped `users`, `sessions`, `password_reset_tokens`
+- Branded UI: logo from brand PDF, custom colors/fonts, SVG icons
+- Database seeder: demo tenant + 3 test users
 
 ### Phase 2 — Operations Hub
 
@@ -130,7 +139,8 @@ Third-party integrations, advanced features, and platform hardening.
 | **Build Tool** | Vite | Fast HMR, Laravel Vite plugin for asset bundling |
 | **Styling** | Tailwind CSS | Utility-first, brand colors/fonts configured in `tailwind.config.js` |
 | **Auth** | Laravel Breeze (Inertia/React stack) | Registration, login, password reset, email verification, profile management |
-| **Database** | SQLite (dev) → PostgreSQL (prod) | Eloquent ORM, migrations, seeders |
+| **Multi-Tenancy** | stancl/tenancy v3.9 | Database-per-tenant isolation, auto-provisioning, domain/subdomain identification |
+| **Database** | SQLite (dev) → PostgreSQL (prod) | Eloquent ORM, migrations, seeders, central + tenant DB architecture |
 | **Real-Time** | Laravel Broadcasting + Reverb | WebSocket server for chat, live updates, notifications |
 | **File Storage** | Laravel Storage (local dev) → AWS S3 (prod) | Documents, images, training media |
 | **Mobile (future)** | React Native (Expo) | Shared React/TS knowledge; Laravel API routes for mobile clients |
@@ -140,25 +150,40 @@ Third-party integrations, advanced features, and platform hardening.
 
 ```
 business-glu/
-├── app/                  → Laravel application (Models, Controllers, Services, etc.)
-│   ├── Http/Controllers/ → Route controllers
-│   ├── Models/           → Eloquent models
-│   └── Services/         → Business logic
+├── app/
+│   ├── Http/Controllers/     → Route controllers (Auth, Profile, etc.)
+│   ├── Models/
+│   │   ├── User.php          → User model (role, tenant_id, isSuperAdmin/isOwner/isAdmin)
+│   │   └── Tenant.php        → Custom tenant model (name, slug, plan, is_active)
+│   ├── Providers/
+│   │   └── TenancyServiceProvider.php → Multi-tenancy event lifecycle
+│   └── Services/             → Business logic (future)
+├── config/
+│   └── tenancy.php           → Multi-tenancy configuration
 ├── database/
-│   ├── migrations/       → Database schema migrations
-│   └── seeders/          → Test data seeders
+│   ├── migrations/           → Central database schema
+│   │   ├── *_create_users_table.php      → Users + role + tenant_id
+│   │   ├── *_create_tenants_table.php    → Tenants (name, slug, plan)
+│   │   ├── *_create_domains_table.php    → Tenant domain mappings
+│   │   └── *_add_tenant_foreign_key.php  → FK: users → tenants
+│   ├── migrations/tenant/    → Tenant-scoped database schema
+│   │   └── *_create_users_table.php      → Tenant users + role
+│   └── seeders/
+│       └── DatabaseSeeder.php → Seeds demo tenant + 3 users
 ├── resources/
-│   ├── js/               → React frontend (Inertia pages, components, layouts)
-│   │   ├── components/   → Reusable React components
-│   │   ├── layouts/      → AuthenticatedLayout, GuestLayout
-│   │   └── pages/        → Inertia pages (Auth/, Dashboard, Profile/)
-│   └── css/              → Tailwind CSS with brand theme
+│   ├── js/
+│   │   ├── Components/       → ApplicationLogo, PrimaryButton, NavLink, etc.
+│   │   ├── Layouts/          → AuthenticatedLayout, GuestLayout
+│   │   └── Pages/            → Welcome, Dashboard, Auth/*, Profile/*
+│   └── css/app.css           → Tailwind + Google Fonts imports
 ├── routes/
-│   ├── web.php           → Inertia page routes
-│   └── api.php           → JSON API routes (for future mobile app)
-├── docs/                 → Project documentation
-├── tailwind.config.js    → Brand colors & typography
-└── vite.config.js        → Vite build configuration
+│   ├── web.php               → Central Inertia page routes
+│   ├── auth.php              → Breeze authentication routes
+│   └── tenant.php            → Tenant-scoped routes (domain-based)
+├── public/images/            → Logo assets (extracted from brand PDF)
+├── docs/                     → Project documentation
+├── tailwind.config.js        → Brand colors & typography theme
+└── vite.config.js            → Vite build configuration
 ```
 
 ## Key Documents
