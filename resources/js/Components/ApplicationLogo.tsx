@@ -1,18 +1,35 @@
-import { SVGAttributes } from 'react';
+import { ImgHTMLAttributes } from 'react';
 
-export default function ApplicationLogo(props: SVGAttributes<SVGElement> & { size?: 'sm' | 'md' | 'lg' }) {
-    const { size = 'md', className, ...rest } = props;
+interface ApplicationLogoProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {
+    size?: 'sm' | 'md' | 'lg' | 'xl';
+    variant?: 'full' | 'icon' | 'transparent';
+}
 
+export default function ApplicationLogo({
+    size = 'md',
+    variant = 'full',
+    className = '',
+    ...props
+}: ApplicationLogoProps) {
     const sizes = {
-        sm: 'text-xl',
-        md: 'text-2xl',
-        lg: 'text-4xl',
+        sm: 'h-8',
+        md: 'h-10',
+        lg: 'h-16',
+        xl: 'h-24',
+    };
+
+    const src = {
+        full: '/images/full-logo.png',
+        icon: '/images/only-logo.png',
+        transparent: '/images/tranparent-logo.png',
     };
 
     return (
-        <span className={`font-heading font-bold tracking-tight ${sizes[size]} ${className ?? ''}`}>
-            <span className="text-brand-primary">Business</span>
-            <span className="text-brand-accent"> Glu</span>
-        </span>
+        <img
+            src={src[variant]}
+            alt="Business Glu"
+            className={`${sizes[size]} w-auto ${className}`}
+            {...props}
+        />
     );
 }

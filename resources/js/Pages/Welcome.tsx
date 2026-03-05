@@ -1,3 +1,4 @@
+import ApplicationLogo from '@/Components/ApplicationLogo';
 import { PageProps } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 
@@ -12,10 +13,9 @@ export default function Welcome({
                 <nav className="bg-white border-b border-gray-200">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">
-                            <span className="font-heading font-bold text-2xl tracking-tight">
-                                <span className="text-brand-primary">Business</span>
-                                <span className="text-brand-accent"> Glu</span>
-                            </span>
+                            <Link href="/">
+                                <ApplicationLogo size="md" />
+                            </Link>
                             <div className="flex items-center gap-3">
                                 {auth.user ? (
                                     <Link
@@ -131,10 +131,7 @@ export default function Welcome({
                 {/* Footer */}
                 <footer className="py-8 bg-gray-50 border-t border-gray-200">
                     <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
-                        <span className="font-heading font-bold text-lg">
-                            <span className="text-brand-primary">Business</span>
-                            <span className="text-brand-accent"> Glu</span>
-                        </span>
+                        <ApplicationLogo size="sm" />
                         <p className="text-sm text-brand-accent">
                             &copy; {new Date().getFullYear()} Business Glu. All rights reserved.
                         </p>
