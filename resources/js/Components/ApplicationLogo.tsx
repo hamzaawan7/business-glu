@@ -2,26 +2,26 @@ import { ImgHTMLAttributes } from 'react';
 
 interface ApplicationLogoProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {
     size?: 'sm' | 'md' | 'lg' | 'xl';
-    variant?: 'full' | 'icon' | 'transparent';
+    variant?: 'primary' | 'stacked' | 'dark';
 }
 
 export default function ApplicationLogo({
     size = 'md',
-    variant = 'full',
+    variant = 'primary',
     className = '',
     ...props
 }: ApplicationLogoProps) {
     const sizes = {
         sm: 'h-8',
         md: 'h-10',
-        lg: 'h-16',
-        xl: 'h-24',
+        lg: 'h-14',
+        xl: 'h-20',
     };
 
     const src = {
-        full: '/images/full-logo.png',
-        icon: '/images/only-logo.png',
-        transparent: '/images/tranparent-logo.png',
+        primary: '/images/logo-primary.png',
+        stacked: '/images/logo-stacked.png',
+        dark: '/images/logo-dark.png',
     };
 
     return (
