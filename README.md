@@ -83,8 +83,8 @@ Business Glu uses **database-per-tenant** isolation via [stancl/tenancy](https:/
 
 | Phase | Focus | Status |
 |-------|-------|--------|
-| **1 — Foundation** | Auth, RBAC, multi-tenancy, onboarding, admin + user dashboards, view switching | ✅ Mostly Complete |
-| **2 — Operations** | Time clock, scheduling, quick tasks, forms & checklists | 🟡 Next Up |
+| **1 — Foundation** | Auth, RBAC, multi-tenancy, onboarding, dashboards, team management, company settings | ✅ Complete |
+| **2 — Operations** | Time clock ✅, scheduling, quick tasks, forms & checklists | 🟡 In Progress |
 | **3 — Communications** | Team chat, updates feed, directory, knowledge base, surveys, events, help desk | ⬜ Planned |
 | **4 — HR & People** | Courses, quizzes, documents, time off, recognition, timeline, org chart, digital ID | ⬜ Planned |
 | **5 — Integrations** | Payroll, API & webhooks, Zapier, calendar sync, kiosk, AI scheduling, offline, analytics | ⬜ Planned |

@@ -43,7 +43,7 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 
 ## Current Status
 
-> **Last updated:** June 2025
+> **Last updated:** March 2026
 
 ### What's Built & Working ✅
 
@@ -56,7 +56,7 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 
 **Multi-Tenancy**
 - stancl/tenancy v3.9 with database-per-tenant isolation
-- `Tenant` model (name, slug, plan, is_active, data JSON)
+- `Tenant` model (name, slug, plan, is_active, data JSON, modules JSON)
 - Auto-provisioning lifecycle via TenancyServiceProvider
 
 **Onboarding Flow**
@@ -64,18 +64,46 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 - Auto-assigns registering user as `owner` role
 - Creates tenant and associates user
 
+**Team Management**
+- Invite members via email with role selection (sends invitation link)
+- Edit member roles (owner/admin/manager/member)
+- Remove members with confirmation dialog
+- Cancel pending invitations
+- Accept invitation flow (existing users + new user registration)
+- `TeamInvitation` model with token-based invitations, expiration (7 days)
+- `TeamController` with full CRUD + invitation lifecycle
+
+**Company Settings**
+- Save company name (owner-only, PATCH request)
+- Toggle 15 feature modules on/off per tenant
+- `modules` JSON column on `tenants` table with defaults
+- `SettingsController` with `updateCompany` + `toggleModule` actions
+
+**Employee Time Clock**
+- Clock in / clock out with timestamps
+- Break management (start/end breaks, paid/unpaid types)
+- GPS coordinate capture at clock-in/out
+- Notes on clock-in/out
+- Auto-calculated total minutes and break minutes
+- Admin view: team overview with stats cards, date picker, active/completed entries
+- User view: live timer (HH:MM:SS), big clock-in button, break controls, weekly summary
+- Status tracking: active → completed → edited → approved
+- Approval workflow fields (approved_by, approved_at)
+- `TimeEntry` and `TimeEntryBreak` models with relationships
+- `TimeClockController` with 6 actions (index, myTimeClock, clockIn, clockOut, startBreak, endBreak)
+
 **Admin Dashboard (Web)**
 - Full sidebar layout (`AdminLayout.tsx`) with collapsible navigation
 - Nav sections: Operations, Communication, HR & People, Admin
-- Dashboard page with team member count (live from DB)
-- Team page with real member list from database
-- Settings page showing tenant data (read-only)
-- 15 module stub pages scaffolded (TimeClock, Scheduling, Tasks, Forms, Chat, Updates, Directory, KnowledgeBase, Surveys, Events, HelpDesk, Courses, Documents, TimeOff, Recognition)
+- Dashboard page with live stats: team member count + clocked-in count (from DB)
+- Flash message system via `HandleInertiaRequests` middleware
+- 12 remaining module stub pages (Scheduling, Tasks, Forms, Chat, Updates, Directory, KnowledgeBase, Surveys, Events, HelpDesk, Courses, Documents, TimeOff, Recognition)
 
 **User/Employee View**
 - Separate sidebar layout (`UserLayout.tsx`)
 - Nav sections: My Work, Communication, HR & Info, Account
-- 13 user-facing stub pages scaffolded
+- Functional Time Clock page with live timer and break management
+- 12 remaining user-facing stub pages
 - Session-based Admin ↔ User view switching (for admin+ roles)
 
 **Branding & UI**
@@ -91,12 +119,10 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 
 ### What's NOT Built Yet 🔲
 
-- **Zero business-domain database tables** (no time_entries, shifts, tasks, messages, etc.)
-- **All 15 admin module pages are stubs** (no forms, no CRUD, no real data)
-- **All 13 user pages are stubs** (static mockup content only)
-- **Team invitation system** (team page is read-only)
-- **Settings save functionality** (displays data but can't edit)
-- **Dashboard stats** (hardcoded to 0 except team count)
+- **Most business-domain tables** (no shifts, tasks, messages, etc. — time_entries done)
+- **12 admin module pages are stubs** (Scheduling, Tasks, Forms, Chat, etc.)
+- **12 user pages are stubs** (MySchedule, MyTasks, MyChat, etc.)
+- **Dashboard stats** (openTasks and unreadMessages still hardcoded to 0)
 - **No API routes** for future mobile app
 - **No file upload infrastructure**
 - **No notification system**
@@ -117,17 +143,17 @@ Set up the core platform infrastructure that all other features depend on.
 | **Admin Dashboard** | Web panel with sidebar, team list, settings | ✅ Scaffolded (stubs need wiring) |
 | **User Dashboard** | Employee view with sidebar layout | ✅ Scaffolded (stubs need wiring) |
 | **View Switching** | Admin ↔ User toggle for admin+ roles | ✅ Complete |
-| **Team Management** | Invite members, edit roles, remove | 🟡 Read-only (needs invite/edit/remove) |
-| **Company Settings** | Save company info, toggle modules | 🟡 Display-only (needs save functionality) |
+| **Team Management** | Invite members, edit roles, remove | ✅ Complete |
+| **Company Settings** | Save company info, toggle modules | ✅ Complete |
 | **Mobile App Shell** | iOS & Android app with push notifications | ⬜ Planned |
 
-### Phase 2 — Operations Hub — ⬜ Next Up
+### Phase 2 — Operations Hub — 🟡 In Progress
 
 The day-to-day tools managers and employees use every shift.
 
 | Module | What It Includes | Status |
 |--------|-----------------|--------|
-| **Employee Time Clock** | Clock in/out, digital timesheets, break management, overtime rules, approval workflow, notifications | ⬜ Stub page only |
+| **Employee Time Clock** | Clock in/out, GPS, break management, live timer, admin team view, approval fields | ✅ Core functional |
 | **Employee Scheduling** | Drag & drop builder, shift templates, availability, publish/notify, conflict detection | ⬜ Stub page only |
 | **Quick Tasks** | Create, assign, track tasks with subtasks, reminders, permissions | ⬜ Stub page only |
 | **Forms & Checklists** | Form builder, submissions, templates, assignment, reporting | ⬜ Stub page only |
@@ -218,14 +244,20 @@ business-glu/
 │   │   │   ├── Auth/                     → Breeze auth controllers
 │   │   │   ├── OnboardingController.php  → Company creation after registration
 │   │   │   ├── ProfileController.php     → User profile CRUD
+│   │   │   ├── SettingsController.php    → Company settings + module toggles
+│   │   │   ├── TeamController.php        → Team CRUD + invitation lifecycle
+│   │   │   ├── TimeClockController.php   → Clock in/out, breaks, admin/user views
 │   │   │   └── ViewSwitchController.php  → Admin ↔ User view toggle
 │   │   └── Middleware/
 │   │       ├── EnsureAdminAccess.php     → Blocks non-admins from /admin/*
 │   │       ├── EnsureOnboarded.php       → Redirects users without tenant to /onboarding
-│   │       └── HandleInertiaRequests.php → Shares auth, activeView, canSwitchView
+│   │       └── HandleInertiaRequests.php → Shares auth, activeView, canSwitchView, flash
 │   ├── Models/
 │   │   ├── User.php                      → Roles (super_admin/owner/admin/manager/member), tenant_id
-│   │   └── Tenant.php                    → Custom stancl/tenancy model (name, slug, plan)
+│   │   ├── Tenant.php                    → Custom stancl/tenancy model (name, slug, plan, modules)
+│   │   ├── TeamInvitation.php            → Token-based team invitations with expiry
+│   │   ├── TimeEntry.php                 → Clock in/out entries with GPS, breaks, approval
+│   │   └── TimeEntryBreak.php            → Break records (paid/unpaid) linked to time entries
 │   ├── Providers/
 │   │   └── TenancyServiceProvider.php    → Multi-tenancy event lifecycle
 │   └── Services/                         → Business logic (future)
@@ -238,7 +270,10 @@ business-glu/
 │   │   ├── *_create_users_table.php      → Users + role + tenant_id
 │   │   ├── *_create_tenants_table.php    → Tenants (name, slug, plan)
 │   │   ├── *_create_domains_table.php    → Tenant domain mappings
-│   │   └── *_add_tenant_foreign_key.php  → FK: users → tenants
+│   │   ├── *_add_tenant_foreign_key.php  → FK: users → tenants
+│   │   ├── *_create_team_invitations_table.php → Token-based invitations
+│   │   ├── *_add_modules_to_tenants_table.php  → JSON modules column
+│   │   └── *_create_time_entries_table.php     → time_entries + time_entry_breaks
 │   ├── migrations/tenant/                → Tenant-scoped database schema
 │   └── seeders/
 │       └── DatabaseSeeder.php            → Demo tenant + 3 test users
@@ -250,15 +285,16 @@ business-glu/
 │   │   │   ├── UserLayout.tsx            → Employee sidebar + top bar
 │   │   │   └── GuestLayout.tsx           → Centered card for auth pages
 │   │   └── Pages/
-│   │       ├── Admin/                    → Team.tsx, Settings.tsx
+│   │       ├── Admin/                    → Team.tsx (functional), Settings.tsx (functional)
 │   │       ├── Auth/                     → Login, Register, ForgotPassword, etc.
 │   │       ├── Communication/            → Chat, Updates, Directory, etc. (stubs)
-│   │       ├── Dashboard.tsx             → Admin dashboard with stats
+│   │       ├── Dashboard.tsx             → Admin dashboard with live stats
 │   │       ├── HR/                       → Courses, Documents, TimeOff, Recognition (stubs)
 │   │       ├── Onboarding/              → CreateCompany.tsx
-│   │       ├── Operations/              → TimeClock, Scheduling, Tasks, Forms (stubs)
+│   │       ├── Operations/              → TimeClock.tsx (functional), Scheduling, Tasks, Forms (stubs)
 │   │       ├── Profile/                 → Edit.tsx + partials
-│   │       ├── User/                    → Home, MyTimeClock, MySchedule, etc. (stubs)
+│   │       ├── Team/                    → AcceptInvitation.tsx, InvitationExpired.tsx
+│   │       ├── User/                    → Home, MyTimeClock.tsx (functional), rest (stubs)
 │   │       └── Welcome.tsx              → Public landing page
 │   └── css/app.css                      → Tailwind + Google Fonts imports
 ├── routes/

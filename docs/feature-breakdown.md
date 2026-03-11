@@ -447,14 +447,15 @@ Mobile employee identification.
 - [x] Admin Dashboard (sidebar layout, 15 module stubs, team list, settings display)
 - [x] User Dashboard (sidebar layout, 13 module stubs)
 - [x] Brand Theming (colors, fonts, logos, SVG icons)
-- [ ] Team Management (invite members, edit roles, remove)
-- [ ] Company Settings (save company info, toggle modules)
-- [ ] Dashboard Stats (wire to real data from business tables)
+- [x] Team Management (invite members, edit roles, remove, cancel invitations, accept invitations)
+- [x] Company Settings (save company name, toggle 15 feature modules)
+- [x] Dashboard Stats — partially wired (teamMembers + clockedIn live; openTasks + unreadMessages still 0)
 - [ ] Activity Log
 - [ ] Mobile App Shell (iOS & Android, push notifications)
 
 ### Phase 2 — Operations Hub
-- [ ] Employee Time Clock (clock in/out, GPS, geofencing, timesheets, breaks, overtime)
+- [x] Employee Time Clock — core (clock in/out, GPS capture, break management, admin team view, user live timer, weekly summary)
+- [ ] Employee Time Clock — advanced (geofencing, digital timesheets, overtime rules, approval workflow, notifications, payroll export)
 - [ ] Employee Scheduling (schedule builder, templates, publish/notify, conflict detection)
 - [ ] Forms & Checklists (builder, submissions, templates, reporting)
 - [ ] Quick Tasks (create, assign, track, sub-tasks, reminders)
