@@ -24,6 +24,9 @@ interface ShiftData {
     notes: string | null;
     is_published: boolean;
     is_open: boolean;
+    is_recurring: boolean;
+    repeat_type: string | null;
+    repeat_group_id: number | null;
     status: string;
 }
 
@@ -64,6 +67,7 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [showDuplicateModal, setShowDuplicateModal] = useState(false);
     const [duplicateTarget, setDuplicateTarget] = useState('');
+    const [deleteScope, setDeleteScope] = useState<'this' | 'following' | 'all'>('this');
 
     // Create shift form
     const createForm = useForm({
@@ -76,6 +80,8 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
         location: '',
         notes: '',
         is_open: false,
+        repeat_type: 'none',
+        repeat_end_date: '',
     });
 
     // Edit shift form
@@ -136,8 +142,12 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
     const handleDelete = () => {
         if (!deleteConfirm) return;
         router.delete(route('admin.scheduling.destroy', deleteConfirm.id), {
+            data: { delete_scope: deleteScope },
             preserveScroll: true,
-            onSuccess: () => setDeleteConfirm(null),
+            onSuccess: () => {
+                setDeleteConfirm(null);
+                setDeleteScope('this');
+            },
         });
     };
 
@@ -325,6 +335,9 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                                         {!shift.is_published && (
                                                             <span className="text-[10px] text-amber-600 font-medium">DRAFT</span>
                                                         )}
+                                                        {shift.is_recurring && (
+                                                            <span className="text-[10px] text-brand-accent">🔁</span>
+                                                        )}
                                                     </button>
                                                 ))}
                                                 {dayShifts.length === 0 && (
@@ -484,6 +497,32 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                     />
                                 </div>
 
+                                {/* Recurrence */}
+                                <div>
+                                    <label className="block text-sm font-medium text-brand-secondary mb-1">Repeat</label>
+                                    <select
+                                        value={createForm.data.repeat_type}
+                                        onChange={e => createForm.setData('repeat_type', e.target.value)}
+                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-brand-primary focus:border-brand-primary"
+                                    >
+                                        <option value="none">Does not repeat</option>
+                                        <option value="weekly">Every week</option>
+                                    </select>
+                                </div>
+
+                                {createForm.data.repeat_type === 'weekly' && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-brand-secondary mb-1">Repeat until (optional)</label>
+                                        <input
+                                            type="date"
+                                            value={createForm.data.repeat_end_date}
+                                            onChange={e => createForm.setData('repeat_end_date', e.target.value)}
+                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-brand-primary focus:border-brand-primary"
+                                        />
+                                        <p className="text-xs text-brand-accent mt-1">Leave empty for indefinite (up to 1 year)</p>
+                                    </div>
+                                )}
+
                                 {!createForm.data.user_id && (
                                     <label className="flex items-center gap-2">
                                         <input
@@ -623,7 +662,7 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                 <div className="flex items-center justify-between pt-2">
                                     <button
                                         type="button"
-                                        onClick={() => { setDeleteConfirm(editingShift); setEditingShift(null); }}
+                                        onClick={() => { setDeleteScope('this'); setDeleteConfirm(editingShift); setEditingShift(null); }}
                                         className="text-sm text-red-600 hover:text-red-700 font-medium"
                                     >
                                         Delete Shift
@@ -651,19 +690,50 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                 </div>
             )}
 
-            {/* ── Delete Confirmation ── */}
+            {/* ── Delete Confirmation (Google Calendar-style) ── */}
             {deleteConfirm && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setDeleteConfirm(null)}>
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6" onClick={e => e.stopPropagation()}>
                         <h2 className="text-lg font-bold font-heading text-brand-primary mb-2">Delete Shift</h2>
-                        <p className="text-sm text-brand-accent mb-6">
-                            Are you sure you want to delete this shift
-                            {deleteConfirm.user ? ` for ${deleteConfirm.user.name}` : ''}
-                            {' '}on {new Date(deleteConfirm.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' })}?
+                        <p className="text-sm text-brand-accent mb-4">
+                            {deleteConfirm.user ? `${deleteConfirm.user.name}'s shift` : 'This shift'}
+                            {' '}on {new Date(deleteConfirm.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' })}
+                            {deleteConfirm.title ? ` — ${deleteConfirm.title}` : ''}
                         </p>
+
+                        {deleteConfirm.is_recurring ? (
+                            <div className="space-y-2 mb-6">
+                                <p className="text-xs font-medium text-brand-accent uppercase tracking-wide">This is a recurring shift</p>
+                                {[
+                                    { value: 'this' as const, label: 'This shift only' },
+                                    { value: 'following' as const, label: 'This and all following shifts' },
+                                    { value: 'all' as const, label: 'All shifts in this series' },
+                                ].map(opt => (
+                                    <label
+                                        key={opt.value}
+                                        className={`flex items-center gap-3 p-2.5 rounded-lg border cursor-pointer transition hover:bg-gray-50 ${
+                                            deleteScope === opt.value ? 'border-brand-primary bg-brand-primary/5' : 'border-gray-200'
+                                        }`}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="delete_scope"
+                                            value={opt.value}
+                                            checked={deleteScope === opt.value}
+                                            onChange={() => setDeleteScope(opt.value)}
+                                            className="text-brand-primary focus:ring-brand-primary"
+                                        />
+                                        <span className="text-sm text-brand-secondary">{opt.label}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-brand-accent mb-6">Are you sure you want to delete this shift?</p>
+                        )}
+
                         <div className="flex justify-end gap-3">
                             <button
-                                onClick={() => setDeleteConfirm(null)}
+                                onClick={() => { setDeleteConfirm(null); setDeleteScope('this'); }}
                                 className="px-4 py-2 text-sm text-brand-accent hover:text-brand-primary transition"
                             >
                                 Cancel

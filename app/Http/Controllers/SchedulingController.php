@@ -77,39 +77,74 @@ class SchedulingController extends Controller
     }
 
     /**
-     * Store a new shift.
+     * Store a new shift (with optional recurrence).
      */
     public function store(Request $request): RedirectResponse
     {
         $user = $request->user();
 
         $validated = $request->validate([
-            'user_id'    => 'nullable|exists:users,id',
-            'title'      => 'nullable|string|max:100',
-            'date'       => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time'   => 'required|date_format:H:i',
-            'color'      => 'nullable|string|max:7',
-            'location'   => 'nullable|string|max:255',
-            'notes'      => 'nullable|string|max:1000',
-            'is_open'    => 'boolean',
+            'user_id'         => 'nullable|exists:users,id',
+            'title'           => 'nullable|string|max:100',
+            'date'            => 'required|date',
+            'start_time'      => 'required|date_format:H:i',
+            'end_time'        => 'required|date_format:H:i',
+            'color'           => 'nullable|string|max:7',
+            'location'        => 'nullable|string|max:255',
+            'notes'           => 'nullable|string|max:1000',
+            'is_open'         => 'boolean',
+            'repeat_type'     => 'nullable|in:none,weekly',
+            'repeat_end_date' => 'nullable|date|after:date',
         ]);
 
-        Shift::create([
+        $repeatType = $validated['repeat_type'] ?? 'none';
+
+        $baseData = [
             'tenant_id'  => $user->tenant_id,
             'created_by' => $user->id,
             'user_id'    => $validated['user_id'] ?? null,
             'title'      => $validated['title'] ?? null,
-            'date'       => $validated['date'],
             'start_time' => $validated['start_time'],
             'end_time'   => $validated['end_time'],
             'color'      => $validated['color'] ?? '#495B67',
             'location'   => $validated['location'] ?? null,
             'notes'      => $validated['notes'] ?? null,
             'is_open'    => $validated['is_open'] ?? false,
-        ]);
+        ];
 
-        return back()->with('success', 'Shift created successfully.');
+        if ($repeatType === 'none' || ! $repeatType) {
+            Shift::create(array_merge($baseData, [
+                'date' => $validated['date'],
+            ]));
+            return back()->with('success', 'Shift created successfully.');
+        }
+
+        // ── Recurring shift generation ────────────────────────
+        $groupId      = now()->timestamp . mt_rand(1000, 9999);
+        $startDate    = Carbon::parse($validated['date']);
+        $endDate      = ! empty($validated['repeat_end_date'])
+            ? Carbon::parse($validated['repeat_end_date'])
+            : $startDate->copy()->addYear(); // default: 1 year if "forever"
+        $repeatEndDate = ! empty($validated['repeat_end_date'])
+            ? $validated['repeat_end_date']
+            : null;
+
+        $interval = 7; // weekly
+        $count    = 0;
+        $current  = $startDate->copy();
+
+        while ($current->lte($endDate) && $count < 52) { // cap at 52 weeks
+            Shift::create(array_merge($baseData, [
+                'date'            => $current->toDateString(),
+                'repeat_type'     => 'weekly',
+                'repeat_group_id' => $groupId,
+                'repeat_end_date' => $repeatEndDate,
+            ]));
+            $count++;
+            $current->addDays($interval);
+        }
+
+        return back()->with('success', "{$count} recurring shift(s) created.");
     }
 
     /**
@@ -152,7 +187,9 @@ class SchedulingController extends Controller
     }
 
     /**
-     * Delete a shift.
+     * Delete shift(s) — supports Google Calendar-style scopes for recurring shifts.
+     *
+     * delete_scope: "this" | "following" | "all"
      */
     public function destroy(Request $request, Shift $shift): RedirectResponse
     {
@@ -160,9 +197,30 @@ class SchedulingController extends Controller
             abort(403);
         }
 
-        $shift->delete();
+        $scope = $request->input('delete_scope', 'this');
 
-        return back()->with('success', 'Shift deleted.');
+        // Non-recurring shift — just delete it
+        if (! $shift->repeat_group_id) {
+            $shift->delete();
+            return back()->with('success', 'Shift deleted.');
+        }
+
+        // Recurring shift — scope-based deletion
+        switch ($scope) {
+            case 'all':
+                $count = Shift::where('repeat_group_id', $shift->repeat_group_id)->delete();
+                return back()->with('success', "{$count} recurring shift(s) deleted.");
+
+            case 'following':
+                $count = Shift::where('repeat_group_id', $shift->repeat_group_id)
+                    ->where('date', '>=', $shift->date->toDateString())
+                    ->delete();
+                return back()->with('success', "{$count} shift(s) deleted from this date onward.");
+
+            default: // 'this'
+                $shift->delete();
+                return back()->with('success', 'Shift deleted.');
+        }
     }
 
     /**
@@ -336,26 +394,29 @@ class SchedulingController extends Controller
     private function formatShift(Shift $shift): array
     {
         return [
-            'id'             => $shift->id,
-            'user_id'        => $shift->user_id,
-            'user'           => $shift->user ? [
+            'id'              => $shift->id,
+            'user_id'         => $shift->user_id,
+            'user'            => $shift->user ? [
                 'id'    => $shift->user->id,
                 'name'  => $shift->user->name,
                 'email' => $shift->user->email,
                 'role'  => $shift->user->role,
             ] : null,
-            'title'          => $shift->title,
-            'date'           => $shift->date->toDateString(),
-            'start_time'     => substr($shift->start_time, 0, 5),
-            'end_time'       => substr($shift->end_time, 0, 5),
-            'duration_hours' => $shift->durationHours(),
-            'duration_label' => $shift->formattedDuration(),
-            'color'          => $shift->color,
-            'location'       => $shift->location,
-            'notes'          => $shift->notes,
-            'is_published'   => $shift->is_published,
-            'is_open'        => $shift->is_open && $shift->user_id === null,
-            'status'         => $shift->status,
+            'title'           => $shift->title,
+            'date'            => $shift->date->toDateString(),
+            'start_time'      => substr($shift->start_time, 0, 5),
+            'end_time'        => substr($shift->end_time, 0, 5),
+            'duration_hours'  => $shift->durationHours(),
+            'duration_label'  => $shift->formattedDuration(),
+            'color'           => $shift->color,
+            'location'        => $shift->location,
+            'notes'           => $shift->notes,
+            'is_published'    => $shift->is_published,
+            'is_open'         => $shift->is_open && $shift->user_id === null,
+            'is_recurring'    => $shift->repeat_group_id !== null,
+            'repeat_type'     => $shift->repeat_type,
+            'repeat_group_id' => $shift->repeat_group_id,
+            'status'          => $shift->status,
         ];
     }
 }

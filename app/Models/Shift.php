@@ -23,15 +23,17 @@ class Shift extends Model
         'is_open',
         'repeat_type',
         'repeat_group_id',
+        'repeat_end_date',
         'status',
     ];
 
     protected function casts(): array
     {
         return [
-            'date'         => 'date',
-            'is_published' => 'boolean',
-            'is_open'      => 'boolean',
+            'date'            => 'date',
+            'repeat_end_date' => 'date',
+            'is_published'    => 'boolean',
+            'is_open'         => 'boolean',
         ];
     }
 
