@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\User;
@@ -40,6 +41,18 @@ Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->post('/switch-view', [ViewSwitchController::class, '__invoke'])->name('switch-view');
+
+/*
+|--------------------------------------------------------------------------
+| Onboarding Routes
+|--------------------------------------------------------------------------
+| Users who haven't created a company yet are funneled here by
+| the EnsureOnboarded middleware.
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/onboarding', [OnboardingController::class, 'create'])->name('onboarding.create');
+    Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+});
 
 /*
 |--------------------------------------------------------------------------
