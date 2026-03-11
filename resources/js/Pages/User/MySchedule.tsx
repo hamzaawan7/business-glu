@@ -89,7 +89,7 @@ export default function MySchedule({ dates, myShifts, upcomingShifts, openShifts
                             return (
                                 <div
                                     key={day.date}
-                                    className={`text-center py-2 rounded-lg text-xs font-medium ${
+                                    className={`text-center py-2 rounded-lg font-medium ${
                                         day.isToday
                                             ? 'bg-brand-primary text-white'
                                             : hasShift
@@ -97,8 +97,8 @@ export default function MySchedule({ dates, myShifts, upcomingShifts, openShifts
                                             : 'text-brand-accent'
                                     }`}
                                 >
-                                    <div>{day.dayName}</div>
-                                    <div className="text-sm font-bold">{day.dayNumber}</div>
+                                    <div className="text-sm font-bold">{day.dayName}</div>
+                                    <div className="text-[10px] mt-0.5 opacity-75">{day.dayNumber}</div>
                                     {hasShift && !day.isToday && (
                                         <div className="w-1.5 h-1.5 bg-brand-primary rounded-full mx-auto mt-0.5" />
                                     )}

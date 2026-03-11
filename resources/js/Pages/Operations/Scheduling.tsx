@@ -259,13 +259,15 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                 {dates.map(d => (
                                     <th
                                         key={d.date}
-                                        className={`text-center px-2 py-3 text-xs font-medium uppercase tracking-wide cursor-pointer hover:bg-gray-50 ${
-                                            d.isToday ? 'bg-brand-primary/5 text-brand-primary' : 'text-brand-accent'
+                                        className={`text-center px-2 py-3 cursor-pointer hover:bg-gray-50 ${
+                                            d.isToday ? 'bg-brand-primary/5' : ''
                                         }`}
                                         onClick={() => openCreate(d.date)}
                                     >
-                                        <div>{d.dayName}</div>
-                                        <div className={`text-lg font-bold ${d.isToday ? 'text-brand-primary' : 'text-brand-secondary'}`}>
+                                        <div className={`text-sm font-bold ${d.isToday ? 'text-brand-primary' : 'text-brand-secondary'}`}>
+                                            {d.dayName}
+                                        </div>
+                                        <div className={`text-[10px] font-medium mt-0.5 ${d.isToday ? 'text-brand-primary' : 'text-brand-accent'}`}>
                                             {d.dayNumber}
                                         </div>
                                     </th>
