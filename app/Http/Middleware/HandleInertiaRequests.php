@@ -40,6 +40,10 @@ class HandleInertiaRequests extends Middleware
                 ? session('active_view', $user->isAdmin() ? 'admin' : 'user')
                 : 'user',
             'canSwitchView' => fn () => $user?->isAdmin() ?? false,
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error'   => fn () => $request->session()->get('error'),
+            ],
         ];
     }
 }

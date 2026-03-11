@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -98,15 +99,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/recognition', fn () => Inertia::render('HR/Recognition'))->name('recognition.index');
 
     // ── Admin ───────────────────────────────────────────────
-    Route::get('/team', function () {
-        $user = auth()->user();
-        return Inertia::render('Admin/Team', [
-            'members' => User::where('tenant_id', $user->tenant_id)
-                ->select(['id', 'name', 'email', 'email_verified_at', 'role', 'tenant_id'])
-                ->orderBy('name')
-                ->get(),
-        ]);
-    })->name('team.index');
+    Route::get('/team', [TeamController::class, 'index'])->name('team.index');
+    Route::post('/team/invite', [TeamController::class, 'invite'])->name('team.invite');
+    Route::patch('/team/{member}/role', [TeamController::class, 'updateRole'])->name('team.update-role');
+    Route::delete('/team/{member}', [TeamController::class, 'remove'])->name('team.remove');
+    Route::delete('/team/invitation/{invitation}', [TeamController::class, 'cancelInvitation'])->name('team.cancel-invitation');
 
     Route::get('/settings', function () {
         $user = auth()->user();
@@ -145,6 +142,16 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
         'status' => session('status'),
     ]))->name('profile');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Team Invitation Routes (public)
+|--------------------------------------------------------------------------
+| These are accessible without authentication — invited users
+| may not have an account yet.
+*/
+Route::get('/invitation/{token}', [TeamController::class, 'showAcceptForm'])->name('invitation.show');
+Route::post('/invitation/{token}/accept', [TeamController::class, 'acceptInvitation'])->name('invitation.accept');
 
 /*
 |--------------------------------------------------------------------------

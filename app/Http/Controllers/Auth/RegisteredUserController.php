@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\TeamInvitation;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -45,6 +46,29 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        // If there's a pending invitation, accept it automatically
+        $pendingToken = session()->pull('pending_invitation');
+        if ($pendingToken) {
+            $invitation = TeamInvitation::where('token', $pendingToken)
+                ->whereNull('accepted_at')
+                ->where('expires_at', '>', now())
+                ->first();
+
+            if ($invitation) {
+                $user->update([
+                    'tenant_id' => $invitation->tenant_id,
+                    'role'      => $invitation->role,
+                ]);
+
+                $invitation->update(['accepted_at' => now()]);
+
+                session(['active_view' => 'user']);
+
+                return redirect(route('dashboard', absolute: false))
+                    ->with('success', 'Welcome to ' . $invitation->tenant->name . '!');
+            }
+        }
 
         return redirect(route('onboarding.create', absolute: false));
     }

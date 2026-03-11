@@ -441,8 +441,16 @@ Mobile employee identification.
 ## Implementation Checklist
 
 ### Phase 1 — Foundation (MVP)
-- [ ] Authentication & User Management (registration, login, RBAC, multi-tenancy)
-- [ ] Admin Dashboard (web panel, company settings, activity log)
+- [x] Authentication & User Management (registration, login, RBAC, multi-tenancy)
+- [x] Onboarding Flow (registration → company creation → dashboard)
+- [x] Admin ↔ User View Switching (session-based, RBAC-guarded)
+- [x] Admin Dashboard (sidebar layout, 15 module stubs, team list, settings display)
+- [x] User Dashboard (sidebar layout, 13 module stubs)
+- [x] Brand Theming (colors, fonts, logos, SVG icons)
+- [ ] Team Management (invite members, edit roles, remove)
+- [ ] Company Settings (save company info, toggle modules)
+- [ ] Dashboard Stats (wire to real data from business tables)
+- [ ] Activity Log
 - [ ] Mobile App Shell (iOS & Android, push notifications)
 
 ### Phase 2 — Operations Hub
