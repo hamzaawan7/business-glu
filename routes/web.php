@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TimeClockController;
@@ -83,9 +84,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     })->name('dashboard');
 
     // ── Operations Hub ──────────────────────────────────────
-    // ── Operations Hub ──────────────────────────────────────
     Route::get('/time-clock', [TimeClockController::class, 'index'])->name('time-clock.index');
-    Route::get('/scheduling', fn () => Inertia::render('Operations/Scheduling'))->name('scheduling.index');
+    Route::get('/scheduling', [SchedulingController::class, 'index'])->name('scheduling.index');
+    Route::post('/scheduling', [SchedulingController::class, 'store'])->name('scheduling.store');
+    Route::patch('/scheduling/{shift}', [SchedulingController::class, 'update'])->name('scheduling.update');
+    Route::delete('/scheduling/{shift}', [SchedulingController::class, 'destroy'])->name('scheduling.destroy');
+    Route::post('/scheduling/publish', [SchedulingController::class, 'publish'])->name('scheduling.publish');
+    Route::post('/scheduling/duplicate', [SchedulingController::class, 'duplicate'])->name('scheduling.duplicate');
     Route::get('/tasks', fn () => Inertia::render('Operations/Tasks'))->name('tasks.index');
     Route::get('/forms', fn () => Inertia::render('Operations/Forms'))->name('forms.index');
 
@@ -125,7 +130,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(function () {
     Route::get('/', fn () => Inertia::render('User/Home'))->name('home');
     Route::get('/time-clock', [TimeClockController::class, 'myTimeClock'])->name('time-clock');
-    Route::get('/schedule', fn () => Inertia::render('User/MySchedule'))->name('schedule');
+    Route::get('/schedule', [SchedulingController::class, 'mySchedule'])->name('schedule');
     Route::get('/chat', fn () => Inertia::render('User/MyChat'))->name('chat');
     Route::get('/tasks', fn () => Inertia::render('User/MyTasks'))->name('tasks');
     Route::get('/more', fn () => Inertia::render('User/More'))->name('more');
@@ -151,6 +156,15 @@ Route::middleware(['auth', 'verified'])->prefix('time-clock')->name('time-clock.
     Route::post('/clock-out', [TimeClockController::class, 'clockOut'])->name('clock-out');
     Route::post('/break/start', [TimeClockController::class, 'startBreak'])->name('break-start');
     Route::post('/break/end', [TimeClockController::class, 'endBreak'])->name('break-end');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Scheduling Actions (shared — claim open shifts)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('scheduling')->name('scheduling.')->group(function () {
+    Route::post('/{shift}/claim', [SchedulingController::class, 'claim'])->name('claim');
 });
 
 /*
