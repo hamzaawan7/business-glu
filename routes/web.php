@@ -4,9 +4,11 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TimeClockController;
 use App\Http\Controllers\ViewSwitchController;
+use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -77,7 +79,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
                 'clockedIn' => TimeEntry::where('tenant_id', $user->tenant_id)
                     ->where('status', 'active')
                     ->count(),
-                'openTasks' => 0,
+                'openTasks' => Task::where('tenant_id', $user->tenant_id)
+                    ->whereNull('parent_id')
+                    ->whereIn('status', ['open', 'in_progress'])
+                    ->count(),
                 'unreadMessages' => 0,
             ],
         ]);
@@ -91,7 +96,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/scheduling/{shift}', [SchedulingController::class, 'destroy'])->name('scheduling.destroy');
     Route::post('/scheduling/publish', [SchedulingController::class, 'publish'])->name('scheduling.publish');
     Route::post('/scheduling/duplicate', [SchedulingController::class, 'duplicate'])->name('scheduling.duplicate');
-    Route::get('/tasks', fn () => Inertia::render('Operations/Tasks'))->name('tasks.index');
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::get('/forms', fn () => Inertia::render('Operations/Forms'))->name('forms.index');
 
     // ── Communication Hub ───────────────────────────────────
@@ -132,7 +140,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/time-clock', [TimeClockController::class, 'myTimeClock'])->name('time-clock');
     Route::get('/schedule', [SchedulingController::class, 'mySchedule'])->name('schedule');
     Route::get('/chat', fn () => Inertia::render('User/MyChat'))->name('chat');
-    Route::get('/tasks', fn () => Inertia::render('User/MyTasks'))->name('tasks');
+    Route::get('/tasks', [TaskController::class, 'myTasks'])->name('tasks');
     Route::get('/more', fn () => Inertia::render('User/More'))->name('more');
     Route::get('/forms', fn () => Inertia::render('User/UserForms'))->name('forms');
     Route::get('/updates', fn () => Inertia::render('User/UserUpdates'))->name('updates');
@@ -165,6 +173,16 @@ Route::middleware(['auth', 'verified'])->prefix('time-clock')->name('time-clock.
 */
 Route::middleware(['auth', 'verified'])->prefix('scheduling')->name('scheduling.')->group(function () {
     Route::post('/{shift}/claim', [SchedulingController::class, 'claim'])->name('claim');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Task Actions (shared — used by both admin and user views)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('tasks')->name('tasks.')->group(function () {
+    Route::patch('/{task}/status', [TaskController::class, 'toggleStatus'])->name('toggle-status');
+    Route::post('/bulk-status', [TaskController::class, 'bulkStatus'])->name('bulk-status');
 });
 
 /*
