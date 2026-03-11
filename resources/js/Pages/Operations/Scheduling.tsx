@@ -62,6 +62,8 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
     const [editingShift, setEditingShift] = useState<ShiftData | null>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<ShiftData | null>(null);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+    const [duplicateTarget, setDuplicateTarget] = useState('');
 
     // Create shift form
     const createForm = useForm({
@@ -146,6 +148,26 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
         }, { preserveScroll: true });
     };
 
+    const handleDuplicate = () => {
+        if (!duplicateTarget) return;
+        router.post(route('admin.scheduling.duplicate'), {
+            source_week: weekStart,
+            target_week: duplicateTarget,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setShowDuplicateModal(false);
+                setDuplicateTarget('');
+            },
+        });
+    };
+
+    const getNextWeekStart = () => {
+        const d = new Date(weekStart);
+        d.setDate(d.getDate() + 7);
+        return d.toISOString().split('T')[0];
+    };
+
     const navigateWeek = (direction: 'prev' | 'next') => {
         const d = new Date(weekStart);
         d.setDate(d.getDate() + (direction === 'prev' ? -7 : 7));
@@ -194,7 +216,13 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                         <h1 className="text-2xl font-bold font-heading text-brand-primary">Scheduling</h1>
                         <p className="text-sm text-brand-accent mt-1">Create and manage employee schedules</p>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => { setDuplicateTarget(getNextWeekStart()); setShowDuplicateModal(true); }}
+                            className="px-4 py-2 border border-gray-300 text-brand-secondary text-sm font-medium rounded-lg hover:bg-gray-50 transition"
+                        >
+                            Duplicate Week
+                        </button>
                         <button
                             onClick={handlePublish}
                             className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition"
@@ -266,9 +294,6 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                     >
                                         <div className={`text-sm font-bold ${d.isToday ? 'text-brand-primary' : 'text-brand-secondary'}`}>
                                             {d.dayName}
-                                        </div>
-                                        <div className={`text-[10px] font-medium mt-0.5 ${d.isToday ? 'text-brand-primary' : 'text-brand-accent'}`}>
-                                            {d.dayNumber}
                                         </div>
                                     </th>
                                 ))}
@@ -634,7 +659,7 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                         <p className="text-sm text-brand-accent mb-6">
                             Are you sure you want to delete this shift
                             {deleteConfirm.user ? ` for ${deleteConfirm.user.name}` : ''}
-                            {' '}on {new Date(deleteConfirm.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}?
+                            {' '}on {new Date(deleteConfirm.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' })}?
                         </p>
                         <div className="flex justify-end gap-3">
                             <button
@@ -648,6 +673,43 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                 className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition"
                             >
                                 Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── Duplicate Week Modal ── */}
+            {showDuplicateModal && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowDuplicateModal(false)}>
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6" onClick={e => e.stopPropagation()}>
+                        <h2 className="text-lg font-bold font-heading text-brand-primary mb-2">Duplicate Week</h2>
+                        <p className="text-sm text-brand-accent mb-4">
+                            Copy all shifts from <span className="font-medium text-brand-primary">{weekLabel}</span> to another week.
+                        </p>
+                        <div className="mb-6">
+                            <label className="block text-sm font-medium text-brand-secondary mb-1">Copy to week starting</label>
+                            <input
+                                type="date"
+                                value={duplicateTarget}
+                                onChange={e => setDuplicateTarget(e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-brand-primary focus:border-brand-primary"
+                                required
+                            />
+                        </div>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setShowDuplicateModal(false)}
+                                className="px-4 py-2 text-sm text-brand-accent hover:text-brand-primary transition"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDuplicate}
+                                disabled={!duplicateTarget}
+                                className="px-5 py-2 bg-brand-primary text-white text-sm font-medium rounded-lg hover:opacity-90 transition disabled:opacity-50"
+                            >
+                                Duplicate
                             </button>
                         </div>
                     </div>

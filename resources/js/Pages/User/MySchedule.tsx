@@ -98,7 +98,6 @@ export default function MySchedule({ dates, myShifts, upcomingShifts, openShifts
                                     }`}
                                 >
                                     <div className="text-sm font-bold">{day.dayName}</div>
-                                    <div className="text-[10px] mt-0.5 opacity-75">{day.dayNumber}</div>
                                     {hasShift && !day.isToday && (
                                         <div className="w-1.5 h-1.5 bg-brand-primary rounded-full mx-auto mt-0.5" />
                                     )}
