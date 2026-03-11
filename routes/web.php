@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\User;
@@ -105,17 +106,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/team/{member}', [TeamController::class, 'remove'])->name('team.remove');
     Route::delete('/team/invitation/{invitation}', [TeamController::class, 'cancelInvitation'])->name('team.cancel-invitation');
 
-    Route::get('/settings', function () {
-        $user = auth()->user();
-        $tenant = $user->tenant;
-        return Inertia::render('Admin/Settings', [
-            'company' => $tenant ? [
-                'name' => $tenant->name,
-                'slug' => $tenant->slug,
-                'plan' => $tenant->plan ?? 'free',
-            ] : null,
-        ]);
-    })->name('settings.index');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::patch('/settings/company', [SettingsController::class, 'updateCompany'])->name('settings.update-company');
+    Route::patch('/settings/module', [SettingsController::class, 'toggleModule'])->name('settings.toggle-module');
 });
 
 /*
