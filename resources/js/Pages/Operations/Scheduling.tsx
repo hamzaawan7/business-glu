@@ -73,7 +73,7 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
     const createForm = useForm({
         user_id: '' as string | number,
         title: '',
-        date: '',
+        dates: [] as string[],
         start_time: '09:00',
         end_time: '17:00',
         color: '#495B67',
@@ -99,7 +99,7 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
 
     const openCreate = (date?: string) => {
         createForm.reset();
-        if (date) createForm.setData('date', date);
+        if (date) createForm.setData('dates', [date]);
         setSelectedDate(date ?? null);
         setShowCreateModal(true);
     };
@@ -426,14 +426,60 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-brand-secondary mb-1">Date</label>
-                                    <input
-                                        type="date"
-                                        value={createForm.data.date}
-                                        onChange={e => createForm.setData('date', e.target.value)}
-                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-brand-primary focus:border-brand-primary"
-                                        required
-                                    />
+                                    <label className="block text-sm font-medium text-brand-secondary mb-2">Days</label>
+                                    <div className="flex gap-1.5">
+                                        {dates.map(d => {
+                                            const selected = createForm.data.dates.includes(d.date);
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={d.date}
+                                                    onClick={() => {
+                                                        const current = createForm.data.dates;
+                                                        createForm.setData(
+                                                            'dates',
+                                                            selected
+                                                                ? current.filter(dd => dd !== d.date)
+                                                                : [...current, d.date]
+                                                        );
+                                                    }}
+                                                    className={`flex-1 py-2 rounded-lg text-xs font-bold transition border ${
+                                                        selected
+                                                            ? 'bg-brand-primary text-white border-brand-primary'
+                                                            : 'bg-white text-brand-secondary border-gray-300 hover:border-brand-primary'
+                                                    }`}
+                                                >
+                                                    {d.dayName}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => createForm.setData('dates', dates.slice(0, 5).map(d => d.date))}
+                                            className="text-[11px] text-brand-accent hover:text-brand-primary font-medium"
+                                        >
+                                            Mon–Fri
+                                        </button>
+                                        <span className="text-gray-300">|</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => createForm.setData('dates', dates.map(d => d.date))}
+                                            className="text-[11px] text-brand-accent hover:text-brand-primary font-medium"
+                                        >
+                                            All days
+                                        </button>
+                                        <span className="text-gray-300">|</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => createForm.setData('dates', [])}
+                                            className="text-[11px] text-brand-accent hover:text-brand-primary font-medium"
+                                        >
+                                            Clear
+                                        </button>
+                                    </div>
+                                    {createForm.errors.dates && <p className="text-xs text-red-600 mt-1">{createForm.errors.dates}</p>}
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-3">

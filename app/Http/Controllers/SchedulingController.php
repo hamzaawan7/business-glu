@@ -86,7 +86,8 @@ class SchedulingController extends Controller
         $validated = $request->validate([
             'user_id'         => 'nullable|exists:users,id',
             'title'           => 'nullable|string|max:100',
-            'date'            => 'required|date',
+            'dates'           => 'required|array|min:1',
+            'dates.*'         => 'required|date',
             'start_time'      => 'required|date_format:H:i',
             'end_time'        => 'required|date_format:H:i',
             'color'           => 'nullable|string|max:7',
@@ -94,10 +95,11 @@ class SchedulingController extends Controller
             'notes'           => 'nullable|string|max:1000',
             'is_open'         => 'boolean',
             'repeat_type'     => 'nullable|in:none,weekly',
-            'repeat_end_date' => 'nullable|date|after:date',
+            'repeat_end_date' => 'nullable|date',
         ]);
 
         $repeatType = $validated['repeat_type'] ?? 'none';
+        $dates      = $validated['dates'];
 
         $baseData = [
             'tenant_id'  => $user->tenant_id,
@@ -112,36 +114,42 @@ class SchedulingController extends Controller
             'is_open'    => $validated['is_open'] ?? false,
         ];
 
+        // ── Non-recurring: create one shift per selected day ──
         if ($repeatType === 'none' || ! $repeatType) {
-            Shift::create(array_merge($baseData, [
-                'date' => $validated['date'],
-            ]));
-            return back()->with('success', 'Shift created successfully.');
+            foreach ($dates as $date) {
+                Shift::create(array_merge($baseData, [
+                    'date' => $date,
+                ]));
+            }
+            $label = count($dates) === 1 ? 'Shift created successfully.' : count($dates) . ' shifts created successfully.';
+            return back()->with('success', $label);
         }
 
-        // ── Recurring shift generation ────────────────────────
-        $groupId      = now()->timestamp . mt_rand(1000, 9999);
-        $startDate    = Carbon::parse($validated['date']);
-        $endDate      = ! empty($validated['repeat_end_date'])
-            ? Carbon::parse($validated['repeat_end_date'])
-            : $startDate->copy()->addYear(); // default: 1 year if "forever"
+        // ── Recurring: generate weekly instances per selected day ──
+        $groupId       = now()->timestamp . mt_rand(1000, 9999);
         $repeatEndDate = ! empty($validated['repeat_end_date'])
             ? $validated['repeat_end_date']
             : null;
+        $count = 0;
 
-        $interval = 7; // weekly
-        $count    = 0;
-        $current  = $startDate->copy();
+        foreach ($dates as $date) {
+            $startDate = Carbon::parse($date);
+            $endDate   = $repeatEndDate
+                ? Carbon::parse($repeatEndDate)
+                : $startDate->copy()->addYear();
 
-        while ($current->lte($endDate) && $count < 52) { // cap at 52 weeks
-            Shift::create(array_merge($baseData, [
-                'date'            => $current->toDateString(),
-                'repeat_type'     => 'weekly',
-                'repeat_group_id' => $groupId,
-                'repeat_end_date' => $repeatEndDate,
-            ]));
-            $count++;
-            $current->addDays($interval);
+            $current = $startDate->copy();
+
+            while ($current->lte($endDate) && $count < 260) { // cap at 260 (5 days × 52 weeks)
+                Shift::create(array_merge($baseData, [
+                    'date'            => $current->toDateString(),
+                    'repeat_type'     => 'weekly',
+                    'repeat_group_id' => $groupId,
+                    'repeat_end_date' => $repeatEndDate,
+                ]));
+                $count++;
+                $current->addWeek();
+            }
         }
 
         return back()->with('success', "{$count} recurring shift(s) created.");
