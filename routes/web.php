@@ -4,7 +4,9 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TimeClockController;
 use App\Http\Controllers\ViewSwitchController;
+use App\Models\TimeEntry;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -71,7 +73,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         return Inertia::render('Dashboard', [
             'stats' => [
                 'teamMembers' => User::where('tenant_id', $user->tenant_id)->count(),
-                'clockedIn' => 0,
+                'clockedIn' => TimeEntry::where('tenant_id', $user->tenant_id)
+                    ->where('status', 'active')
+                    ->count(),
                 'openTasks' => 0,
                 'unreadMessages' => 0,
             ],
@@ -79,7 +83,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     })->name('dashboard');
 
     // ── Operations Hub ──────────────────────────────────────
-    Route::get('/time-clock', fn () => Inertia::render('Operations/TimeClock'))->name('time-clock.index');
+    // ── Operations Hub ──────────────────────────────────────
+    Route::get('/time-clock', [TimeClockController::class, 'index'])->name('time-clock.index');
     Route::get('/scheduling', fn () => Inertia::render('Operations/Scheduling'))->name('scheduling.index');
     Route::get('/tasks', fn () => Inertia::render('Operations/Tasks'))->name('tasks.index');
     Route::get('/forms', fn () => Inertia::render('Operations/Forms'))->name('forms.index');
@@ -119,7 +124,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 */
 Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(function () {
     Route::get('/', fn () => Inertia::render('User/Home'))->name('home');
-    Route::get('/time-clock', fn () => Inertia::render('User/MyTimeClock'))->name('time-clock');
+    Route::get('/time-clock', [TimeClockController::class, 'myTimeClock'])->name('time-clock');
     Route::get('/schedule', fn () => Inertia::render('User/MySchedule'))->name('schedule');
     Route::get('/chat', fn () => Inertia::render('User/MyChat'))->name('chat');
     Route::get('/tasks', fn () => Inertia::render('User/MyTasks'))->name('tasks');
@@ -134,6 +139,18 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
         'mustVerifyEmail' => ! auth()->user()->hasVerifiedEmail(),
         'status' => session('status'),
     ]))->name('profile');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Time Clock Actions (shared — used by both admin and user views)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('time-clock')->name('time-clock.')->group(function () {
+    Route::post('/clock-in', [TimeClockController::class, 'clockIn'])->name('clock-in');
+    Route::post('/clock-out', [TimeClockController::class, 'clockOut'])->name('clock-out');
+    Route::post('/break/start', [TimeClockController::class, 'startBreak'])->name('break-start');
+    Route::post('/break/end', [TimeClockController::class, 'endBreak'])->name('break-end');
 });
 
 /*
