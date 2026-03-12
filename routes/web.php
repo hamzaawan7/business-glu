@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DirectoryController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\ProfileController;
@@ -125,7 +126,15 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/directory', [DirectoryController::class, 'index'])->name('directory.index');
     Route::patch('/directory/{member}', [DirectoryController::class, 'updateProfile'])->name('directory.update-profile');
     Route::post('/directory/bulk-department', [DirectoryController::class, 'bulkUpdateDepartment'])->name('directory.bulk-department');
-    Route::get('/knowledge-base', fn () => Inertia::render('Communication/KnowledgeBase'))->name('knowledge-base.index');
+    Route::get('/knowledge-base', [KnowledgeBaseController::class, 'index'])->name('kb.index');
+    Route::post('/knowledge-base/categories', [KnowledgeBaseController::class, 'storeCategory'])->name('kb.store-category');
+    Route::patch('/knowledge-base/categories/{category}', [KnowledgeBaseController::class, 'updateCategory'])->name('kb.update-category');
+    Route::delete('/knowledge-base/categories/{category}', [KnowledgeBaseController::class, 'destroyCategory'])->name('kb.destroy-category');
+    Route::post('/knowledge-base/articles', [KnowledgeBaseController::class, 'storeArticle'])->name('kb.store-article');
+    Route::patch('/knowledge-base/articles/{article}', [KnowledgeBaseController::class, 'updateArticle'])->name('kb.update-article');
+    Route::delete('/knowledge-base/articles/{article}', [KnowledgeBaseController::class, 'destroyArticle'])->name('kb.destroy-article');
+    Route::post('/knowledge-base/articles/{article}/publish', [KnowledgeBaseController::class, 'publishArticle'])->name('kb.publish-article');
+    Route::post('/knowledge-base/articles/{article}/archive', [KnowledgeBaseController::class, 'archiveArticle'])->name('kb.archive-article');
     Route::get('/surveys', fn () => Inertia::render('Communication/Surveys'))->name('surveys.index');
     Route::get('/events', fn () => Inertia::render('Communication/Events'))->name('events.index');
     Route::get('/help-desk', fn () => Inertia::render('Communication/HelpDesk'))->name('help-desk.index');
@@ -166,7 +175,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
-    Route::get('/knowledge-base', fn () => Inertia::render('User/UserKnowledgeBase'))->name('knowledge-base');
+    Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
     Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
         'mustVerifyEmail' => ! auth()->user()->hasVerifiedEmail(),
         'status' => session('status'),
@@ -223,6 +232,15 @@ Route::middleware(['auth', 'verified'])->prefix('updates')->name('updates.')->gr
     Route::delete('/comments/{comment}', [UpdateController::class, 'deleteComment'])->name('delete-comment');
     Route::post('/{update}/react', [UpdateController::class, 'toggleReaction'])->name('react');
     Route::post('/{update}/read', [UpdateController::class, 'markRead'])->name('read');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Knowledge Base Actions (shared — article view tracking)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('kb')->name('kb.')->group(function () {
+    Route::post('/articles/{article}/view', [KnowledgeBaseController::class, 'markViewed'])->name('mark-viewed');
 });
 
 /*
