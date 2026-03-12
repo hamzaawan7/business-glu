@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchedulingController;
@@ -100,7 +101,15 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-    Route::get('/forms', fn () => Inertia::render('Operations/Forms'))->name('forms.index');
+    Route::get('/forms', [FormController::class, 'index'])->name('forms.index');
+    Route::post('/forms', [FormController::class, 'store'])->name('forms.store');
+    Route::patch('/forms/{form}', [FormController::class, 'update'])->name('forms.update');
+    Route::delete('/forms/{form}', [FormController::class, 'destroy'])->name('forms.destroy');
+    Route::post('/forms/{form}/publish', [FormController::class, 'publish'])->name('forms.publish');
+    Route::post('/forms/{form}/archive', [FormController::class, 'archive'])->name('forms.archive');
+    Route::post('/forms/{form}/assign', [FormController::class, 'assign'])->name('forms.assign');
+    Route::get('/forms/{form}/submissions', [FormController::class, 'submissions'])->name('forms.submissions');
+    Route::patch('/forms/submissions/{submission}/review', [FormController::class, 'reviewSubmission'])->name('forms.review-submission');
 
     // ── Communication Hub ───────────────────────────────────
     Route::get('/chat', fn () => Inertia::render('Communication/Chat'))->name('chat.index');
@@ -142,7 +151,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/chat', fn () => Inertia::render('User/MyChat'))->name('chat');
     Route::get('/tasks', [TaskController::class, 'myTasks'])->name('tasks');
     Route::get('/more', fn () => Inertia::render('User/More'))->name('more');
-    Route::get('/forms', fn () => Inertia::render('User/UserForms'))->name('forms');
+    Route::get('/forms', [FormController::class, 'myForms'])->name('forms');
     Route::get('/updates', fn () => Inertia::render('User/UserUpdates'))->name('updates');
     Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
@@ -183,6 +192,15 @@ Route::middleware(['auth', 'verified'])->prefix('scheduling')->name('scheduling.
 Route::middleware(['auth', 'verified'])->prefix('tasks')->name('tasks.')->group(function () {
     Route::patch('/{task}/status', [TaskController::class, 'toggleStatus'])->name('toggle-status');
     Route::post('/bulk-status', [TaskController::class, 'bulkStatus'])->name('bulk-status');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Form Actions (shared — submit forms from any view)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('forms')->name('forms.')->group(function () {
+    Route::post('/{form}/submit', [FormController::class, 'submit'])->name('submit');
 });
 
 /*
