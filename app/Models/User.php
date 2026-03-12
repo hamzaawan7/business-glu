@@ -24,6 +24,14 @@ class User extends Authenticatable
         'password',
         'role',
         'tenant_id',
+        'phone',
+        'position',
+        'department',
+        'location',
+        'bio',
+        'avatar_url',
+        'hire_date',
+        'directory_visible',
     ];
 
     /**
@@ -46,6 +54,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'hire_date' => 'date',
+            'directory_visible' => 'boolean',
         ];
     }
 
@@ -79,5 +89,21 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return in_array($this->role, ['super_admin', 'owner', 'admin']);
+    }
+
+    /**
+     * Check if the user has at least manager-level access.
+     */
+    public function isManager(): bool
+    {
+        return in_array($this->role, ['super_admin', 'owner', 'admin', 'manager']);
+    }
+
+    /**
+     * Scope: visible in directory.
+     */
+    public function scopeDirectoryVisible($query)
+    {
+        return $query->where('directory_visible', true);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DirectoryController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\UpdateController;
@@ -121,7 +122,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/updates/{update}/publish', [UpdateController::class, 'publish'])->name('updates.publish');
     Route::post('/updates/{update}/archive', [UpdateController::class, 'archive'])->name('updates.archive');
     Route::post('/updates/{update}/pin', [UpdateController::class, 'togglePin'])->name('updates.toggle-pin');
-    Route::get('/directory', fn () => Inertia::render('Communication/Directory'))->name('directory.index');
+    Route::get('/directory', [DirectoryController::class, 'index'])->name('directory.index');
+    Route::patch('/directory/{member}', [DirectoryController::class, 'updateProfile'])->name('directory.update-profile');
+    Route::post('/directory/bulk-department', [DirectoryController::class, 'bulkUpdateDepartment'])->name('directory.bulk-department');
     Route::get('/knowledge-base', fn () => Inertia::render('Communication/KnowledgeBase'))->name('knowledge-base.index');
     Route::get('/surveys', fn () => Inertia::render('Communication/Surveys'))->name('surveys.index');
     Route::get('/events', fn () => Inertia::render('Communication/Events'))->name('events.index');
@@ -162,7 +165,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/updates', [UpdateController::class, 'feed'])->name('updates');
     Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
-    Route::get('/directory', fn () => Inertia::render('User/UserDirectory'))->name('directory');
+    Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', fn () => Inertia::render('User/UserKnowledgeBase'))->name('knowledge-base');
     Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
         'mustVerifyEmail' => ! auth()->user()->hasVerifiedEmail(),
