@@ -238,6 +238,7 @@ class TaskController extends Controller
         $user     = $request->user();
         $tenantId = $user->tenant_id;
         $status   = $request->get('status', 'all');
+        $priority = $request->get('priority', 'all');
 
         $query = Task::where('tenant_id', $tenantId)
             ->whereNull('parent_id')
@@ -250,6 +251,10 @@ class TaskController extends Controller
 
         if ($status !== 'all') {
             $query->where('status', $status);
+        }
+
+        if ($priority !== 'all') {
+            $query->where('priority', $priority);
         }
 
         $tasks = $query->get()->map(fn ($task) => $this->formatTask($task));
@@ -268,9 +273,12 @@ class TaskController extends Controller
             ->count();
 
         return Inertia::render('User/MyTasks', [
-            'tasks'  => $tasks,
-            'filter' => $status,
-            'stats'  => [
+            'tasks'   => $tasks,
+            'filters' => [
+                'status'   => $status,
+                'priority' => $priority,
+            ],
+            'stats'   => [
                 'open'       => $open,
                 'inProgress' => $progress,
                 'completed'  => $completed,
