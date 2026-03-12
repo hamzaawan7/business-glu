@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SettingsController;
@@ -113,7 +114,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 
     // ── Communication Hub ───────────────────────────────────
     Route::get('/chat', fn () => Inertia::render('Communication/Chat'))->name('chat.index');
-    Route::get('/updates', fn () => Inertia::render('Communication/Updates'))->name('updates.index');
+    Route::get('/updates', [UpdateController::class, 'index'])->name('updates.index');
+    Route::post('/updates', [UpdateController::class, 'store'])->name('updates.store');
+    Route::patch('/updates/{update}', [UpdateController::class, 'update'])->name('updates.update');
+    Route::delete('/updates/{update}', [UpdateController::class, 'destroy'])->name('updates.destroy');
+    Route::post('/updates/{update}/publish', [UpdateController::class, 'publish'])->name('updates.publish');
+    Route::post('/updates/{update}/archive', [UpdateController::class, 'archive'])->name('updates.archive');
+    Route::post('/updates/{update}/pin', [UpdateController::class, 'togglePin'])->name('updates.toggle-pin');
     Route::get('/directory', fn () => Inertia::render('Communication/Directory'))->name('directory.index');
     Route::get('/knowledge-base', fn () => Inertia::render('Communication/KnowledgeBase'))->name('knowledge-base.index');
     Route::get('/surveys', fn () => Inertia::render('Communication/Surveys'))->name('surveys.index');
@@ -152,7 +159,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/tasks', [TaskController::class, 'myTasks'])->name('tasks');
     Route::get('/more', fn () => Inertia::render('User/More'))->name('more');
     Route::get('/forms', [FormController::class, 'myForms'])->name('forms');
-    Route::get('/updates', fn () => Inertia::render('User/UserUpdates'))->name('updates');
+    Route::get('/updates', [UpdateController::class, 'feed'])->name('updates');
     Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
     Route::get('/directory', fn () => Inertia::render('User/UserDirectory'))->name('directory');
@@ -201,6 +208,18 @@ Route::middleware(['auth', 'verified'])->prefix('tasks')->name('tasks.')->group(
 */
 Route::middleware(['auth', 'verified'])->prefix('forms')->name('forms.')->group(function () {
     Route::post('/{form}/submit', [FormController::class, 'submit'])->name('submit');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Update Actions (shared — comments, reactions, reads from any view)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('updates')->name('updates.')->group(function () {
+    Route::post('/{update}/comment', [UpdateController::class, 'addComment'])->name('comment');
+    Route::delete('/comments/{comment}', [UpdateController::class, 'deleteComment'])->name('delete-comment');
+    Route::post('/{update}/react', [UpdateController::class, 'toggleReaction'])->name('react');
+    Route::post('/{update}/read', [UpdateController::class, 'markRead'])->name('read');
 });
 
 /*
