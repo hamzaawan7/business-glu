@@ -9,6 +9,7 @@ use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RecognitionController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SurveyController;
@@ -193,7 +194,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/time-off/policies', [TimeOffController::class, 'storePolicy'])->name('time-off.store-policy');
     Route::patch('/time-off/policies/{policy}', [TimeOffController::class, 'updatePolicy'])->name('time-off.update-policy');
     Route::delete('/time-off/policies/{policy}', [TimeOffController::class, 'destroyPolicy'])->name('time-off.destroy-policy');
-    Route::get('/recognition', fn () => Inertia::render('HR/Recognition'))->name('recognition.index');
+    Route::get('/recognition', [RecognitionController::class, 'index'])->name('recognition.index');
+    Route::post('/recognition', [RecognitionController::class, 'store'])->name('recognition.store');
+    Route::delete('/recognition/{recognition}', [RecognitionController::class, 'destroy'])->name('recognition.destroy');
+    Route::post('/recognition/badges', [RecognitionController::class, 'storeBadge'])->name('recognition.store-badge');
+    Route::delete('/recognition/badges/{badge}', [RecognitionController::class, 'destroyBadge'])->name('recognition.destroy-badge');
 
     // ── Admin ───────────────────────────────────────────────
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');
@@ -228,6 +233,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/help-desk', [TicketController::class, 'browse'])->name('help-desk');
     Route::get('/courses', [CourseController::class, 'browse'])->name('courses');
     Route::get('/documents', [DocumentController::class, 'browse'])->name('documents');
+    Route::get('/recognition', [RecognitionController::class, 'browse'])->name('recognition');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
     Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
@@ -355,6 +361,15 @@ Route::middleware(['auth', 'verified'])->prefix('documents')->name('documents.')
 Route::middleware(['auth', 'verified'])->prefix('time-off')->name('time-off.')->group(function () {
     Route::post('/submit', [TimeOffController::class, 'submit'])->name('submit');
     Route::post('/{leaveRequest}/cancel', [TimeOffController::class, 'cancel'])->name('cancel');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Recognition Actions (shared — user peer-to-peer recognition)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('recognition')->name('recognition.')->group(function () {
+    Route::post('/send', [RecognitionController::class, 'send'])->name('send');
 });
 
 /*

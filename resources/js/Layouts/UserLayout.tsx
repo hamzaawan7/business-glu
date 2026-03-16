@@ -67,6 +67,7 @@ const navigation: { section: string; items: NavItem[] }[] = [
             { label: 'Courses', icon: 'knowledge', href: '/app/courses' },
             { label: 'Time Off', icon: 'timeoff', href: '/app/time-off' },
             { label: 'Documents', icon: 'documents', href: '/app/documents' },
+            { label: 'Recognition', icon: 'updates', href: '/app/recognition' },
             { label: 'Directory', icon: 'directory', href: '/app/directory' },
             { label: 'Knowledge Base', icon: 'knowledge', href: '/app/knowledge-base' },
         ],
