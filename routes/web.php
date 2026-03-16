@@ -16,6 +16,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TimeClockController;
+use App\Http\Controllers\TimeOffController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -187,7 +188,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
     Route::post('/documents/categories', [DocumentController::class, 'storeCategory'])->name('documents.store-category');
     Route::delete('/documents/categories/{category}', [DocumentController::class, 'destroyCategory'])->name('documents.destroy-category');
-    Route::get('/time-off', fn () => Inertia::render('HR/TimeOff'))->name('time-off.index');
+    Route::get('/time-off', [TimeOffController::class, 'index'])->name('time-off.index');
+    Route::post('/time-off/{leaveRequest}/review', [TimeOffController::class, 'review'])->name('time-off.review');
+    Route::post('/time-off/policies', [TimeOffController::class, 'storePolicy'])->name('time-off.store-policy');
+    Route::patch('/time-off/policies/{policy}', [TimeOffController::class, 'updatePolicy'])->name('time-off.update-policy');
+    Route::delete('/time-off/policies/{policy}', [TimeOffController::class, 'destroyPolicy'])->name('time-off.destroy-policy');
     Route::get('/recognition', fn () => Inertia::render('HR/Recognition'))->name('recognition.index');
 
     // ── Admin ───────────────────────────────────────────────
@@ -217,7 +222,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/more', fn () => Inertia::render('User/More'))->name('more');
     Route::get('/forms', [FormController::class, 'myForms'])->name('forms');
     Route::get('/updates', [UpdateController::class, 'feed'])->name('updates');
-    Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
+    Route::get('/time-off', [TimeOffController::class, 'browse'])->name('time-off');
     Route::get('/surveys', [SurveyController::class, 'browse'])->name('surveys');
     Route::get('/events', [EventController::class, 'browse'])->name('events');
     Route::get('/help-desk', [TicketController::class, 'browse'])->name('help-desk');
@@ -340,6 +345,16 @@ Route::middleware(['auth', 'verified'])->prefix('courses')->name('courses.')->gr
 Route::middleware(['auth', 'verified'])->prefix('documents')->name('documents.')->group(function () {
     Route::get('/{document}/download', [DocumentController::class, 'download'])->name('download');
     Route::post('/upload', [DocumentController::class, 'userUpload'])->name('user-upload');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Time Off Actions (shared — submit & cancel from user view)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('time-off')->name('time-off.')->group(function () {
+    Route::post('/submit', [TimeOffController::class, 'submit'])->name('submit');
+    Route::post('/{leaveRequest}/cancel', [TimeOffController::class, 'cancel'])->name('cancel');
 });
 
 /*
