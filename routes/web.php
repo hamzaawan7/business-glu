@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DirectoryController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\OnboardingController;
@@ -162,7 +163,23 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/help-desk/categories/{category}', [TicketController::class, 'destroyCategory'])->name('help-desk.destroy-category');
 
     // ── HR & People Hub ─────────────────────────────────────
-    Route::get('/courses', fn () => Inertia::render('HR/Courses'))->name('courses.index');
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+    Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    Route::patch('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    Route::post('/courses/{course}/publish', [CourseController::class, 'publish'])->name('courses.publish');
+    Route::post('/courses/{course}/archive', [CourseController::class, 'archive'])->name('courses.archive');
+    Route::get('/courses/{course}/builder', [CourseController::class, 'builder'])->name('courses.builder');
+    Route::post('/courses/{course}/sections', [CourseController::class, 'storeSection'])->name('courses.store-section');
+    Route::patch('/courses/sections/{section}', [CourseController::class, 'updateSection'])->name('courses.update-section');
+    Route::delete('/courses/sections/{section}', [CourseController::class, 'destroySection'])->name('courses.destroy-section');
+    Route::post('/courses/sections/{section}/objects', [CourseController::class, 'storeObject'])->name('courses.store-object');
+    Route::patch('/courses/objects/{object}', [CourseController::class, 'updateObject'])->name('courses.update-object');
+    Route::delete('/courses/objects/{object}', [CourseController::class, 'destroyObject'])->name('courses.destroy-object');
+    Route::post('/courses/{course}/assign', [CourseController::class, 'assign'])->name('courses.assign');
+    Route::delete('/courses/assignments/{assignment}', [CourseController::class, 'removeAssignment'])->name('courses.remove-assignment');
+    Route::post('/courses/categories', [CourseController::class, 'storeCategory'])->name('courses.store-category');
+    Route::delete('/courses/categories/{category}', [CourseController::class, 'destroyCategory'])->name('courses.destroy-category');
     Route::get('/documents', fn () => Inertia::render('HR/Documents'))->name('documents.index');
     Route::get('/time-off', fn () => Inertia::render('HR/TimeOff'))->name('time-off.index');
     Route::get('/recognition', fn () => Inertia::render('HR/Recognition'))->name('recognition.index');
@@ -198,6 +215,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/surveys', [SurveyController::class, 'browse'])->name('surveys');
     Route::get('/events', [EventController::class, 'browse'])->name('events');
     Route::get('/help-desk', [TicketController::class, 'browse'])->name('help-desk');
+    Route::get('/courses', [CourseController::class, 'browse'])->name('courses');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
@@ -296,6 +314,16 @@ Route::middleware(['auth', 'verified'])->prefix('help-desk')->name('help-desk.')
     Route::post('/submit', [TicketController::class, 'store'])->name('submit');
     Route::get('/{ticket}', [TicketController::class, 'userShow'])->name('show');
     Route::post('/{ticket}/reply', [TicketController::class, 'userReply'])->name('reply');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Course Actions (shared — user course detail & progress)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('courses')->name('courses.')->group(function () {
+    Route::get('/{course}', [CourseController::class, 'userCourseDetail'])->name('detail');
+    Route::post('/objects/{object}/complete', [CourseController::class, 'completeObject'])->name('complete-object');
 });
 
 /*
