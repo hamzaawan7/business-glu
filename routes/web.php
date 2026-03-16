@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DirectoryController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\OnboardingController;
@@ -143,7 +144,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/surveys/{survey}/publish', [SurveyController::class, 'publish'])->name('surveys.publish');
     Route::post('/surveys/{survey}/close', [SurveyController::class, 'close'])->name('surveys.close');
     Route::get('/surveys/{survey}/results', [SurveyController::class, 'results'])->name('surveys.results');
-    Route::get('/events', fn () => Inertia::render('Communication/Events'))->name('events.index');
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::patch('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::post('/events/{event}/publish', [EventController::class, 'publish'])->name('events.publish');
+    Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel');
     Route::get('/help-desk', fn () => Inertia::render('Communication/HelpDesk'))->name('help-desk.index');
 
     // ── HR & People Hub ─────────────────────────────────────
@@ -181,6 +187,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/updates', [UpdateController::class, 'feed'])->name('updates');
     Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
     Route::get('/surveys', [SurveyController::class, 'browse'])->name('surveys');
+    Route::get('/events', [EventController::class, 'browse'])->name('events');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
@@ -259,6 +266,15 @@ Route::middleware(['auth', 'verified'])->prefix('kb')->name('kb.')->group(functi
 Route::middleware(['auth', 'verified'])->prefix('surveys')->name('surveys.')->group(function () {
     Route::get('/{survey}', [SurveyController::class, 'show'])->name('show');
     Route::post('/{survey}/submit', [SurveyController::class, 'submit'])->name('submit');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Event Actions (shared — RSVP from any view)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('events')->name('events.')->group(function () {
+    Route::post('/{event}/rsvp', [EventController::class, 'rsvp'])->name('rsvp');
 });
 
 /*
