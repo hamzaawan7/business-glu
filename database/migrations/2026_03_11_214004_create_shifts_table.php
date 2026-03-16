@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tenant_id');
+            $table->string('tenant_id');
             $table->unsignedBigInteger('user_id')->nullable();       // null = open shift
             $table->unsignedBigInteger('created_by');                 // who created the shift
             $table->string('title')->nullable();                       // e.g. "Morning Shift"

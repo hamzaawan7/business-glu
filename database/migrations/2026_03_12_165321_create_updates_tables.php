@@ -14,7 +14,7 @@ return new class extends Migration
         // ── Updates (posts / announcements) ─────────────────
         Schema::create('updates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tenant_id');
+            $table->string('tenant_id');
             $table->unsignedBigInteger('created_by');
             $table->string('title');
             $table->text('body');

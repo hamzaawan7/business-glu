@@ -14,7 +14,7 @@ return new class extends Migration
         // ── Forms (the form definition) ──────────────────────
         Schema::create('forms', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tenant_id');
+            $table->string('tenant_id');
             $table->unsignedBigInteger('created_by');
             $table->string('title');
             $table->text('description')->nullable();
@@ -66,7 +66,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('form_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('tenant_id');
+            $table->string('tenant_id');
             $table->json('answers');                                   // { field_id: value, ... }
             $table->string('status')->default('submitted');            // submitted, reviewed, rejected
             $table->text('reviewer_notes')->nullable();
