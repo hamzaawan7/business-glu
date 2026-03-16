@@ -8,6 +8,7 @@ use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TimeClockController;
@@ -135,7 +136,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/knowledge-base/articles/{article}', [KnowledgeBaseController::class, 'destroyArticle'])->name('kb.destroy-article');
     Route::post('/knowledge-base/articles/{article}/publish', [KnowledgeBaseController::class, 'publishArticle'])->name('kb.publish-article');
     Route::post('/knowledge-base/articles/{article}/archive', [KnowledgeBaseController::class, 'archiveArticle'])->name('kb.archive-article');
-    Route::get('/surveys', fn () => Inertia::render('Communication/Surveys'))->name('surveys.index');
+    Route::get('/surveys', [SurveyController::class, 'index'])->name('surveys.index');
+    Route::post('/surveys', [SurveyController::class, 'store'])->name('surveys.store');
+    Route::patch('/surveys/{survey}', [SurveyController::class, 'update'])->name('surveys.update');
+    Route::delete('/surveys/{survey}', [SurveyController::class, 'destroy'])->name('surveys.destroy');
+    Route::post('/surveys/{survey}/publish', [SurveyController::class, 'publish'])->name('surveys.publish');
+    Route::post('/surveys/{survey}/close', [SurveyController::class, 'close'])->name('surveys.close');
+    Route::get('/surveys/{survey}/results', [SurveyController::class, 'results'])->name('surveys.results');
     Route::get('/events', fn () => Inertia::render('Communication/Events'))->name('events.index');
     Route::get('/help-desk', fn () => Inertia::render('Communication/HelpDesk'))->name('help-desk.index');
 
@@ -173,6 +180,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/forms', [FormController::class, 'myForms'])->name('forms');
     Route::get('/updates', [UpdateController::class, 'feed'])->name('updates');
     Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
+    Route::get('/surveys', [SurveyController::class, 'browse'])->name('surveys');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
@@ -241,6 +249,16 @@ Route::middleware(['auth', 'verified'])->prefix('updates')->name('updates.')->gr
 */
 Route::middleware(['auth', 'verified'])->prefix('kb')->name('kb.')->group(function () {
     Route::post('/articles/{article}/view', [KnowledgeBaseController::class, 'markViewed'])->name('mark-viewed');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Survey Actions (shared — view & submit surveys from any view)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('surveys')->name('surveys.')->group(function () {
+    Route::get('/{survey}', [SurveyController::class, 'show'])->name('show');
+    Route::post('/{survey}/submit', [SurveyController::class, 'submit'])->name('submit');
 });
 
 /*
