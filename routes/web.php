@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DirectoryController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\FormController;
@@ -180,7 +181,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/courses/assignments/{assignment}', [CourseController::class, 'removeAssignment'])->name('courses.remove-assignment');
     Route::post('/courses/categories', [CourseController::class, 'storeCategory'])->name('courses.store-category');
     Route::delete('/courses/categories/{category}', [CourseController::class, 'destroyCategory'])->name('courses.destroy-category');
-    Route::get('/documents', fn () => Inertia::render('HR/Documents'))->name('documents.index');
+    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
+    Route::patch('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
+    Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+    Route::post('/documents/categories', [DocumentController::class, 'storeCategory'])->name('documents.store-category');
+    Route::delete('/documents/categories/{category}', [DocumentController::class, 'destroyCategory'])->name('documents.destroy-category');
     Route::get('/time-off', fn () => Inertia::render('HR/TimeOff'))->name('time-off.index');
     Route::get('/recognition', fn () => Inertia::render('HR/Recognition'))->name('recognition.index');
 
@@ -216,7 +222,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/events', [EventController::class, 'browse'])->name('events');
     Route::get('/help-desk', [TicketController::class, 'browse'])->name('help-desk');
     Route::get('/courses', [CourseController::class, 'browse'])->name('courses');
-    Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
+    Route::get('/documents', [DocumentController::class, 'browse'])->name('documents');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
     Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
@@ -324,6 +330,16 @@ Route::middleware(['auth', 'verified'])->prefix('help-desk')->name('help-desk.')
 Route::middleware(['auth', 'verified'])->prefix('courses')->name('courses.')->group(function () {
     Route::get('/{course}', [CourseController::class, 'userCourseDetail'])->name('detail');
     Route::post('/objects/{object}/complete', [CourseController::class, 'completeObject'])->name('complete-object');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Document Actions (shared — download & user upload)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('documents')->name('documents.')->group(function () {
+    Route::get('/{document}/download', [DocumentController::class, 'download'])->name('download');
+    Route::post('/upload', [DocumentController::class, 'userUpload'])->name('user-upload');
 });
 
 /*
