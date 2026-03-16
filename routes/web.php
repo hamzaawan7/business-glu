@@ -12,6 +12,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TimeClockController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
@@ -150,7 +151,15 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
     Route::post('/events/{event}/publish', [EventController::class, 'publish'])->name('events.publish');
     Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel');
-    Route::get('/help-desk', fn () => Inertia::render('Communication/HelpDesk'))->name('help-desk.index');
+    Route::get('/help-desk', [TicketController::class, 'index'])->name('help-desk.index');
+    Route::get('/help-desk/tickets/{ticket}', [TicketController::class, 'show'])->name('help-desk.show');
+    Route::post('/help-desk', [TicketController::class, 'store'])->name('help-desk.store');
+    Route::patch('/help-desk/{ticket}', [TicketController::class, 'update'])->name('help-desk.update');
+    Route::delete('/help-desk/{ticket}', [TicketController::class, 'destroy'])->name('help-desk.destroy');
+    Route::post('/help-desk/{ticket}/reply', [TicketController::class, 'reply'])->name('help-desk.reply');
+    Route::post('/help-desk/categories', [TicketController::class, 'storeCategory'])->name('help-desk.store-category');
+    Route::patch('/help-desk/categories/{category}', [TicketController::class, 'updateCategory'])->name('help-desk.update-category');
+    Route::delete('/help-desk/categories/{category}', [TicketController::class, 'destroyCategory'])->name('help-desk.destroy-category');
 
     // ── HR & People Hub ─────────────────────────────────────
     Route::get('/courses', fn () => Inertia::render('HR/Courses'))->name('courses.index');
@@ -188,6 +197,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/time-off', fn () => Inertia::render('User/UserTimeOff'))->name('time-off');
     Route::get('/surveys', [SurveyController::class, 'browse'])->name('surveys');
     Route::get('/events', [EventController::class, 'browse'])->name('events');
+    Route::get('/help-desk', [TicketController::class, 'browse'])->name('help-desk');
     Route::get('/documents', fn () => Inertia::render('User/UserDocuments'))->name('documents');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
@@ -275,6 +285,17 @@ Route::middleware(['auth', 'verified'])->prefix('surveys')->name('surveys.')->gr
 */
 Route::middleware(['auth', 'verified'])->prefix('events')->name('events.')->group(function () {
     Route::post('/{event}/rsvp', [EventController::class, 'rsvp'])->name('rsvp');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Help Desk Actions (shared — submit & reply from user view)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('help-desk')->name('help-desk.')->group(function () {
+    Route::post('/submit', [TicketController::class, 'store'])->name('submit');
+    Route::get('/{ticket}', [TicketController::class, 'userShow'])->name('show');
+    Route::post('/{ticket}/reply', [TicketController::class, 'userReply'])->name('reply');
 });
 
 /*

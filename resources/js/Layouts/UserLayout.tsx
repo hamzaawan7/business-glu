@@ -56,6 +56,9 @@ const navigation: { section: string; items: NavItem[] }[] = [
         items: [
             { label: 'Chat', icon: 'chat', href: '/app/chat' },
             { label: 'Updates', icon: 'updates', href: '/app/updates' },
+            { label: 'Events', icon: 'schedule', href: '/app/events' },
+            { label: 'Surveys', icon: 'forms', href: '/app/surveys' },
+            { label: 'Help Desk', icon: 'tasks', href: '/app/help-desk' },
         ],
     },
     {
