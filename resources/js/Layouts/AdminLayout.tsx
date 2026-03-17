@@ -80,6 +80,7 @@ const navigation: { section: string; items: NavItem[] }[] = [
             { label: 'Documents', icon: 'documents', href: '/admin/documents', routeName: 'admin.documents.*' },
             { label: 'Time Off', icon: 'timeoff', href: '/admin/time-off', routeName: 'admin.time-off.*' },
             { label: 'Recognition', icon: 'recognition', href: '/admin/recognition', routeName: 'admin.recognition.*' },
+            { label: 'Quizzes', icon: 'courses', href: '/admin/quizzes', routeName: 'admin.quizzes.*' },
         ],
     },
     {

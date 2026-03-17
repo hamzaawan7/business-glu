@@ -18,6 +18,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TimeClockController;
 use App\Http\Controllers\TimeOffController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -199,6 +200,17 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/recognition/{recognition}', [RecognitionController::class, 'destroy'])->name('recognition.destroy');
     Route::post('/recognition/badges', [RecognitionController::class, 'storeBadge'])->name('recognition.store-badge');
     Route::delete('/recognition/badges/{badge}', [RecognitionController::class, 'destroyBadge'])->name('recognition.destroy-badge');
+    Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+    Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+    Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
+    Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
+    Route::post('/quizzes/{quiz}/publish', [QuizController::class, 'publish'])->name('quizzes.publish');
+    Route::post('/quizzes/{quiz}/archive', [QuizController::class, 'archive'])->name('quizzes.archive');
+    Route::get('/quizzes/{quiz}/builder', [QuizController::class, 'builder'])->name('quizzes.builder');
+    Route::post('/quizzes/{quiz}/questions', [QuizController::class, 'storeQuestion'])->name('quizzes.questions.store');
+    Route::delete('/quizzes/{quiz}/questions/{question}', [QuizController::class, 'destroyQuestion'])->name('quizzes.questions.destroy');
+    Route::post('/quizzes/{quiz}/assign', [QuizController::class, 'assign'])->name('quizzes.assign');
+    Route::delete('/quizzes/assignments/{assignment}', [QuizController::class, 'removeAssignment'])->name('quizzes.remove-assignment');
 
     // ── Admin ───────────────────────────────────────────────
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');
@@ -234,6 +246,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/courses', [CourseController::class, 'browse'])->name('courses');
     Route::get('/documents', [DocumentController::class, 'browse'])->name('documents');
     Route::get('/recognition', [RecognitionController::class, 'browse'])->name('recognition');
+    Route::get('/quizzes', [QuizController::class, 'browse'])->name('quizzes');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
     Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
@@ -370,6 +383,16 @@ Route::middleware(['auth', 'verified'])->prefix('time-off')->name('time-off.')->
 */
 Route::middleware(['auth', 'verified'])->prefix('recognition')->name('recognition.')->group(function () {
     Route::post('/send', [RecognitionController::class, 'send'])->name('send');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Quiz Actions (shared — take quiz & submit answers)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('quizzes')->name('quizzes.')->group(function () {
+    Route::get('/{quiz}/take', [QuizController::class, 'take'])->name('take');
+    Route::post('/{quiz}/submit', [QuizController::class, 'submitAttempt'])->name('submit');
 });
 
 /*
