@@ -24,6 +24,7 @@ use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\EmployeeIdController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -128,7 +129,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::patch('/forms/submissions/{submission}/review', [FormController::class, 'reviewSubmission'])->name('forms.review-submission');
 
     // ── Communication Hub ───────────────────────────────────
-    Route::get('/chat', fn () => Inertia::render('Communication/Chat'))->name('chat.index');
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/updates', [UpdateController::class, 'index'])->name('updates.index');
     Route::post('/updates', [UpdateController::class, 'store'])->name('updates.store');
     Route::patch('/updates/{update}', [UpdateController::class, 'update'])->name('updates.update');
@@ -248,7 +249,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/', fn () => Inertia::render('User/Home'))->name('home');
     Route::get('/time-clock', [TimeClockController::class, 'myTimeClock'])->name('time-clock');
     Route::get('/schedule', [SchedulingController::class, 'mySchedule'])->name('schedule');
-    Route::get('/chat', fn () => Inertia::render('User/MyChat'))->name('chat');
+    Route::get('/chat', [ChatController::class, 'userChat'])->name('chat');
     Route::get('/tasks', [TaskController::class, 'myTasks'])->name('tasks');
     Route::get('/more', fn () => Inertia::render('User/More'))->name('more');
     Route::get('/forms', [FormController::class, 'myForms'])->name('forms');
@@ -291,6 +292,19 @@ Route::middleware(['auth', 'verified'])->prefix('time-clock')->name('time-clock.
 */
 Route::middleware(['auth', 'verified'])->prefix('scheduling')->name('scheduling.')->group(function () {
     Route::post('/{shift}/claim', [SchedulingController::class, 'claim'])->name('claim');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Chat Actions (shared — used by both admin and user views)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('chat')->name('chat.')->group(function () {
+    Route::post('/', [ChatController::class, 'store'])->name('store');
+    Route::get('/{conversation}/messages', [ChatController::class, 'messages'])->name('messages');
+    Route::post('/{conversation}/messages', [ChatController::class, 'sendMessage'])->name('send-message');
+    Route::patch('/messages/{message}', [ChatController::class, 'editMessage'])->name('edit-message');
+    Route::delete('/messages/{message}', [ChatController::class, 'deleteMessage'])->name('delete-message');
 });
 
 /*
