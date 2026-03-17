@@ -83,6 +83,7 @@ const navigation: { section: string; items: NavItem[] }[] = [
             { label: 'Quizzes', icon: 'courses', href: '/admin/quizzes', routeName: 'admin.quizzes.*' },
             { label: 'Timeline', icon: 'courses', href: '/admin/timeline', routeName: 'admin.timeline.*' },
             { label: 'Org Chart', icon: 'users', href: '/admin/org-chart', routeName: 'admin.org-chart.*' },
+            { label: 'Employee IDs', icon: 'users', href: '/admin/employee-ids', routeName: 'admin.employee-ids.*' },
         ],
     },
     {

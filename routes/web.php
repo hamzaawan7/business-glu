@@ -21,6 +21,7 @@ use App\Http\Controllers\TimeOffController;
 use App\Http\Controllers\OrgChartController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TimelineController;
+use App\Http\Controllers\EmployeeIdController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -219,6 +220,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/timeline/{event}', [TimelineController::class, 'destroy'])->name('timeline.destroy');
     Route::get('/timeline/{event}/download', [TimelineController::class, 'download'])->name('timeline.download');
     Route::get('/org-chart', [OrgChartController::class, 'index'])->name('org-chart.index');
+    Route::get('/employee-ids', [EmployeeIdController::class, 'index'])->name('employee-ids.index');
 
     // ── Admin ───────────────────────────────────────────────
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');
@@ -257,6 +259,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/quizzes', [QuizController::class, 'browse'])->name('quizzes');
     Route::get('/timeline', [TimelineController::class, 'myTimeline'])->name('timeline');
     Route::get('/org-chart', [OrgChartController::class, 'browse'])->name('org-chart');
+    Route::get('/employee-id', [EmployeeIdController::class, 'myId'])->name('employee-id');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
     Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
