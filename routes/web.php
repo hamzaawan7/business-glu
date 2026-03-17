@@ -22,6 +22,7 @@ use App\Http\Controllers\OrgChartController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\EmployeeIdController;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -221,6 +222,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/timeline/{event}/download', [TimelineController::class, 'download'])->name('timeline.download');
     Route::get('/org-chart', [OrgChartController::class, 'index'])->name('org-chart.index');
     Route::get('/employee-ids', [EmployeeIdController::class, 'index'])->name('employee-ids.index');
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
 
     // ── Admin ───────────────────────────────────────────────
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');

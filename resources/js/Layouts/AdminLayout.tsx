@@ -90,6 +90,7 @@ const navigation: { section: string; items: NavItem[] }[] = [
         section: 'Admin',
         items: [
             { label: 'Team', icon: 'users', href: '/admin/team', routeName: 'admin.team.*' },
+            { label: 'Analytics', icon: 'settings', href: '/admin/analytics', routeName: 'admin.analytics.*' },
             { label: 'Settings', icon: 'settings', href: '/admin/settings', routeName: 'admin.settings.*' },
         ],
     },
