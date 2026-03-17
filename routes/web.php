@@ -23,6 +23,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\EmployeeIdController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -223,6 +224,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/org-chart', [OrgChartController::class, 'index'])->name('org-chart.index');
     Route::get('/employee-ids', [EmployeeIdController::class, 'index'])->name('employee-ids.index');
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
 
     // ── Admin ───────────────────────────────────────────────
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');
