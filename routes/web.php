@@ -19,6 +19,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TimeClockController;
 use App\Http\Controllers\TimeOffController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -211,6 +212,11 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/quizzes/{quiz}/questions/{question}', [QuizController::class, 'destroyQuestion'])->name('quizzes.questions.destroy');
     Route::post('/quizzes/{quiz}/assign', [QuizController::class, 'assign'])->name('quizzes.assign');
     Route::delete('/quizzes/assignments/{assignment}', [QuizController::class, 'removeAssignment'])->name('quizzes.remove-assignment');
+    Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline.index');
+    Route::post('/timeline', [TimelineController::class, 'store'])->name('timeline.store');
+    Route::patch('/timeline/{event}', [TimelineController::class, 'update'])->name('timeline.update');
+    Route::delete('/timeline/{event}', [TimelineController::class, 'destroy'])->name('timeline.destroy');
+    Route::get('/timeline/{event}/download', [TimelineController::class, 'download'])->name('timeline.download');
 
     // ── Admin ───────────────────────────────────────────────
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');
@@ -247,6 +253,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(fun
     Route::get('/documents', [DocumentController::class, 'browse'])->name('documents');
     Route::get('/recognition', [RecognitionController::class, 'browse'])->name('recognition');
     Route::get('/quizzes', [QuizController::class, 'browse'])->name('quizzes');
+    Route::get('/timeline', [TimelineController::class, 'myTimeline'])->name('timeline');
     Route::get('/directory', [DirectoryController::class, 'browse'])->name('directory');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'browse'])->name('knowledge-base');
     Route::get('/profile', fn () => Inertia::render('User/UserProfile', [
@@ -393,6 +400,15 @@ Route::middleware(['auth', 'verified'])->prefix('recognition')->name('recognitio
 Route::middleware(['auth', 'verified'])->prefix('quizzes')->name('quizzes.')->group(function () {
     Route::get('/{quiz}/take', [QuizController::class, 'take'])->name('take');
     Route::post('/{quiz}/submit', [QuizController::class, 'submitAttempt'])->name('submit');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Timeline Actions (shared — file download)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->prefix('timeline')->name('timeline.')->group(function () {
+    Route::get('/{event}/download', [TimelineController::class, 'download'])->name('download');
 });
 
 /*
