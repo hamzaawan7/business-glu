@@ -28,6 +28,7 @@ class User extends Authenticatable
         'phone',
         'position',
         'department',
+        'reports_to',
         'location',
         'bio',
         'avatar_url',

@@ -82,6 +82,7 @@ const navigation: { section: string; items: NavItem[] }[] = [
             { label: 'Recognition', icon: 'recognition', href: '/admin/recognition', routeName: 'admin.recognition.*' },
             { label: 'Quizzes', icon: 'courses', href: '/admin/quizzes', routeName: 'admin.quizzes.*' },
             { label: 'Timeline', icon: 'courses', href: '/admin/timeline', routeName: 'admin.timeline.*' },
+            { label: 'Org Chart', icon: 'users', href: '/admin/org-chart', routeName: 'admin.org-chart.*' },
         ],
     },
     {

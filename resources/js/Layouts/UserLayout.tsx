@@ -70,6 +70,7 @@ const navigation: { section: string; items: NavItem[] }[] = [
             { label: 'Recognition', icon: 'updates', href: '/app/recognition' },
             { label: 'Quizzes', icon: 'knowledge', href: '/app/quizzes' },
             { label: 'Timeline', icon: 'knowledge', href: '/app/timeline' },
+            { label: 'Org Chart', icon: 'directory', href: '/app/org-chart' },
             { label: 'Directory', icon: 'directory', href: '/app/directory' },
             { label: 'Knowledge Base', icon: 'knowledge', href: '/app/knowledge-base' },
         ],
