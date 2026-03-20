@@ -43,7 +43,7 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 
 ## Current Status
 
-> **Last updated:** March 2026
+> **Last updated:** July 2025
 
 ### What's Built & Working ✅
 
@@ -79,6 +79,12 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 - `modules` JSON column on `tenants` table with defaults
 - `SettingsController` with `updateCompany` + `toggleModule` actions
 
+**Activity Log / Audit Trail**
+- Filterable activity log with event types, user tracking, date ranges
+- Immutable audit records for compliance
+- `ActivityLog` model with relationships to users and subjects
+- `ActivityLogController` with filtering and pagination
+
 **Employee Time Clock**
 - Clock in / clock out with timestamps
 - Break management (start/end breaks, paid/unpaid types)
@@ -89,21 +95,137 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 - User view: live timer (HH:MM:SS), big clock-in button, break controls, weekly summary
 - Status tracking: active → completed → edited → approved
 - Approval workflow fields (approved_by, approved_at)
-- `TimeEntry` and `TimeEntryBreak` models with relationships
-- `TimeClockController` with 6 actions (index, myTimeClock, clockIn, clockOut, startBreak, endBreak)
+
+**Employee Scheduling**
+- Schedule builder with drag & drop shift creation
+- Shift templates and recurring schedules
+- Employee availability management
+- Publish/notify workflow
+- Conflict detection for overlapping shifts
+- Admin and user views with calendar interface
+
+**Forms & Checklists**
+- Dynamic form builder with multiple field types
+- Form templates for reuse
+- Submission tracking and assignment
+- Reporting and analytics on submissions
+- Admin builder interface and user submission view
+
+**Quick Tasks**
+- Task creation with priorities, due dates, and assignments
+- Sub-task support for complex work items
+- Status management (pending, in-progress, completed)
+- Admin task overview and user personal task list
+
+**Team Chat**
+- 1:1 and group conversations
+- Channel-based communication
+- File sharing within conversations
+- Real-time messaging with read receipts
+- Admin channel management
+
+**Updates Feed**
+- Company-wide post feed
+- Rich content with reactions and comments
+- Read tracking for posts
+- Admin posting controls
+
+**Employee Directory**
+- Employee profiles with department and role info
+- Search and filter by department, role, status
+- Contact actions (email, phone)
+- Admin and user views
+
+**Knowledge Base**
+- Article management with rich content editor
+- Category organization
+- Search functionality
+- Access permissions per article/category
+
+**Surveys & Polls**
+- Survey builder with multiple question types
+- Anonymous response support
+- Analytics and result visualization
+- Distribution management
+
+**Events**
+- Event creation with date, time, location
+- RSVP tracking and attendee management
+- Event notifications
+- Calendar integration view
+
+**Help Desk**
+- Ticketing system with priorities
+- Ticket assignment and status tracking
+- SLA monitoring
+- Admin queue management and user ticket views
+
+**Courses & Training**
+- Course builder with sections and lessons
+- Content management with multiple media types
+- Student enrollment and progress tracking
+- Certificate generation on completion
+
+**Quizzes**
+- Quiz builder with multiple question types
+- Question banks and randomization
+- Scoring with pass/fail thresholds
+- Retake management and statistics
+
+**Document Management**
+- Document upload with categorization
+- Expiration date tracking and alerts
+- Compliance dashboard for document status
+- Version control and access management
+
+**Time Off Management**
+- Leave request submission and approval workflow
+- Policy management with different leave types
+- Balance tracking and accrual rules
+- Admin overview and user request views
+
+**Recognition & Rewards**
+- Badge creation and awarding
+- Points system with accumulation
+- Gift card rewards catalog
+- Recognition feed and leaderboards
+
+**Employee Timeline**
+- Chronological milestone tracking
+- Hire date, promotions, role changes, reviews
+- Timeline view with event details
+- Admin and user perspectives
+
+**Org Chart**
+- Visual organizational hierarchy
+- Reporting line visualization
+- Interactive navigation to employee profiles
+- Department and location views
+
+**Digital Employee ID**
+- Mobile-optimized ID card display
+- QR code generation for identification
+- Employee photo, name, role, department
+- Custom fields per organization
+
+**Analytics & Reporting**
+- Cross-module analytics dashboard
+- Attendance trends and patterns
+- Engagement metrics
+- Training completion statistics
+- Team performance overviews
 
 **Admin Dashboard (Web)**
 - Full sidebar layout (`AdminLayout.tsx`) with collapsible navigation
 - Nav sections: Operations, Communication, HR & People, Admin
-- Dashboard page with live stats: team member count + clocked-in count (from DB)
+- Dashboard page with live stats: team members, clocked-in, open tasks, unread messages
 - Flash message system via `HandleInertiaRequests` middleware
-- 12 remaining module stub pages (Scheduling, Tasks, Forms, Chat, Updates, Directory, KnowledgeBase, Surveys, Events, HelpDesk, Courses, Documents, TimeOff, Recognition)
+- All module pages fully functional
 
 **User/Employee View**
 - Separate sidebar layout (`UserLayout.tsx`)
 - Nav sections: My Work, Communication, HR & Info, Account
-- Functional Time Clock page with live timer and break management
-- 12 remaining user-facing stub pages
+- All module pages fully functional
 - Session-based Admin ↔ User view switching (for admin+ roles)
 
 **Branding & UI**
@@ -111,6 +233,7 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 - Typography: Montserrat Bold (headings), Lato Regular (body)
 - Logo assets extracted from brand PDF (3 PNGs)
 - SVG icons throughout UI (no emoji)
+- Consistent design: `rounded-xl` cards, `rounded-2xl` modals, shadow-sm surfaces
 
 **Developer Experience**
 - `npm start` runs both Laravel + Vite servers via concurrently
@@ -119,20 +242,22 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 
 ### What's NOT Built Yet 🔲
 
-- **Most business-domain tables** (no shifts, tasks, messages, etc. — time_entries done)
-- **12 admin module pages are stubs** (Scheduling, Tasks, Forms, Chat, etc.)
-- **12 user pages are stubs** (MySchedule, MyTasks, MyChat, etc.)
-- **Dashboard stats** (openTasks and unreadMessages still hardcoded to 0)
-- **No API routes** for future mobile app
-- **No file upload infrastructure**
-- **No notification system**
-- **No tests**
+- **Employee Time Clock — advanced** (geofencing, digital timesheets, overtime rules, payroll export)
+- **REST API & Webhooks** for third-party integrations and mobile app
+- **Payroll Integrations** (Gusto, QuickBooks, Xero, ADP)
+- **Zapier Integration** (external app connections)
+- **Calendar Sync** (Google Calendar, Apple Calendar, Outlook)
+- **Kiosk Mode** (shared-device clock-in for job sites)
+- **AI / Auto-Scheduling** (smart schedule generation)
+- **Offline Support** (basic mobile functionality when offline)
+- **Security & Compliance enhancements** (encryption at rest, GDPR tools, SOC 2 alignment)
+- **Mobile App** (React Native / Expo)
 
 ---
 
 ## Implementation Plan
 
-### Phase 1 — Foundation (MVP) — ✅ Mostly Complete
+### Phase 1 — Foundation (MVP) — ✅ Complete
 
 Set up the core platform infrastructure that all other features depend on.
 
@@ -140,62 +265,62 @@ Set up the core platform infrastructure that all other features depend on.
 |--------|-----------------|--------|
 | **Auth & User Management** | Registration, login, RBAC, multi-tenancy, user profiles | ✅ Complete |
 | **Onboarding Flow** | Registration → company creation → dashboard | ✅ Complete |
-| **Admin Dashboard** | Web panel with sidebar, team list, settings | ✅ Scaffolded (stubs need wiring) |
-| **User Dashboard** | Employee view with sidebar layout | ✅ Scaffolded (stubs need wiring) |
+| **Admin Dashboard** | Web panel with sidebar, stats, navigation to all modules | ✅ Complete |
+| **User Dashboard** | Employee view with sidebar layout, all modules accessible | ✅ Complete |
 | **View Switching** | Admin ↔ User toggle for admin+ roles | ✅ Complete |
 | **Team Management** | Invite members, edit roles, remove | ✅ Complete |
 | **Company Settings** | Save company info, toggle modules | ✅ Complete |
+| **Activity Log** | Audit trail with filterable events, user/action tracking | ✅ Complete |
 | **Mobile App Shell** | iOS & Android app with push notifications | ⬜ Planned |
 
-### Phase 2 — Operations Hub — 🟡 In Progress
+### Phase 2 — Operations Hub — ✅ Complete
 
 The day-to-day tools managers and employees use every shift.
 
 | Module | What It Includes | Status |
 |--------|-----------------|--------|
 | **Employee Time Clock** | Clock in/out, GPS, break management, live timer, admin team view, approval fields | ✅ Core functional |
-| **Employee Scheduling** | Drag & drop builder, shift templates, availability, publish/notify, conflict detection | ⬜ Stub page only |
-| **Quick Tasks** | Create, assign, track tasks with subtasks, reminders, permissions | ⬜ Stub page only |
-| **Forms & Checklists** | Form builder, submissions, templates, assignment, reporting | ⬜ Stub page only |
+| **Employee Scheduling** | Schedule builder, shift templates, availability, publish/notify, conflict detection | ✅ Complete |
+| **Quick Tasks** | Create, assign, track tasks with subtasks, priorities, due dates, status management | ✅ Complete |
+| **Forms & Checklists** | Form builder, field types, submissions, templates, assignment, reporting | ✅ Complete |
 
-### Phase 3 — Communications Hub — ⬜ Planned
+### Phase 3 — Communications Hub — ✅ Complete
 
 Internal communication suite to keep everyone connected and informed.
 
 | Module | What It Includes | Status |
 |--------|-----------------|--------|
-| **Team Chat** | 1:1 & group chat, channels, media sharing, read receipts, admin controls | ⬜ Stub page only |
-| **Updates Feed** | Company feed, rich attachments, reactions, comments, read tracking | ⬜ Stub page only |
-| **Employee Directory** | Profiles, search & filter, external contacts, contact actions | ⬜ Stub page only |
-| **Knowledge Base** | Articles, categories, rich media, search, access permissions | ⬜ Stub page only |
-| **Surveys & Polls** | Survey builder, live polls, analytics, distribution | ⬜ Stub page only |
-| **Events** | Event creation, RSVP, attendee tracking, notifications | ⬜ Stub page only |
-| **Help Desk** | Ticketing system, auto-assignment, SLA monitoring | ⬜ Stub page only |
+| **Team Chat** | 1:1 & group conversations, channels, file sharing, real-time messaging, read receipts | ✅ Complete |
+| **Updates Feed** | Company feed, rich content, reactions, comments, read tracking | ✅ Complete |
+| **Employee Directory** | Profiles, search & filter, departments, contact actions | ✅ Complete |
+| **Knowledge Base** | Articles, categories, rich content, search, access permissions | ✅ Complete |
+| **Surveys & Polls** | Survey builder, question types, analytics, distribution, anonymous responses | ✅ Complete |
+| **Events** | Event creation, RSVP, attendee tracking, notifications | ✅ Complete |
+| **Help Desk** | Ticketing system, priorities, assignments, status tracking, SLA | ✅ Complete |
 
-### Phase 4 — HR & People Management — ⬜ Planned
+### Phase 4 — HR & People Management — ✅ Complete
 
 Complete HR platform for training, compliance, and employee lifecycle.
 
 | Module | What It Includes | Status |
 |--------|-----------------|--------|
-| **Courses & Training** | Course builder, AI generation, progress tracking, certificates | ⬜ Stub page only |
-| **Quizzes** | Quiz builder, scoring, randomization, statistics | ⬜ Not started |
-| **Document Management** | Upload, expiration alerts, compliance dashboard | ⬜ Stub page only |
-| **Time Off Management** | Leave requests, approval workflow, balance tracking | ⬜ Stub page only |
-| **Recognition & Rewards** | Badges, points, gift cards, recognition feed | ⬜ Stub page only |
-| **Employee Timeline** | Milestone tracking, history view | ⬜ Not started |
-| **Org Chart** | Auto-generated visual hierarchy | ⬜ Not started |
-| **Digital Employee ID** | Mobile ID card | ⬜ Not started |
-| **Employee Timeline** | Milestone tracking (hire date/promotions/role changes/salary raises/reviews), file attachments per event, upcoming milestones view, full chronological history |
-| **Org Chart** | Auto-generated visual hierarchy from reporting structure, interactive navigation to profiles, department/location filter views |
-| **Digital Employee ID** | Mobile ID card (photo/name/role/company), custom fields, instant issuance without physical production |
+| **Courses & Training** | Course builder, sections & lessons, progress tracking, certificates, enrollment | ✅ Complete |
+| **Quizzes** | Quiz builder, question types, scoring, randomization, pass/fail, retakes, statistics | ✅ Complete |
+| **Document Management** | Upload, categorization, expiration alerts, compliance dashboard, version control | ✅ Complete |
+| **Time Off Management** | Leave requests, approval workflow, policy management, balance tracking, accrual | ✅ Complete |
+| **Recognition & Rewards** | Badges, points system, gift cards, recognition feed, leaderboards | ✅ Complete |
+| **Employee Timeline** | Milestone tracking, hire/promotion/role change history, chronological view | ✅ Complete |
+| **Org Chart** | Visual hierarchy, reporting lines, interactive navigation, department views | ✅ Complete |
+| **Digital Employee ID** | Mobile badge, QR code, photo, custom fields, role/department display | ✅ Complete |
 
-### Phase 5 — Integrations & Polish — ⬜ Planned
+### Phase 5 — Integrations & Polish — 🟡 In Progress
 
 Third-party integrations, advanced features, and platform hardening.
 
 | Module | What It Includes | Status |
 |--------|-----------------|--------|
+| **Advanced Analytics** | Cross-module dashboards, attendance trends, engagement, training completion | ✅ Complete |
+| **Audit Trail** | Immutable activity logs, filterable, data change tracking | ✅ Complete |
 | **Payroll Integrations** | Gusto, QuickBooks, Xero, Paychex, ADP | ⬜ Not started |
 | **API & Webhooks** | Public REST API, real-time webhooks | ⬜ Not started |
 | **Zapier Integration** | Connect with 5,000+ external apps | ⬜ Not started |
@@ -203,8 +328,7 @@ Third-party integrations, advanced features, and platform hardening.
 | **Kiosk Mode** | Shared-device clock-in station | ⬜ Not started |
 | **AI Auto-Scheduling** | Smart schedule generation | ⬜ Not started |
 | **Offline Support** | Basic offline + sync | ⬜ Not started |
-| **Advanced Analytics** | Cross-feature dashboards | ⬜ Not started |
-| **Security & Compliance** | Encryption, GDPR, SOC 2, audit trails | ⬜ Not started |
+| **Security & Compliance** | Encryption, GDPR, SOC 2 | ⬜ Not started |
 
 ---
 
@@ -213,8 +337,12 @@ Third-party integrations, advanced features, and platform hardening.
 | Metric | Count |
 |--------|-------|
 | **Phases** | 5 |
-| **Modules** | ~20 |
+| **Modules** | ~25 |
 | **Total Features** | 200+ |
+| **Controllers** | 27 |
+| **Models** | 48 |
+| **Migrations** | 28 |
+| **Frontend Pages** | 68 |
 
 ---
 
@@ -223,16 +351,16 @@ Third-party integrations, advanced features, and platform hardening.
 | Layer | Choice | Details |
 |-------|--------|---------|
 | **Backend** | Laravel 12 (PHP 8.2) | Elegant MVC framework, built-in auth, queues, events, broadcasting |
-| **Frontend** | React + TypeScript via Inertia.js | Server-driven SPA — Laravel routes render React pages directly |
+| **Frontend** | React 19 + TypeScript via Inertia.js | Server-driven SPA — Laravel routes render React pages directly |
 | **Build Tool** | Vite | Fast HMR, Laravel Vite plugin for asset bundling |
 | **Styling** | Tailwind CSS | Utility-first, brand colors/fonts configured in `tailwind.config.js` |
 | **Auth** | Laravel Breeze (Inertia/React stack) | Registration, login, password reset, email verification, profile management |
 | **Multi-Tenancy** | stancl/tenancy v3.9 | Database-per-tenant isolation, auto-provisioning, domain/subdomain identification |
-| **Database** | SQLite (dev) → PostgreSQL (prod) | Eloquent ORM, migrations, seeders, central + tenant DB architecture |
+| **Database** | SQLite (dev) → MySQL 8.0 (prod) | Eloquent ORM, migrations, seeders, central + tenant DB architecture |
 | **Real-Time** | Laravel Broadcasting + Reverb | WebSocket server for chat, live updates, notifications |
 | **File Storage** | Laravel Storage (local dev) → AWS S3 (prod) | Documents, images, training media |
 | **Mobile (future)** | React Native (Expo) | Shared React/TS knowledge; Laravel API routes for mobile clients |
-| **Deployment** | Laravel Forge / Railway → AWS | Start simple, scale when needed |
+| **Deployment** | Ubuntu 24.04, Nginx, PHP 8.2, MySQL 8.0 | Production server at 64.225.5.237 |
 
 ### Project Structure
 
@@ -241,73 +369,103 @@ business-glu/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── Auth/                     → Breeze auth controllers
-│   │   │   ├── OnboardingController.php  → Company creation after registration
-│   │   │   ├── ProfileController.php     → User profile CRUD
-│   │   │   ├── SettingsController.php    → Company settings + module toggles
-│   │   │   ├── TeamController.php        → Team CRUD + invitation lifecycle
-│   │   │   ├── TimeClockController.php   → Clock in/out, breaks, admin/user views
-│   │   │   └── ViewSwitchController.php  → Admin ↔ User view toggle
+│   │   │   ├── Auth/                          → Breeze auth controllers
+│   │   │   ├── ActivityLogController.php      → Audit trail with filtering
+│   │   │   ├── AnalyticsController.php        → Cross-module analytics dashboards
+│   │   │   ├── ChatController.php             → Team chat (1:1, group, channels)
+│   │   │   ├── CourseController.php           → Courses & training management
+│   │   │   ├── DirectoryController.php        → Employee directory
+│   │   │   ├── DocumentController.php         → Document management & compliance
+│   │   │   ├── EmployeeIdController.php       → Digital employee ID cards
+│   │   │   ├── EventController.php            → Events & RSVP
+│   │   │   ├── FormController.php             → Forms & checklists builder
+│   │   │   ├── KnowledgeBaseController.php    → Knowledge base articles
+│   │   │   ├── OnboardingController.php       → Company creation after registration
+│   │   │   ├── OrgChartController.php         → Organizational chart
+│   │   │   ├── ProfileController.php          → User profile CRUD
+│   │   │   ├── QuizController.php             → Quiz management & scoring
+│   │   │   ├── RecognitionController.php      → Recognition & rewards
+│   │   │   ├── SchedulingController.php       → Employee scheduling
+│   │   │   ├── SettingsController.php         → Company settings + module toggles
+│   │   │   ├── SurveyController.php           → Surveys & polls
+│   │   │   ├── TaskController.php             → Quick tasks management
+│   │   │   ├── TeamController.php             → Team CRUD + invitation lifecycle
+│   │   │   ├── TicketController.php           → Help desk ticketing
+│   │   │   ├── TimeClockController.php        → Clock in/out, breaks
+│   │   │   ├── TimeOffController.php          → Time off requests & policies
+│   │   │   ├── TimelineController.php         → Employee timeline
+│   │   │   ├── UpdateController.php           → Updates feed
+│   │   │   └── ViewSwitchController.php       → Admin ↔ User view toggle
 │   │   └── Middleware/
-│   │       ├── EnsureAdminAccess.php     → Blocks non-admins from /admin/*
-│   │       ├── EnsureOnboarded.php       → Redirects users without tenant to /onboarding
-│   │       └── HandleInertiaRequests.php → Shares auth, activeView, canSwitchView, flash
-│   ├── Models/
-│   │   ├── User.php                      → Roles (super_admin/owner/admin/manager/member), tenant_id
-│   │   ├── Tenant.php                    → Custom stancl/tenancy model (name, slug, plan, modules)
-│   │   ├── TeamInvitation.php            → Token-based team invitations with expiry
-│   │   ├── TimeEntry.php                 → Clock in/out entries with GPS, breaks, approval
-│   │   └── TimeEntryBreak.php            → Break records (paid/unpaid) linked to time entries
+│   │       ├── EnsureAdminAccess.php          → Blocks non-admins from /admin/*
+│   │       ├── EnsureOnboarded.php            → Redirects users without tenant
+│   │       └── HandleInertiaRequests.php      → Shares auth, flash, activeView
+│   ├── Models/                                → 48 Eloquent models
+│   │   ├── User.php                           → Roles, tenant_id, relationships
+│   │   ├── Tenant.php                         → Multi-tenancy (name, slug, plan, modules)
+│   │   ├── TeamInvitation.php                 → Token-based team invitations
+│   │   ├── ActivityLog.php                    → Audit trail entries
+│   │   ├── TimeEntry.php / TimeEntryBreak.php → Time clock records
+│   │   ├── Shift.php / ShiftTemplate.php      → Scheduling
+│   │   ├── Task.php / SubTask.php             → Quick tasks
+│   │   ├── Form.php / FormField.php / FormSubmission.php → Forms & checklists
+│   │   ├── Conversation.php / Message.php / Channel.php  → Team chat
+│   │   ├── Post.php / Comment.php / Reaction.php         → Updates feed
+│   │   ├── Article.php / ArticleCategory.php              → Knowledge base
+│   │   ├── Survey.php / SurveyQuestion.php / SurveyResponse.php → Surveys
+│   │   ├── Event.php / EventRsvp.php                      → Events
+│   │   ├── Ticket.php / TicketReply.php                   → Help desk
+│   │   ├── Course.php / CourseSection.php / Lesson.php    → Training
+│   │   ├── Quiz.php / QuizQuestion.php / QuizAttempt.php  → Quizzes
+│   │   ├── Document.php / DocumentCategory.php            → Documents
+│   │   ├── TimeOffRequest.php / TimeOffPolicy.php         → Time off
+│   │   ├── Badge.php / Recognition.php / Reward.php       → Recognition
+│   │   ├── TimelineEvent.php                              → Employee timeline
+│   │   └── EmployeeId.php                                 → Digital IDs
 │   ├── Providers/
-│   │   └── TenancyServiceProvider.php    → Multi-tenancy event lifecycle
-│   └── Services/                         → Business logic (future)
+│   │   └── TenancyServiceProvider.php         → Multi-tenancy event lifecycle
+│   └── Services/                              → Business logic (future)
 ├── bootstrap/
-│   └── app.php                           → Middleware stack & aliases
+│   └── app.php                                → Middleware stack & aliases
 ├── config/
-│   └── tenancy.php                       → Multi-tenancy configuration
+│   └── tenancy.php                            → Multi-tenancy configuration
 ├── database/
-│   ├── migrations/
-│   │   ├── *_create_users_table.php      → Users + role + tenant_id
-│   │   ├── *_create_tenants_table.php    → Tenants (name, slug, plan)
-│   │   ├── *_create_domains_table.php    → Tenant domain mappings
-│   │   ├── *_add_tenant_foreign_key.php  → FK: users → tenants
-│   │   ├── *_create_team_invitations_table.php → Token-based invitations
-│   │   ├── *_add_modules_to_tenants_table.php  → JSON modules column
-│   │   └── *_create_time_entries_table.php     → time_entries + time_entry_breaks
-│   ├── migrations/tenant/                → Tenant-scoped database schema
+│   ├── migrations/                            → 28 migration files
+│   ├── migrations/tenant/                     → Tenant-scoped database schema
 │   └── seeders/
-│       └── DatabaseSeeder.php            → Demo tenant + 3 test users
+│       └── DatabaseSeeder.php                 → Demo tenant + 3 test users
 ├── resources/
 │   ├── js/
-│   │   ├── Components/                   → ApplicationLogo, ViewSwitcher, ModulePage, etc.
+│   │   ├── Components/                        → Shared UI components
 │   │   ├── Layouts/
-│   │   │   ├── AdminLayout.tsx           → Admin sidebar + top bar
-│   │   │   ├── UserLayout.tsx            → Employee sidebar + top bar
-│   │   │   └── GuestLayout.tsx           → Centered card for auth pages
-│   │   └── Pages/
-│   │       ├── Admin/                    → Team.tsx (functional), Settings.tsx (functional)
-│   │       ├── Auth/                     → Login, Register, ForgotPassword, etc.
-│   │       ├── Communication/            → Chat, Updates, Directory, etc. (stubs)
-│   │       ├── Dashboard.tsx             → Admin dashboard with live stats
-│   │       ├── HR/                       → Courses, Documents, TimeOff, Recognition (stubs)
-│   │       ├── Onboarding/              → CreateCompany.tsx
-│   │       ├── Operations/              → TimeClock.tsx (functional), Scheduling, Tasks, Forms (stubs)
-│   │       ├── Profile/                 → Edit.tsx + partials
-│   │       ├── Team/                    → AcceptInvitation.tsx, InvitationExpired.tsx
-│   │       ├── User/                    → Home, MyTimeClock.tsx (functional), rest (stubs)
-│   │       └── Welcome.tsx              → Public landing page
-│   └── css/app.css                      → Tailwind + Google Fonts imports
+│   │   │   ├── AdminLayout.tsx                → Admin sidebar + top bar
+│   │   │   ├── UserLayout.tsx                 → Employee sidebar + top bar
+│   │   │   └── GuestLayout.tsx                → Centered card for auth pages
+│   │   └── Pages/                             → 68 TSX page files
+│   │       ├── Admin/                         → Team, Settings, ActivityLog
+│   │       ├── Auth/                          → Login, Register, ForgotPassword, etc.
+│   │       ├── Communication/                 → Chat, Updates, Directory, KnowledgeBase, Surveys, Events, HelpDesk
+│   │       ├── Dashboard.tsx                  → Admin dashboard with live stats
+│   │       ├── HR/                            → Courses, Quizzes, Documents, TimeOff, Recognition, Timeline, OrgChart, EmployeeId
+│   │       ├── Onboarding/                    → CreateCompany.tsx
+│   │       ├── Operations/                    → TimeClock, Scheduling, Tasks, Forms
+│   │       ├── Profile/                       → Edit.tsx + partials
+│   │       ├── Team/                          → AcceptInvitation.tsx, InvitationExpired.tsx
+│   │       ├── User/                          → Home + all user-facing module pages
+│   │       └── Welcome.tsx                    → Public landing page
+│   └── css/app.css                            → Tailwind + Google Fonts imports
 ├── routes/
-│   ├── web.php                          → All routes: admin/*, app/*, onboarding, etc.
-│   ├── auth.php                         → Breeze authentication routes
-│   └── tenant.php                       → Tenant-scoped routes (future)
-├── public/images/                       → Logo assets (3 PNGs from brand PDF)
-├── docs/                                → Project documentation
-│   ├── project-overview.md              → This file
-│   ├── feature-breakdown.md             → 200+ features by phase
-│   └── brand-guidelines.md              → Colors, typography, voice, logo
-├── tailwind.config.js                   → Brand colors & typography theme
-└── vite.config.js                       → Vite build configuration
+│   ├── web.php                                → All routes: admin/*, app/*, actions
+│   ├── auth.php                               → Breeze authentication routes
+│   └── tenant.php                             → Tenant-scoped routes (future)
+├── public/images/                             → Logo assets (3 PNGs from brand PDF)
+├── docs/                                      → Project documentation
+│   ├── project-overview.md                    → This file
+│   ├── feature-breakdown.md                   → 200+ features by phase
+│   ├── deployment.md                          → Server setup & deployment guide
+│   └── brand-guidelines.md                    → Colors, typography, voice, logo
+├── tailwind.config.js                         → Brand colors & typography theme
+└── vite.config.js                             → Vite build configuration
 ```
 
 ## Key Documents

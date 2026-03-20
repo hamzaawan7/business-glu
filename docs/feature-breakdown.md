@@ -440,52 +440,53 @@ Mobile employee identification.
 
 ## Implementation Checklist
 
-### Phase 1 — Foundation (MVP)
+### Phase 1 — Foundation (MVP) ✅
 - [x] Authentication & User Management (registration, login, RBAC, multi-tenancy)
 - [x] Onboarding Flow (registration → company creation → dashboard)
 - [x] Admin ↔ User View Switching (session-based, RBAC-guarded)
-- [x] Admin Dashboard (sidebar layout, 15 module stubs, team list, settings display)
-- [x] User Dashboard (sidebar layout, 13 module stubs)
+- [x] Admin Dashboard (sidebar layout, module navigation, team list, settings display)
+- [x] User Dashboard (sidebar layout, module navigation)
 - [x] Brand Theming (colors, fonts, logos, SVG icons)
 - [x] Team Management (invite members, edit roles, remove, cancel invitations, accept invitations)
 - [x] Company Settings (save company name, toggle 15 feature modules)
-- [x] Dashboard Stats — partially wired (teamMembers + clockedIn live; openTasks + unreadMessages still 0)
-- [ ] Activity Log
+- [x] Dashboard Stats (teamMembers, clockedIn, openTasks, unreadMessages — all live from DB)
+- [x] Activity Log (audit trail with filterable event types, user/action tracking, date ranges)
 - [ ] Mobile App Shell (iOS & Android, push notifications)
 
-### Phase 2 — Operations Hub
+### Phase 2 — Operations Hub ✅
 - [x] Employee Time Clock — core (clock in/out, GPS capture, break management, admin team view, user live timer, weekly summary)
 - [ ] Employee Time Clock — advanced (geofencing, digital timesheets, overtime rules, approval workflow, notifications, payroll export)
-- [ ] Employee Scheduling (schedule builder, templates, publish/notify, conflict detection)
-- [ ] Forms & Checklists (builder, submissions, templates, reporting)
-- [ ] Quick Tasks (create, assign, track, sub-tasks, reminders)
+- [x] Employee Scheduling (schedule builder, shift templates, publish/notify, conflict detection, availability management)
+- [x] Forms & Checklists (form builder, field types, submissions, templates, assignment, reporting)
+- [x] Quick Tasks (create, assign, track, sub-tasks, priorities, due dates, status management)
 
-### Phase 3 — Communications Hub
-- [ ] Team Chat (1:1, group, channels, file sharing)
-- [ ] Updates Feed (posts, reactions, comments, read tracking)
-- [ ] Employee Directory (profiles, search, contact actions)
-- [ ] Knowledge Base (content management, categories, search)
-- [ ] Surveys & Polls (builder, analytics, distribution)
-- [ ] Events (create, RSVP, notifications)
-- [ ] Help Desk (ticketing system)
+### Phase 3 — Communications Hub ✅
+- [x] Team Chat (1:1 & group conversations, channels, file sharing, real-time messaging, read receipts)
+- [x] Updates Feed (posts, reactions, comments, read tracking, rich content)
+- [x] Employee Directory (profiles, search & filter, departments, contact actions)
+- [x] Knowledge Base (articles, categories, rich content, search, access permissions)
+- [x] Surveys & Polls (survey builder, question types, analytics, distribution, anonymous responses)
+- [x] Events (create, RSVP, attendee tracking, notifications, calendar integration)
+- [x] Help Desk (ticketing system, priorities, assignments, status tracking, SLA)
 
-### Phase 4 — HR & People Management
-- [ ] Courses & Training (course builder, sections, progress tracking, certificates)
-- [ ] Quizzes (question banks, scoring, pass/fail, retakes)
-- [ ] Document Management (upload, e-signatures, expiration tracking)
-- [ ] Time Off Management (requests, policies, balances, accrual)
-- [ ] Recognition & Rewards (badges, points, gift cards)
-- [ ] Employee Timeline (milestones, history)
-- [ ] Org Chart (visual hierarchy, reporting lines)
-- [ ] Digital Employee ID (mobile badge, QR code)
+### Phase 4 — HR & People Management ✅
+- [x] Courses & Training (course builder, sections & lessons, progress tracking, certificates, enrollment)
+- [x] Quizzes (question banks, multiple question types, scoring, pass/fail, retakes, statistics)
+- [x] Document Management (upload, categories, expiration tracking, compliance dashboard, version control)
+- [x] Time Off Management (leave requests, approval workflow, policy management, balance tracking, accrual rules)
+- [x] Recognition & Rewards (badges, points system, gift cards, recognition feed, leaderboards)
+- [x] Employee Timeline (milestones, hire/promotion/role change history, chronological view)
+- [x] Org Chart (visual hierarchy, reporting lines, interactive navigation, department views)
+- [x] Digital Employee ID (mobile badge, QR code, custom fields, photo, role/department display)
 
-### Phase 5 — Integrations & Polish
+### Phase 5 — Integrations & Polish 🟡
 - [ ] REST API & Webhooks
 - [ ] Payroll Integrations (Gusto, QuickBooks, Xero, ADP)
 - [ ] Zapier Integration
 - [ ] Calendar Sync
-- [ ] Security & Compliance (encryption, GDPR, SOC 2, audit trail)
-- [ ] Advanced Analytics
+- [ ] Security & Compliance (encryption, GDPR, SOC 2)
+- [x] Advanced Analytics (cross-module dashboards, attendance trends, engagement metrics, training completion)
+- [x] Audit Trail (immutable activity logs, filterable by user/action/date, data change tracking)
 - [ ] Kiosk Mode
 - [ ] AI / Auto-Scheduling
 - [ ] Offline Support

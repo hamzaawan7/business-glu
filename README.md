@@ -16,7 +16,7 @@ Business Glu is an all-in-one workforce management platform for deskless and fro
 | Build | Vite 7 |
 | Auth | Laravel Breeze (Inertia/React) |
 | Multi-Tenancy | stancl/tenancy v3.9 (database-per-tenant) |
-| Database | SQLite (dev) → PostgreSQL (prod) |
+| Database | SQLite (dev) → MySQL 8.0 (prod) |
 | Mobile (future) | React Native (Expo) |
 
 ## Getting Started
@@ -83,11 +83,11 @@ Business Glu uses **database-per-tenant** isolation via [stancl/tenancy](https:/
 
 | Phase | Focus | Status |
 |-------|-------|--------|
-| **1 — Foundation** | Auth, RBAC, multi-tenancy, onboarding, dashboards, team management, company settings | ✅ Complete |
-| **2 — Operations** | Time clock ✅, scheduling, quick tasks, forms & checklists | 🟡 In Progress |
-| **3 — Communications** | Team chat, updates feed, directory, knowledge base, surveys, events, help desk | ⬜ Planned |
-| **4 — HR & People** | Courses, quizzes, documents, time off, recognition, timeline, org chart, digital ID | ⬜ Planned |
-| **5 — Integrations** | Payroll, API & webhooks, Zapier, calendar sync, kiosk, AI scheduling, offline, analytics | ⬜ Planned |
+| **1 — Foundation** | Auth, RBAC, multi-tenancy, onboarding, dashboards, team management, settings, activity log | ✅ Complete |
+| **2 — Operations** | Time clock, scheduling, quick tasks, forms & checklists | ✅ Complete |
+| **3 — Communications** | Team chat, updates feed, directory, knowledge base, surveys, events, help desk | ✅ Complete |
+| **4 — HR & People** | Courses, quizzes, documents, time off, recognition, timeline, org chart, digital ID | ✅ Complete |
+| **5 — Integrations** | Analytics ✅, audit trail ✅, payroll, API & webhooks, Zapier, calendar sync, kiosk, AI scheduling, offline | 🟡 In Progress |
 
 ## Documentation
 
