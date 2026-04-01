@@ -124,11 +124,20 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 - Real-time messaging with read receipts
 - Admin channel management
 
-**Updates Feed**
-- Company-wide post feed
-- Rich content with reactions and comments
-- Read tracking for posts
-- Admin posting controls
+**Updates Feed (Enhanced)**
+- Rich post builder with cover images, multi-photo gallery (up to 10), file attachments, YouTube embeds
+- Reusable post templates system (create, apply, save-as-template from existing posts)
+- Targeted audience distribution (everyone, by department, by role, specific users)
+- Scheduling & auto-expiry with optional reminders
+- Interaction controls (enable/disable comments and reactions per post)
+- Per-post analytics dashboard (read rate, reactions breakdown, comments, unread members)
+- Pop-up alerts for critical updates
+- Category tagging and filtering
+- Reactions (emoji) and threaded comments
+- Read tracking with who-read / who-hasn't lists
+- Pin-to-top functionality
+- Image lightbox and responsive gallery layouts on employee feed
+- Admin and employee views
 
 **Employee Directory**
 - Employee profiles with department and role info
@@ -291,7 +300,7 @@ Internal communication suite to keep everyone connected and informed.
 | Module | What It Includes | Status |
 |--------|-----------------|--------|
 | **Team Chat** | 1:1 & group conversations, channels, file sharing, real-time messaging, read receipts | ✅ Complete |
-| **Updates Feed** | Company feed, rich content, reactions, comments, read tracking | ✅ Complete |
+| **Updates Feed** | Rich post builder, templates, audience targeting, media uploads (cover/gallery/files/YouTube), scheduling & expiry, per-post analytics, reminders, pop-up alerts, reactions, comments, read tracking | ✅ Enhanced |
 | **Employee Directory** | Profiles, search & filter, departments, contact actions | ✅ Complete |
 | **Knowledge Base** | Articles, categories, rich content, search, access permissions | ✅ Complete |
 | **Surveys & Polls** | Survey builder, question types, analytics, distribution, anonymous responses | ✅ Complete |
@@ -400,7 +409,7 @@ business-glu/
 │   │       ├── EnsureAdminAccess.php          → Blocks non-admins from /admin/*
 │   │       ├── EnsureOnboarded.php            → Redirects users without tenant
 │   │       └── HandleInertiaRequests.php      → Shares auth, flash, activeView
-│   ├── Models/                                → 48 Eloquent models
+│   ├── Models/                                → 50 Eloquent models
 │   │   ├── User.php                           → Roles, tenant_id, relationships
 │   │   ├── Tenant.php                         → Multi-tenancy (name, slug, plan, modules)
 │   │   ├── TeamInvitation.php                 → Token-based team invitations
@@ -410,7 +419,8 @@ business-glu/
 │   │   ├── Task.php / SubTask.php             → Quick tasks
 │   │   ├── Form.php / FormField.php / FormSubmission.php → Forms & checklists
 │   │   ├── Conversation.php / Message.php / Channel.php  → Team chat
-│   │   ├── Post.php / Comment.php / Reaction.php         → Updates feed
+│   │   ├── Update.php / Comment.php / Reaction.php        → Updates feed
+│   │   ├── UpdateTemplate.php / UpdateAudience.php / UpdateRead.php → Updates templates & targeting
 │   │   ├── Article.php / ArticleCategory.php              → Knowledge base
 │   │   ├── Survey.php / SurveyQuestion.php / SurveyResponse.php → Surveys
 │   │   ├── Event.php / EventRsvp.php                      → Events

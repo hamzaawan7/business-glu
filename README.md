@@ -87,7 +87,7 @@ Business Glu uses **database-per-tenant** isolation via [stancl/tenancy](https:/
 | **2 — Operations** | Time clock, scheduling, quick tasks, forms & checklists | ✅ Complete |
 | **3 — Communications** | Team chat, updates feed, directory, knowledge base, surveys, events, help desk | ✅ Complete |
 | **4 — HR & People** | Courses, quizzes, documents, time off, recognition, timeline, org chart, digital ID | ✅ Complete |
-| **5 — Integrations** | Analytics ✅, audit trail ✅, payroll, API & webhooks, Zapier, calendar sync, kiosk, AI scheduling, offline | 🟡 In Progress |
+| **5 — Integrations & Enhancements** | Analytics ✅, audit trail ✅, enhanced Updates/Feed ✅ (templates, audience targeting, media uploads, per-post analytics), payroll, API & webhooks, Zapier, calendar sync, kiosk, AI scheduling, offline | 🟡 In Progress |
 
 ## Documentation
 

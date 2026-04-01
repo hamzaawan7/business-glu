@@ -137,6 +137,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/updates/{update}/publish', [UpdateController::class, 'publish'])->name('updates.publish');
     Route::post('/updates/{update}/archive', [UpdateController::class, 'archive'])->name('updates.archive');
     Route::post('/updates/{update}/pin', [UpdateController::class, 'togglePin'])->name('updates.toggle-pin');
+    Route::get('/updates/{update}/analytics', [UpdateController::class, 'analytics'])->name('updates.analytics');
+    Route::post('/updates/{update}/save-template', [UpdateController::class, 'saveAsTemplate'])->name('updates.save-as-template');
+    Route::post('/templates', [UpdateController::class, 'storeTemplate'])->name('templates.store');
+    Route::delete('/templates/{template}', [UpdateController::class, 'destroyTemplate'])->name('templates.destroy');
     Route::get('/directory', [DirectoryController::class, 'index'])->name('directory.index');
     Route::patch('/directory/{member}', [DirectoryController::class, 'updateProfile'])->name('directory.update-profile');
     Route::post('/directory/bulk-department', [DirectoryController::class, 'bulkUpdateDepartment'])->name('directory.bulk-department');

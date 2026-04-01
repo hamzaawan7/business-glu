@@ -11,9 +11,15 @@ class Update extends Model
     protected $fillable = [
         'tenant_id',
         'created_by',
+        'template_id',
         'title',
         'body',
+        'cover_image',
+        'attachments',
+        'images',
+        'youtube_url',
         'type',
+        'category',
         'status',
         'is_pinned',
         'is_popup',
@@ -22,18 +28,24 @@ class Update extends Model
         'published_at',
         'scheduled_at',
         'expires_at',
+        'reminder_at',
+        'reminder_sent',
     ];
 
     protected function casts(): array
     {
         return [
+            'attachments'     => 'array',
+            'images'          => 'array',
             'is_pinned'       => 'boolean',
             'is_popup'        => 'boolean',
             'allow_comments'  => 'boolean',
             'allow_reactions' => 'boolean',
+            'reminder_sent'   => 'boolean',
             'published_at'    => 'datetime',
             'scheduled_at'    => 'datetime',
             'expires_at'      => 'datetime',
+            'reminder_at'     => 'datetime',
         ];
     }
 
@@ -62,6 +74,16 @@ class Update extends Model
     public function reads(): HasMany
     {
         return $this->hasMany(UpdateRead::class);
+    }
+
+    public function audiences(): HasMany
+    {
+        return $this->hasMany(UpdateAudience::class);
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(UpdateTemplate::class, 'template_id');
     }
 
     // ── Helpers ──────────────────────────────────────────────

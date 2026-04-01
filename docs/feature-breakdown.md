@@ -192,29 +192,33 @@ Secure, work-only instant messaging.
 
 Social media-style company communication feed. Think of it as your company's internal social media — every update appears on the company feed and can be viewed from mobile or desktop.
 
-| # | Feature | Description | Priority |
-|---|---------|-------------|----------|
-| 1 | **Company Updates Feed** | Post announcements visible to all or targeted groups; feed is the first thing users see on login | 🔴 High |
-| 2 | **Feed Topics** | Categorize updates by topic (e.g., "CEO Updates", "Company Events", "HR News") to organize the feed | 🟡 Medium |
-| 3 | **Rich Media Attachments** | Attach to any update: images, videos, GIFs, files, YouTube embeds, location (with map/directions), links, polls, and shortcuts (deep links to other platform features) | 🔴 High |
-| 4 | **Reactions & Comments** | Employees can react (like, love, etc.) and comment on posts; configurable per update | 🔴 High |
-| 5 | **Read Tracking** | See who viewed/read each update; overview of all activity at the top of each update | 🟡 Medium |
-| 6 | **Targeted Distribution** | Send updates to specific users, Smart Groups, teams, departments, or locations | 🟡 Medium |
-| 7 | **Scheduled Publishing** | Schedule updates to publish at a future date/time via "Schedule Publish" toggle | 🟡 Medium |
-| 8 | **Recurring Updates** | Set updates to repeat daily, weekly, or monthly with an end date; manage all scheduled updates from a "Scheduled" tab; delete single or all future in a series | 🟡 Medium |
-| 9 | **Pop-Up Updates** | Critical updates that pop up immediately when users open the app; users must click a confirmation button (customizable text: "I understood", "Approve", etc.) or "Remind Me Later"; configurable auto-expire after 1/3/7/14/30 days | 🔴 High |
-| 10 | **Pop-Up Confirmation Tracking** | Track who confirmed vs. who hasn't; send targeted reminders to non-confirmers; filter updates by pop-up status (active/expired) | 🔴 High |
-| 11 | **Cancel/Stop Pop-Up** | Convert a pop-up update back to a regular feed update at any time | 🟡 Medium |
-| 12 | **Auto-Translation** | Automatically offer a "See Translation" button when the user's device language differs from the post language; translates to the device's language; enable globally or per-update | 🟡 Medium |
-| 13 | **Pinned Posts** | Pin important updates to the top of the feed | 🟡 Medium |
-| 14 | **Shortcuts in Updates** | Embed deep links (shortcuts) to any platform feature/asset (time clock, form, knowledge base article, etc.) as a button within an update; users click to navigate directly | 🟡 Medium |
-| 15 | **Polls in Updates** | Embed quick polls directly in an update for live feedback (e.g., food orders, team votes) | 🟡 Medium |
-| 16 | **Location in Updates** | Attach a location to updates with map integration (Apple Maps, Google Maps directions) | 🟢 Low |
-| 17 | **Update Templates** | Pre-built templates (e.g., "New Teammates", "How-To") to speed up update creation | 🟢 Low |
-| 18 | **Scheduled Removal** | Schedule an update to auto-remove from the feed after a set time | 🟢 Low |
-| 19 | **SMS Fallback** | Send updates via SMS for employees without the app | 🟢 Low |
-| 20 | **Reminder Notifications** | Notify users who haven't viewed an update; bulk remind from the admin dashboard | 🟡 Medium |
-| 21 | **Mobile Update Creation** | Create and publish updates (including shortcuts) directly from the mobile app Admin tab | 🔴 High |
+> **Enhanced July 2025** — Rich post builder, templates system, audience targeting, media uploads, per-post analytics, scheduling & auto-expiry, reminders.
+
+| # | Feature | Description | Priority | Status |
+|---|---------|-------------|----------|--------|
+| 1 | **Company Updates Feed** | Post announcements visible to all or targeted groups; feed is the first thing users see on login | 🔴 High | ✅ Done |
+| 2 | **Feed Topics / Categories** | Categorize updates by topic (e.g., "CEO Updates", "Company Events", "HR News") to organize the feed; category badges on posts | 🟡 Medium | ✅ Done |
+| 3 | **Rich Media Attachments** | Cover images, multi-photo gallery (up to 10), file attachments (up to 10 with size display), YouTube video embeds; responsive gallery layouts (1/2/3/grid) with lightbox | 🔴 High | ✅ Done |
+| 4 | **Reactions & Comments** | Employees can react (emoji) and comment on posts; configurable per update (allow_comments, allow_reactions toggles) | 🔴 High | ✅ Done |
+| 5 | **Read Tracking** | See who viewed/read each update; per-post analytics with read rate %, read/unread member lists | 🟡 Medium | ✅ Done |
+| 6 | **Targeted Distribution** | Send updates to everyone, specific departments, roles, or individual users via audience picker; `update_audiences` table | 🟡 Medium | ✅ Done |
+| 7 | **Scheduled Publishing** | Schedule updates to publish at a future date/time; scheduled count in stats cards; auto-publish support | 🟡 Medium | ✅ Done |
+| 8 | **Recurring Updates** | Set updates to repeat daily, weekly, or monthly with an end date | 🟡 Medium | 🔲 Planned |
+| 9 | **Pop-Up Updates** | Critical updates that pop up immediately when users open the app; is_popup flag per update | 🔴 High | ✅ Done |
+| 10 | **Pop-Up Confirmation Tracking** | Track who confirmed vs. who hasn't via read tracking; analytics dashboard shows unread users | 🔴 High | ✅ Done |
+| 11 | **Cancel/Stop Pop-Up** | Toggle pop-up flag on/off for any update via admin controls | 🟡 Medium | ✅ Done |
+| 12 | **Auto-Translation** | Automatically offer a "See Translation" button when the user's device language differs from the post language | 🟡 Medium | 🔲 Planned |
+| 13 | **Pinned Posts** | Pin important updates to the top of the feed; toggle pin from admin | 🟡 Medium | ✅ Done |
+| 14 | **Shortcuts in Updates** | Embed deep links to other platform features as buttons within an update | 🟡 Medium | 🔲 Planned |
+| 15 | **Polls in Updates** | Embed quick polls directly in an update for live feedback | 🟡 Medium | 🔲 Planned |
+| 16 | **Location in Updates** | Attach a location to updates with map integration | 🟢 Low | 🔲 Planned |
+| 17 | **Update Templates** | Pre-built and custom templates; create template modal, save-as-template from existing posts, apply template on create; Templates tab in admin | 🟢 Low | ✅ Done |
+| 18 | **Scheduled Removal / Auto-Expiry** | Schedule an update to auto-remove from the feed via expires_at date picker | 🟢 Low | ✅ Done |
+| 19 | **SMS Fallback** | Send updates via SMS for employees without the app | 🟢 Low | 🔲 Planned |
+| 20 | **Reminder Notifications** | Set reminder_at date for updates; remind users who haven't viewed an update | 🟡 Medium | ✅ Done |
+| 21 | **Mobile Update Creation** | Create and publish updates directly from the mobile app Admin tab | 🔴 High | 🔲 Future (mobile) |
+| 22 | **Per-Post Analytics** | Dedicated analytics page per update: read rate %, reactions breakdown with per-emoji user lists, comments list, read/unread member lists | 🟡 Medium | ✅ Done |
+| 23 | **YouTube Video Embeds** | Embed YouTube videos in updates with responsive iframe player; auto-extract embed URL from standard/short YouTube links | 🟡 Medium | ✅ Done |
 
 ### 3.3 Employee Directory
 
