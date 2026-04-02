@@ -212,9 +212,9 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                     </div>
                     {/* Bottom nav */}
                     <div className="bg-white border-t border-gray-100 px-4 py-2 flex items-center justify-around">
-                        {['home', 'clock', 'megaphone', 'chat-bubble', 'user'].map((icon, i) => (
+                        {['home', 'clock', 'megaphone', 'chat-bubble', 'user'].map((iconName, i) => (
                             <div key={i} className={`flex flex-col items-center gap-0.5 ${i === 2 ? 'text-[#495B67]' : 'text-gray-300'}`}>
-                                <span className="text-sm">{icon}</span>
+                                <Icon name={iconName} className="w-4 h-4" />
                                 <div className={`h-0.5 w-4 rounded-full ${i === 2 ? 'bg-[#495B67]' : 'bg-transparent'}`} />
                             </div>
                         ))}
@@ -468,115 +468,177 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
         const iRef = isCreate ? imagesRef : editImagesRef;
         const fRef = isCreate ? filesRef : editFilesRef;
 
-        return (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-4 px-4 z-50 overflow-y-auto">
-                <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl mb-8 flex overflow-hidden">
-                    {/* Left: Form */}
-                    <div className="flex-1 flex flex-col min-w-0">
-                        {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        const STEPS = [
+            { id: 'content', label: 'Content', icon: 'pencil-square' },
+            { id: 'media', label: 'Media', icon: 'photo' },
+            { id: 'audience', label: 'Audience & Options', icon: 'user-group' },
+            { id: 'publish', label: isCreate ? 'Publish' : 'Save', icon: 'rocket' },
+        ];
+
+        const StepWizard = () => {
+            const [step, setStep] = useState(0);
+            const canNext = step < STEPS.length - 1;
+            const canPrev = step > 0;
+
+            /* step validation — require title+body before advancing from step 0 */
+            const isStepValid = (s: number) => {
+                if (s === 0) return !!form.data.title?.trim() && !!form.data.body?.trim();
+                return true;
+            };
+
+            return (
+                <div className="flex-1 flex flex-col min-w-0">
+                    {/* Header with step indicators */}
+                    <div className="px-6 py-4 border-b border-gray-100">
+                        <div className="flex items-center justify-between mb-4">
                             <div>
                                 <h2 className="text-lg font-bold font-heading text-brand-primary">
                                     {isCreate ? 'Create Update' : 'Edit Update'}
                                 </h2>
-                                <p className="text-xs text-gray-400 mt-0.5">Fill in the details — preview updates live on the right →</p>
+                                <p className="text-xs text-gray-400 mt-0.5">Step {step + 1} of {STEPS.length} — {STEPS[step].label}</p>
                             </div>
                             <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition">&times;</button>
                         </div>
 
-                        <form onSubmit={onSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
-                            {/* Template picker (create only) */}
-                            {isCreate && templates.length > 0 && (
-                                <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100 rounded-xl p-3">
-                                    <label className="block text-xs font-semibold text-purple-700 mb-1.5">Start from a template</label>
-                                    <select value={(form.data as any).template_id || ''}
-                                        onChange={e => {
-                                            const tpl = templates.find((t: TemplateData) => t.id === Number(e.target.value));
-                                            if (tpl) {
-                                                form.setData({ ...form.data, title: tpl.title ?? '', body: tpl.body ?? '', type: tpl.type, category: tpl.category ?? '', allow_comments: tpl.allow_comments, allow_reactions: tpl.allow_reactions, template_id: String(tpl.id) } as any);
-                                            } else {
-                                                (form as any).setData('template_id', '');
-                                            }
-                                        }}
-                                        className="w-full text-sm border border-purple-200 rounded-lg px-3 py-2 bg-white/80 focus:ring-purple-400 focus:border-purple-400">
-                                        <option value="">Blank post</option>
-                                        {templates.map((t: TemplateData) => <option key={t.id} value={t.id}>{t.name}</option>)}
-                                    </select>
-                                </div>
-                            )}
+                        {/* Step progress bar */}
+                        <div className="flex items-center gap-1">
+                            {STEPS.map((s, i) => (
+                                <button key={s.id} type="button" onClick={() => { if (i < step || isStepValid(step)) setStep(i); }}
+                                    className="flex-1 group relative">
+                                    <div className={`h-1.5 rounded-full transition-all ${
+                                        i < step ? 'bg-brand-primary' : i === step ? 'bg-brand-primary/60' : 'bg-gray-200'
+                                    }`} />
+                                    <div className={`flex items-center gap-1.5 mt-2 ${
+                                        i === step ? 'text-brand-primary' : i < step ? 'text-gray-500' : 'text-gray-300'
+                                    }`}>
+                                        <Icon name={s.icon} className="w-3.5 h-3.5" />
+                                        <span className="text-[10px] font-semibold uppercase tracking-wide hidden sm:inline">{s.label}</span>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
 
-                            {/* Title */}
-                            <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Title *</label>
-                                <input type="text" value={form.data.title} onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('title' as any, e.target.value)}
-                                    placeholder="What's this update about?" required
-                                    className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300" />
-                            </div>
+                    {/* Step content */}
+                    <div className="flex-1 overflow-y-auto p-6">
+                        {/* ─── Step 1: Content ─────────────────── */}
+                        {step === 0 && (
+                            <div className="space-y-5 animate-fadeIn">
+                                {/* Template picker (create only) */}
+                                {isCreate && templates.length > 0 && (
+                                    <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100 rounded-xl p-3">
+                                        <label className="block text-xs font-semibold text-purple-700 mb-1.5">Start from a template</label>
+                                        <select value={(form.data as any).template_id || ''}
+                                            onChange={e => {
+                                                const tpl = templates.find((t: TemplateData) => t.id === Number(e.target.value));
+                                                if (tpl) {
+                                                    form.setData({ ...form.data, title: tpl.title ?? '', body: tpl.body ?? '', type: tpl.type, category: tpl.category ?? '', allow_comments: tpl.allow_comments, allow_reactions: tpl.allow_reactions, template_id: String(tpl.id) } as any);
+                                                } else {
+                                                    (form as any).setData('template_id', '');
+                                                }
+                                            }}
+                                            className="w-full text-sm border border-purple-200 rounded-lg px-3 py-2 bg-white/80 focus:ring-purple-400 focus:border-purple-400">
+                                            <option value="">Blank post</option>
+                                            {templates.map((t: TemplateData) => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                        </select>
+                                    </div>
+                                )}
 
-                            {/* Body */}
-                            <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Content *</label>
-                                <textarea value={form.data.body} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => form.setData('body' as any, e.target.value)}
-                                    rows={5} placeholder="Write your update here..." required
-                                    className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300 resize-none" />
-                            </div>
-
-                            {/* Type + Category */}
-                            <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Type</label>
-                                    <select value={form.data.type} onChange={(e: ChangeEvent<HTMLSelectElement>) => form.setData('type' as any, e.target.value)}
-                                        className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary">
-                                        <option value="announcement">Announcement</option>
-                                        <option value="news">News</option>
-                                        <option value="event">Event</option>
-                                        <option value="poll">Poll</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Category</label>
-                                    <input type="text" value={(form.data as any).category || ''} onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('category' as any, e.target.value)}
-                                        placeholder="e.g. Safety, HR"
+                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Title *</label>
+                                    <input type="text" value={form.data.title} onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('title' as any, e.target.value)}
+                                        placeholder="What's this update about?" required autoFocus
                                         className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300" />
                                 </div>
+
+                                <div>
+                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Content *</label>
+                                    <textarea value={form.data.body} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => form.setData('body' as any, e.target.value)}
+                                        rows={8} placeholder="Write your update here..." required
+                                        className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300 resize-none" />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Type</label>
+                                        <select value={form.data.type} onChange={(e: ChangeEvent<HTMLSelectElement>) => form.setData('type' as any, e.target.value)}
+                                            className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary">
+                                            <option value="announcement">Announcement</option>
+                                            <option value="news">News</option>
+                                            <option value="event">Event</option>
+                                            <option value="poll">Poll</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Category</label>
+                                        <input type="text" value={(form.data as any).category || ''} onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('category' as any, e.target.value)}
+                                            placeholder="e.g. Safety, HR"
+                                            className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300" />
+                                    </div>
+                                </div>
                             </div>
+                        )}
 
-                            {/* YouTube URL */}
-                            <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">YouTube Video</label>
-                                <input type="url" value={(form.data as any).youtube_url || ''} onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('youtube_url' as any, e.target.value)}
-                                    placeholder="https://www.youtube.com/watch?v=..."
-                                    className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300" />
-                            </div>
+                        {/* ─── Step 2: Media ───────────────────── */}
+                        {step === 1 && (
+                            <div className="space-y-5 animate-fadeIn">
+                                <div>
+                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">YouTube Video</label>
+                                    <input type="url" value={(form.data as any).youtube_url || ''} onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('youtube_url' as any, e.target.value)}
+                                        placeholder="https://www.youtube.com/watch?v=..."
+                                        className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300" />
+                                </div>
 
-                            {/* Media uploads */}
-                            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
-                                <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider">Media & Files</h4>
+                                <div className="space-y-4">
+                                    <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider">Upload Files</h4>
 
-                                <div className="grid grid-cols-3 gap-2">
-                                    {/* Cover */}
+                                    {/* Cover Image */}
                                     <div>
                                         <input ref={cRef} type="file" accept="image/*" className="hidden"
                                             onChange={(e: ChangeEvent<HTMLInputElement>) => { if (e.target.files?.[0]) form.setData('cover_image' as any, e.target.files[0]); }} />
                                         <button type="button" onClick={() => cRef.current?.click()}
-                                            className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 border-dashed transition-all text-center ${
-                                                (form.data as any).cover_image ? 'border-green-300 bg-green-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
+                                            className={`w-full flex items-center gap-3 p-4 rounded-xl border-2 border-dashed transition-all text-left ${
+                                                (form.data as any).cover_image ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
                                             }`}>
-                                            <span className="text-xl">{(form.data as any).cover_image ? 'check-circle' : 'photo'}</span>
-                                            <span className="text-[10px] font-medium text-gray-500">Cover Image</span>
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                                (form.data as any).cover_image ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'
+                                            }`}>
+                                                <Icon name={(form.data as any).cover_image ? 'check-circle' : 'photo'} className="w-5 h-5" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="text-sm font-semibold text-gray-700">Cover Image</p>
+                                                <p className="text-xs text-gray-400">{(form.data as any).cover_image ? (form.data as any).cover_image.name : 'Click to upload a hero image'}</p>
+                                            </div>
+                                            {(form.data as any).cover_image && (
+                                                <button type="button" onClick={(e) => { e.stopPropagation(); form.setData('cover_image' as any, null); }}
+                                                    className="text-xs text-red-400 hover:text-red-600 font-medium px-2 py-1">Remove</button>
+                                            )}
                                         </button>
                                     </div>
 
-                                    {/* Gallery */}
+                                    {/* Photos */}
                                     <div>
                                         <input ref={iRef} type="file" accept="image/*" multiple className="hidden"
                                             onChange={(e: ChangeEvent<HTMLInputElement>) => { if (e.target.files) form.setData('upload_images' as any, Array.from(e.target.files)); }} />
                                         <button type="button" onClick={() => iRef.current?.click()}
-                                            className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 border-dashed transition-all text-center ${
-                                                (form.data as any).upload_images?.length > 0 ? 'border-green-300 bg-green-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
+                                            className={`w-full flex items-center gap-3 p-4 rounded-xl border-2 border-dashed transition-all text-left ${
+                                                (form.data as any).upload_images?.length > 0 ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
                                             }`}>
-                                            <span className="text-xl">{(form.data as any).upload_images?.length > 0 ? `<Icon name="camera" className="w-4 h-4 inline-block" /> ${(form.data as any).upload_images.length}` : 'camera'}</span>
-                                            <span className="text-[10px] font-medium text-gray-500">Photos</span>
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                                (form.data as any).upload_images?.length > 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'
+                                            }`}>
+                                                <Icon name="camera" className="w-5 h-5" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="text-sm font-semibold text-gray-700">Photos</p>
+                                                <p className="text-xs text-gray-400">
+                                                    {(form.data as any).upload_images?.length > 0 ? `${(form.data as any).upload_images.length} photo(s) selected` : 'Upload multiple images'}
+                                                </p>
+                                            </div>
+                                            {(form.data as any).upload_images?.length > 0 && (
+                                                <button type="button" onClick={(e) => { e.stopPropagation(); form.setData('upload_images' as any, []); }}
+                                                    className="text-xs text-red-400 hover:text-red-600 font-medium px-2 py-1">Clear</button>
+                                            )}
                                         </button>
                                     </div>
 
@@ -585,144 +647,233 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                         <input ref={fRef} type="file" multiple className="hidden"
                                             onChange={(e: ChangeEvent<HTMLInputElement>) => { if (e.target.files) form.setData('upload_files' as any, Array.from(e.target.files)); }} />
                                         <button type="button" onClick={() => fRef.current?.click()}
-                                            className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 border-dashed transition-all text-center ${
-                                                (form.data as any).upload_files?.length > 0 ? 'border-green-300 bg-green-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
+                                            className={`w-full flex items-center gap-3 p-4 rounded-xl border-2 border-dashed transition-all text-left ${
+                                                (form.data as any).upload_files?.length > 0 ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
                                             }`}>
-                                            <span className="text-xl">{(form.data as any).upload_files?.length > 0 ? `<Icon name="folder-open" className="w-4 h-4 inline-block" /> ${(form.data as any).upload_files.length}` : 'document'}</span>
-                                            <span className="text-[10px] font-medium text-gray-500">Files</span>
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                                (form.data as any).upload_files?.length > 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'
+                                            }`}>
+                                                <Icon name="document" className="w-5 h-5" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="text-sm font-semibold text-gray-700">Documents & Files</p>
+                                                <p className="text-xs text-gray-400">
+                                                    {(form.data as any).upload_files?.length > 0 ? `${(form.data as any).upload_files.length} file(s) selected` : 'PDFs, docs, spreadsheets, etc.'}
+                                                </p>
+                                            </div>
+                                            {(form.data as any).upload_files?.length > 0 && (
+                                                <button type="button" onClick={(e) => { e.stopPropagation(); form.setData('upload_files' as any, []); }}
+                                                    className="text-xs text-red-400 hover:text-red-600 font-medium px-2 py-1">Clear</button>
+                                            )}
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Existing media on edit */}
                                 {!isCreate && existingUpdate?.cover_image && !(form.data as any).remove_cover && (
-                                    <div className="flex items-center gap-2 text-xs bg-white rounded-lg p-2 border border-gray-100">
-                                        <img src={existingUpdate.cover_image} alt="" className="w-10 h-10 rounded object-cover" />
-                                        <span className="text-gray-500">Current cover</span>
+                                    <div className="flex items-center gap-3 text-xs bg-white rounded-xl p-3 border border-gray-100 shadow-sm">
+                                        <img src={existingUpdate.cover_image} alt="" className="w-14 h-14 rounded-lg object-cover" />
+                                        <div className="flex-1">
+                                            <p className="font-semibold text-gray-700">Current cover image</p>
+                                            <p className="text-gray-400 text-[10px]">Upload a new one above to replace</p>
+                                        </div>
                                         <button type="button" onClick={() => form.setData('remove_cover' as any, true)}
-                                            className="ml-auto text-red-400 hover:text-red-600 text-[10px] font-medium">Remove</button>
+                                            className="text-red-400 hover:text-red-600 text-[10px] font-medium">Remove</button>
                                     </div>
                                 )}
                                 {!isCreate && existingUpdate?.images && existingUpdate.images.length > 0 && (
-                                    <div className="flex gap-1.5 flex-wrap">
-                                        {existingUpdate.images.map((img: string, i: number) => (
-                                            <div key={i} className="relative w-12 h-12 rounded-lg overflow-hidden border border-gray-200">
-                                                <img src={img} alt="" className="w-full h-full object-cover" />
+                                    <div className="space-y-2">
+                                        <p className="text-xs font-semibold text-gray-500">Existing images</p>
+                                        <div className="flex gap-2 flex-wrap">
+                                            {existingUpdate.images.map((img: string, i: number) => (
+                                                <div key={i} className="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                                                    <img src={img} alt="" className="w-full h-full object-cover" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* ─── Step 3: Audience & Options ──────── */}
+                        {step === 2 && (
+                            <div className="space-y-6 animate-fadeIn">
+                                <AudiencePicker
+                                    audType={(form.data as any).audience_type}
+                                    audValues={(form.data as any).audience_values}
+                                    onChange={(type: string, values: string[]) => { form.setData('audience_type' as any, type); form.setData('audience_values' as any, values); }}
+                                />
+
+                                <div>
+                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Options</label>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {[
+                                            { key: 'is_pinned', icon: 'pin', label: 'Pin to top', desc: 'Shows first in feed' },
+                                            { key: 'is_popup', icon: 'bolt', label: 'Pop-up alert', desc: 'Must acknowledge' },
+                                            { key: 'allow_comments', icon: 'chat-bubble', label: 'Comments', desc: 'Allow team to comment' },
+                                            { key: 'allow_reactions', icon: 'hand-thumb-up', label: 'Reactions', desc: 'Allow emoji reactions' },
+                                        ].map(opt => (
+                                            <button key={opt.key} type="button"
+                                                onClick={() => form.setData(opt.key as any, !(form.data as any)[opt.key])}
+                                                className={`flex items-center gap-2.5 p-3 rounded-xl border-2 transition-all text-left ${
+                                                    (form.data as any)[opt.key]
+                                                        ? 'border-brand-primary bg-brand-primary/5'
+                                                        : 'border-gray-100 hover:border-gray-300'
+                                                }`}>
+                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                                                    (form.data as any)[opt.key] ? 'bg-brand-primary/10 text-brand-primary' : 'bg-gray-100 text-gray-400'
+                                                }`}>
+                                                    <Icon name={opt.icon} className="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <p className={`text-xs font-semibold ${(form.data as any)[opt.key] ? 'text-brand-primary' : 'text-gray-500'}`}>{opt.label}</p>
+                                                    <p className="text-[9px] text-gray-400">{opt.desc}</p>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Scheduling dates */}
+                                <div>
+                                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Scheduling</label>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="block text-[10px] text-gray-500 font-medium mb-1">Expires on</label>
+                                            <input type="date" value={(form.data as any).expires_at || ''}
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('expires_at' as any, e.target.value)}
+                                                className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] text-gray-500 font-medium mb-1">Send reminder on</label>
+                                            <input type="date" value={(form.data as any).reminder_at || ''}
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('reminder_at' as any, e.target.value)}
+                                                className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ─── Step 4: Publish ─────────────────── */}
+                        {step === 3 && (
+                            <div className="space-y-5 animate-fadeIn">
+                                {/* Summary card */}
+                                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
+                                    <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider">Review Summary</h4>
+                                    <div className="grid grid-cols-2 gap-3 text-sm">
+                                        <div className="bg-white rounded-lg p-3 border border-gray-100">
+                                            <p className="text-[10px] text-gray-400 uppercase font-semibold mb-0.5">Title</p>
+                                            <p className="text-gray-800 font-medium truncate">{form.data.title || '—'}</p>
+                                        </div>
+                                        <div className="bg-white rounded-lg p-3 border border-gray-100">
+                                            <p className="text-[10px] text-gray-400 uppercase font-semibold mb-0.5">Type</p>
+                                            <p className="text-gray-800 font-medium flex items-center gap-1.5">
+                                                <Icon name={typeIcons[form.data.type]} className="w-3.5 h-3.5" /> {typeLabels[form.data.type]}
+                                            </p>
+                                        </div>
+                                        <div className="bg-white rounded-lg p-3 border border-gray-100">
+                                            <p className="text-[10px] text-gray-400 uppercase font-semibold mb-0.5">Audience</p>
+                                            <p className="text-gray-800 font-medium">{(form.data as any).audience_type === 'all' ? 'Everyone' : `${(form.data as any).audience_type}: ${(form.data as any).audience_values?.length || 0} selected`}</p>
+                                        </div>
+                                        <div className="bg-white rounded-lg p-3 border border-gray-100">
+                                            <p className="text-[10px] text-gray-400 uppercase font-semibold mb-0.5">Media</p>
+                                            <p className="text-gray-800 font-medium">
+                                                {[(form.data as any).cover_image && 'Cover', (form.data as any).upload_images?.length && `${(form.data as any).upload_images.length} photos`, (form.data as any).upload_files?.length && `${(form.data as any).upload_files.length} files`, (form.data as any).youtube_url && 'Video'].filter(Boolean).join(', ') || 'None'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Publish options (create only) */}
+                                {isCreate && (
+                                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 rounded-xl p-5 space-y-4">
+                                        <h4 className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Publishing</h4>
+                                        <button type="button"
+                                            onClick={() => form.setData('publish_now' as any, !(form.data as any).publish_now)}
+                                            className={`w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${
+                                                (form.data as any).publish_now ? 'border-emerald-500 bg-emerald-500/10' : 'border-emerald-200 bg-white'
+                                            }`}>
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                                (form.data as any).publish_now ? 'bg-emerald-500 text-white' : 'bg-emerald-100 text-emerald-500'
+                                            }`}>
+                                                <Icon name={(form.data as any).publish_now ? 'check' : 'pause'} className="w-5 h-5" />
                                             </div>
+                                            <div className="text-left">
+                                                <p className={`text-sm font-bold ${(form.data as any).publish_now ? 'text-emerald-700' : 'text-gray-500'}`}>
+                                                    {(form.data as any).publish_now ? 'Publishing immediately' : 'Save as draft'}
+                                                </p>
+                                                <p className="text-xs text-gray-400">
+                                                    {(form.data as any).publish_now ? 'Visible to your team right away' : 'Or schedule it below'}
+                                                </p>
+                                            </div>
+                                        </button>
+                                        {!(form.data as any).publish_now && (
+                                            <div>
+                                                <label className="block text-[10px] text-emerald-600 font-medium mb-1">Schedule for later</label>
+                                                <input type="datetime-local" value={(form.data as any).scheduled_at || ''}
+                                                    onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('scheduled_at' as any, e.target.value)}
+                                                    className="w-full text-sm border border-emerald-200 rounded-xl px-4 py-2.5 focus:ring-emerald-400 focus:border-emerald-400 bg-white/80" />
+                                                <p className="text-[9px] text-gray-400 mt-1">Leave blank to save as draft</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Errors */}
+                                {Object.keys(form.errors).length > 0 && (
+                                    <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+                                        {Object.values(form.errors).map((err: any, i: number) => (
+                                            <p key={i} className="text-xs text-red-600">{err}</p>
                                         ))}
                                     </div>
                                 )}
                             </div>
-
-                            {/* Audience targeting */}
-                            <AudiencePicker
-                                audType={(form.data as any).audience_type}
-                                audValues={(form.data as any).audience_values}
-                                onChange={(type: string, values: string[]) => { form.setData('audience_type' as any, type); form.setData('audience_values' as any, values); }}
-                            />
-
-                            {/* Toggle options */}
-                            <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Options</label>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {[
-                                        { key: 'is_pinned', icon: 'pin', label: 'Pin to top', desc: 'Shows first in feed' },
-                                        { key: 'is_popup', icon: 'bolt', label: 'Pop-up alert', desc: 'Must acknowledge' },
-                                        { key: 'allow_comments', icon: 'chat-bubble', label: 'Comments', desc: 'Allow team to comment' },
-                                        { key: 'allow_reactions', icon: 'hand-thumb-up', label: 'Reactions', desc: 'Allow emoji reactions' },
-                                    ].map(opt => (
-                                        <button key={opt.key} type="button"
-                                            onClick={() => form.setData(opt.key as any, !(form.data as any)[opt.key])}
-                                            className={`flex items-center gap-2.5 p-2.5 rounded-xl border-2 transition-all text-left ${
-                                                (form.data as any)[opt.key]
-                                                    ? 'border-brand-primary bg-brand-primary/5'
-                                                    : 'border-gray-100 hover:border-gray-300'
-                                            }`}>
-                                            <span className="text-base"><Icon name={opt.icon} className="w-4 h-4" /></span>
-                                            <div>
-                                                <p className={`text-xs font-semibold ${(form.data as any)[opt.key] ? 'text-brand-primary' : 'text-gray-500'}`}>{opt.label}</p>
-                                                <p className="text-[9px] text-gray-400">{opt.desc}</p>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Scheduling */}
-                            <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Scheduling</label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">Expires</span>
-                                        <input type="date" value={(form.data as any).expires_at || ''}
-                                            onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('expires_at' as any, e.target.value)}
-                                            className="w-full text-sm border border-gray-200 rounded-xl pl-16 pr-3 py-2.5 focus:ring-brand-primary focus:border-brand-primary" />
-                                    </div>
-                                    <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">Remind</span>
-                                        <input type="date" value={(form.data as any).reminder_at || ''}
-                                            onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('reminder_at' as any, e.target.value)}
-                                            className="w-full text-sm border border-gray-200 rounded-xl pl-16 pr-3 py-2.5 focus:ring-brand-primary focus:border-brand-primary" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Publish options (create only) */}
-                            {isCreate && (
-                                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 rounded-xl p-4 space-y-3">
-                                    <h4 className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Publishing</h4>
-                                    <button type="button"
-                                        onClick={() => form.setData('publish_now' as any, !(form.data as any).publish_now)}
-                                        className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
-                                            (form.data as any).publish_now ? 'border-emerald-500 bg-emerald-500/10' : 'border-emerald-200 bg-white'
-                                        }`}>
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-base ${
-                                            (form.data as any).publish_now ? 'bg-emerald-500 text-white' : 'bg-emerald-100 text-emerald-500'
-                                        }`}>{(form.data as any).publish_now ? 'check' : 'pause'}</div>
-                                        <div className="text-left">
-                                            <p className={`text-xs font-bold ${(form.data as any).publish_now ? 'text-emerald-700' : 'text-gray-500'}`}>
-                                                {(form.data as any).publish_now ? 'Publishing immediately' : 'Save as draft'}
-                                            </p>
-                                            <p className="text-[9px] text-gray-400">
-                                                {(form.data as any).publish_now ? 'Visible to your team right away' : 'Or schedule it below'}
-                                            </p>
-                                        </div>
-                                    </button>
-                                    {!(form.data as any).publish_now && (
-                                        <div>
-                                            <label className="block text-[10px] text-emerald-600 font-medium mb-1">Schedule for later</label>
-                                            <input type="datetime-local" value={(form.data as any).scheduled_at || ''}
-                                                onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('scheduled_at' as any, e.target.value)}
-                                                className="w-full text-sm border border-emerald-200 rounded-xl px-4 py-2.5 focus:ring-emerald-400 focus:border-emerald-400 bg-white/80" />
-                                            <p className="text-[9px] text-gray-400 mt-1">Leave blank to save as draft</p>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* Errors */}
-                            {Object.keys(form.errors).length > 0 && (
-                                <div className="bg-red-50 border border-red-200 rounded-xl p-3">
-                                    {Object.values(form.errors).map((err: any, i: number) => (
-                                        <p key={i} className="text-xs text-red-600">{err}</p>
-                                    ))}
-                                </div>
-                            )}
-                        </form>
-
-                        {/* Footer */}
-                        <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-                            <button onClick={onClose} className="px-4 py-2 text-sm text-gray-400 hover:text-gray-600 transition">Cancel</button>
-                            <button onClick={onSubmit as any} disabled={form.processing}
-                                className="px-6 py-2.5 bg-brand-primary text-white text-sm font-semibold rounded-xl hover:opacity-90 transition disabled:opacity-50 shadow-sm shadow-brand-primary/20">
-                                {form.processing ? (
-                                    <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Saving…</span>
-                                ) : isCreate ? ((form.data as any).publish_now ? 'Publish Now' : 'Save') : 'Save Changes'}
-                            </button>
-                        </div>
+                        )}
                     </div>
 
-                    {/* Right: Live Mobile Preview */}
+                    {/* Footer with navigation */}
+                    <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+                        <div className="flex items-center gap-2">
+                            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-400 hover:text-gray-600 transition">Cancel</button>
+                            {canPrev && (
+                                <button type="button" onClick={() => setStep(step - 1)}
+                                    className="px-4 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition flex items-center gap-1.5">
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+                                    Back
+                                </button>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {canNext ? (
+                                <button type="button" onClick={() => { if (isStepValid(step)) setStep(step + 1); }}
+                                    disabled={!isStepValid(step)}
+                                    className="px-6 py-2.5 bg-brand-primary text-white text-sm font-semibold rounded-xl hover:opacity-90 transition disabled:opacity-40 shadow-sm shadow-brand-primary/20 flex items-center gap-1.5">
+                                    Next
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                                </button>
+                            ) : (
+                                <button type="button" onClick={onSubmit as any} disabled={form.processing}
+                                    className="px-6 py-2.5 bg-brand-primary text-white text-sm font-semibold rounded-xl hover:opacity-90 transition disabled:opacity-50 shadow-sm shadow-brand-primary/20">
+                                    {form.processing ? (
+                                        <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Saving…</span>
+                                    ) : isCreate ? ((form.data as any).publish_now ? 'Publish Now' : 'Save') : 'Save Changes'}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        return (
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-4 px-4 z-50 overflow-y-auto">
+                <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl mb-8 flex overflow-hidden" style={{ minHeight: 'min(85vh, 680px)' }}>
+                    {/* Left: Multi-step Form */}
+                    <StepWizard />
+
+                    {/* Right: Fixed Live Mobile Preview */}
                     <div className="hidden lg:flex w-[340px] bg-gradient-to-b from-gray-50 to-gray-100 border-l border-gray-200 flex-col items-center justify-center py-6 px-4 flex-shrink-0">
                         <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-4">Live Preview</p>
                         <MobilePreview
@@ -736,7 +887,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             allowComments={(form.data as any).allow_comments}
                             allowReactions={(form.data as any).allow_reactions}
                         />
-                        <p className="text-[9px] text-gray-400 mt-3 text-center max-w-[200px]">This is how your update will appear to employees on mobile</p>
+                        <p className="text-[9px] text-gray-400 mt-3 text-center max-w-[200px]">This preview updates in real time as you fill in the form</p>
                     </div>
                 </div>
             </div>
@@ -801,7 +952,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             className={`px-5 py-2 text-sm font-semibold rounded-lg transition-all ${
                                 activeTab === tab ? 'bg-white text-brand-primary shadow-sm' : 'text-gray-400 hover:text-gray-600'
                             }`}>
-                            {tab === 'templates' ? `<Icon name="document" className="w-4 h-4 inline-block" /> Templates (${templates.length})` : 'Updates'}
+                            {tab === 'templates' ? <><Icon name="document" className="w-4 h-4 inline-block" /> Templates ({templates.length})</> : 'Updates'}
                         </button>
                     ))}
                 </div>
@@ -835,7 +986,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             {updates.length === 0 && (
                                 <div className="bg-white rounded-2xl border border-gray-100 p-16 text-center shadow-sm">
                                     <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <span className="text-3xl"><Icon name="megaphone" className="w-4 h-4 inline-block" /></span>
+                                        <Icon name="megaphone" className="w-8 h-8 text-gray-400" />
                                     </div>
                                     <h3 className="text-base font-bold font-heading text-gray-800">No updates yet</h3>
                                     <p className="text-sm text-gray-400 mt-1 max-w-xs mx-auto">Create your first update to keep your team informed and engaged.</p>
@@ -971,7 +1122,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                         {templates.length === 0 && (
                             <div className="bg-white rounded-2xl border border-gray-100 p-16 text-center shadow-sm">
                                 <div className="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                    <span className="text-3xl"><Icon name="document" className="w-4 h-4 inline-block" /></span>
+                                    <Icon name="document" className="w-8 h-8 text-purple-400" />
                                 </div>
                                 <h3 className="text-base font-bold font-heading text-gray-800">No templates yet</h3>
                                 <p className="text-sm text-gray-400 mt-1 max-w-xs mx-auto">Templates let you create consistent updates faster. Build your first one!</p>
@@ -1065,7 +1216,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
                         <div className="bg-purple-50 p-6 text-center">
                             <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto">
-                                <span className="text-2xl"><Icon name="save" className="w-4 h-4 inline-block" /></span>
+                                <Icon name="save" className="w-7 h-7 text-purple-500" />
                             </div>
                             <h3 className="text-lg font-bold text-gray-900 mt-3">Save as Template</h3>
                             <p className="text-sm text-gray-500 mt-1">Give it a name so you can quickly reuse this format.</p>
