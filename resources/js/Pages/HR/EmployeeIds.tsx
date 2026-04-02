@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head } from '@inertiajs/react';
 import { useState, useRef } from 'react';
 
@@ -105,14 +106,14 @@ export default function EmployeeIds({ employees, companyName }: Props) {
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total IDs', value: employees.length, icon: '🪪' },
-                        { label: 'With Photo', value: employees.filter(e => e.avatar_url).length, icon: '📸' },
-                        { label: 'Departments', value: new Set(employees.map(e => e.department).filter(Boolean)).size, icon: '🏢' },
-                        { label: 'Active', value: employees.length, icon: '✅' },
+                        { label: 'Total IDs', value: employees.length, icon: 'id-card' },
+                        { label: 'With Photo', value: employees.filter(e => e.avatar_url).length, icon: 'camera' },
+                        { label: 'Departments', value: new Set(employees.map(e => e.department).filter(Boolean)).size, icon: 'building' },
+                        { label: 'Active', value: employees.length, icon: 'check-circle' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-4">
                             <div className="flex items-center gap-2 mb-1">
-                                <span>{s.icon}</span>
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span>
                                 <span className="text-xs text-slate-500">{s.label}</span>
                             </div>
                             <span className="text-xl font-bold text-slate-900">{s.value}</span>

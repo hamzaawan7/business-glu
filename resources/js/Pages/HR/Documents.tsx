@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler, ChangeEvent } from 'react';
 
@@ -201,7 +202,7 @@ export default function Documents({ documents, filters, stats, categories, emplo
                 {/* Expiring Soon Alert */}
                 {stats.expiring_soon > 0 && (
                     <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 flex items-center gap-3">
-                        <span className="text-amber-600 text-xl">⚠️</span>
+                        <span className="text-amber-600 text-xl"><Icon name="exclamation-triangle" className="w-4 h-4 inline-block" /></span>
                         <div>
                             <p className="font-semibold text-amber-800">{stats.expiring_soon} document{stats.expiring_soon !== 1 ? 's' : ''} expiring within 30 days</p>
                             <p className="text-sm text-amber-600">Review and renew expiring documents to maintain compliance.</p>
@@ -241,8 +242,8 @@ export default function Documents({ documents, filters, stats, categories, emplo
                                             {doc.expiry_date ? (
                                                 <span className={`text-xs font-medium ${isExpired(doc.expiry_date) ? 'text-red-600' : isExpiringSoon(doc.expiry_date) ? 'text-amber-600' : 'text-slate-500'}`}>
                                                     {new Date(doc.expiry_date).toLocaleDateString()}
-                                                    {isExpired(doc.expiry_date) && ' ⚠️'}
-                                                    {isExpiringSoon(doc.expiry_date) && !isExpired(doc.expiry_date) && ' ⏰'}
+                                                    {isExpired(doc.expiry_date) && ' <Icon name="exclamation-triangle" className="w-4 h-4 inline-block" />'}
+                                                    {isExpiringSoon(doc.expiry_date) && !isExpired(doc.expiry_date) && ' <Icon name="clock" className="w-4 h-4 inline-block" />'}
                                                 </span>
                                             ) : <span className="text-xs text-slate-400">No expiry</span>}
                                         </td>

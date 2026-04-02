@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, usePage, router } from '@inertiajs/react';
 
 interface SurveyItem {
@@ -69,7 +70,7 @@ export default function UserSurveys({ activeSurveys, completedSurveys }: Props) 
                 {/* No surveys at all */}
                 {activeSurveys.length === 0 && completedSurveys.length === 0 && (
                     <div className="text-center py-16">
-                        <div className="text-5xl mb-3">📋</div>
+                        <div className="text-5xl mb-3"><Icon name="clipboard-list" className="w-4 h-4 inline-block" /></div>
                         <h3 className="text-lg font-semibold text-gray-700 mb-1">No surveys yet</h3>
                         <p className="text-sm text-gray-500">When surveys are created, they'll appear here for you to respond.</p>
                     </div>
@@ -79,7 +80,7 @@ export default function UserSurveys({ activeSurveys, completedSurveys }: Props) 
                 {pending.length > 0 && (
                     <div>
                         <div className="flex items-center gap-2 text-xs font-semibold text-[#495B67] uppercase tracking-wider mb-3">
-                            📋 Waiting for your response ({pending.length})
+                            <Icon name="clipboard-list" className="w-4 h-4 inline-block" /> Waiting for your response ({pending.length})
                         </div>
                         <div className="space-y-3">
                             {pending.map(survey => (
@@ -90,7 +91,7 @@ export default function UserSurveys({ activeSurveys, completedSurveys }: Props) 
                                 >
                                     <div className="flex items-start gap-3">
                                         <div className="text-2xl flex-shrink-0 mt-0.5">
-                                            {survey.type === 'poll' ? '📊' : '📝'}
+                                            {survey.type === 'poll' ? 'chart-bar' : 'pencil'}
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
@@ -103,9 +104,9 @@ export default function UserSurveys({ activeSurveys, completedSurveys }: Props) 
                                             <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-400">
                                                 <span>{survey.type}</span>
                                                 <span>{survey.questions_count} question{survey.questions_count !== 1 ? 's' : ''}</span>
-                                                {survey.is_anonymous && <span>🔒 Anonymous</span>}
+                                                {survey.is_anonymous && <span>Anonymous</span>}
                                                 {survey.published_at && <span>{timeAgo(survey.published_at)}</span>}
-                                                {survey.closes_at && <span>⏰ Closes {new Date(survey.closes_at).toLocaleDateString()}</span>}
+                                                {survey.closes_at && <span>Closes {new Date(survey.closes_at).toLocaleDateString()}</span>}
                                             </div>
                                         </div>
                                         <div className="flex-shrink-0">
@@ -124,7 +125,7 @@ export default function UserSurveys({ activeSurveys, completedSurveys }: Props) 
                 {responded.length > 0 && (
                     <div>
                         <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                            ✅ Responded ({responded.length})
+                            <Icon name="check-circle" className="w-4 h-4 inline-block" /> Responded ({responded.length})
                         </div>
                         <div className="space-y-3">
                             {responded.map(survey => (
@@ -134,7 +135,7 @@ export default function UserSurveys({ activeSurveys, completedSurveys }: Props) 
                                 >
                                     <div className="flex items-start gap-3">
                                         <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-                                            <span className="text-lg">✓</span>
+                                            <span className="text-lg"><Icon name="check" className="w-3 h-3 inline-block" /></span>
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <h3 className="font-semibold text-gray-900 text-sm">{survey.title}</h3>
@@ -163,13 +164,13 @@ export default function UserSurveys({ activeSurveys, completedSurveys }: Props) 
                 {completedSurveys.length > 0 && (
                     <div>
                         <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                            🔒 Closed ({completedSurveys.length})
+                            <Icon name="lock-closed" className="w-4 h-4 inline-block" /> Closed ({completedSurveys.length})
                         </div>
                         <div className="space-y-3">
                             {completedSurveys.map(survey => (
                                 <div key={survey.id} className="w-full bg-white rounded-xl border border-gray-200 p-4 opacity-60">
                                     <div className="flex items-start gap-3">
-                                        <div className="text-2xl flex-shrink-0 mt-0.5">🔒</div>
+                                        <div className="text-2xl flex-shrink-0 mt-0.5"><Icon name="lock-closed" className="w-4 h-4 inline-block" /></div>
                                         <div className="flex-1 min-w-0">
                                             <h3 className="font-medium text-gray-700 text-sm">{survey.title}</h3>
                                             <div className="flex items-center gap-3 mt-1 text-[10px] text-gray-400">

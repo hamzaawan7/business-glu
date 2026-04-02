@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -101,14 +102,14 @@ export default function OrgChart({ employees, departments }: Props) {
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Employees', value: employees.length, icon: '👥' },
-                        { label: 'Departments', value: departments.length, icon: '🏢' },
-                        { label: 'Managers', value: employees.filter(e => getDirectReports(e.id).length > 0).length, icon: '👔' },
-                        { label: 'No Manager', value: employees.filter(e => !e.reports_to).length, icon: '🔗' },
+                        { label: 'Employees', value: employees.length, icon: 'user-group' },
+                        { label: 'Departments', value: departments.length, icon: 'building' },
+                        { label: 'Managers', value: employees.filter(e => getDirectReports(e.id).length > 0).length, icon: 'necktie' },
+                        { label: 'No Manager', value: employees.filter(e => !e.reports_to).length, icon: 'link' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-4">
                             <div className="flex items-center gap-2 mb-1">
-                                <span>{s.icon}</span>
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span>
                                 <span className="text-xs text-slate-500">{s.label}</span>
                             </div>
                             <span className="text-xl font-bold text-slate-900">{s.value}</span>

@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, router, useForm } from '@inertiajs/react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -136,7 +137,7 @@ export default function MyChat({ conversations, users, currentUserId }: Props) {
                     <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
                         {conversations.length === 0 ? (
                             <div className="p-8 text-center">
-                                <div className="text-3xl mb-2">💬</div>
+                                <div className="text-3xl mb-2"><Icon name="chat-bubble" className="w-4 h-4 inline-block" /></div>
                                 <p className="text-sm text-slate-400">No conversations yet.</p>
                                 <button onClick={() => setShowNewChat(true)} className="mt-2 text-sm font-medium hover:underline" style={{ color: '#495B67' }}>Start a chat</button>
                             </div>
@@ -244,7 +245,7 @@ export default function MyChat({ conversations, users, currentUserId }: Props) {
                 {replyTo && (
                     <div className="py-2 flex items-center gap-2 text-xs text-slate-500 border-t border-slate-100">
                         <span className="truncate flex-1">↩ {replyTo.user.name}: {replyTo.body.slice(0, 40)}</span>
-                        <button onClick={() => setReplyTo(null)} className="text-slate-400">✕</button>
+                        <button onClick={() => setReplyTo(null)} className="text-slate-400"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                     </div>
                 )}
 

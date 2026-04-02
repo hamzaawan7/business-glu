@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -125,7 +126,7 @@ export default function UserHelpDesk({ tickets, categories }: Props) {
                 <div className="space-y-3">
                     {filtered.length === 0 && (
                         <div className="text-center py-12">
-                            <div className="text-3xl mb-2">🎫</div>
+                            <div className="text-3xl mb-2"><Icon name="ticket" className="w-3 h-3 inline-block" /></div>
                             <p className="text-slate-400 text-sm">No tickets yet</p>
                         </div>
                     )}
@@ -159,7 +160,7 @@ export default function UserHelpDesk({ tickets, categories }: Props) {
                                 {t.assignee && (
                                     <span className="text-xs text-slate-400">→ {t.assignee.name}</span>
                                 )}
-                                <span className="text-xs text-slate-400 ml-auto">💬 {t.replies_count}</span>
+                                <span className="text-xs text-slate-400 ml-auto">{t.replies_count}</span>
                                 <span className="text-xs text-slate-400">{timeAgo(t.created_at)}</span>
                             </div>
                         </div>

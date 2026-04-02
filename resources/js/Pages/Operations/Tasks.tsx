@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -357,7 +358,7 @@ export default function Tasks({ tasks, members, filters, stats }: Props) {
                                                 </span>
                                             )}
                                             {task.location && (
-                                                <span className="text-xs text-brand-accent">📍 {task.location}</span>
+                                                <span className="text-xs text-brand-accent"><Icon name="map-pin" className="w-3.5 h-3.5 inline-block" /> {task.location}</span>
                                             )}
                                             {task.assignees.length > 0 && (
                                                 <span className="text-xs text-brand-accent">

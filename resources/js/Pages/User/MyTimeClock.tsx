@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
@@ -108,7 +109,7 @@ export default function MyTimeClock({ activeEntry, recentEntries, weekTotalMinut
                     {isClockedIn ? (
                         <>
                             <p className="text-sm text-brand-accent mb-2">
-                                {isOnBreak ? '☕ On Break' : '🟢 Currently Clocked In'}
+                                {isOnBreak ? 'On Break' : 'Currently Clocked In'}
                             </p>
                             <div className="text-3xl font-bold font-heading text-brand-primary mb-4">
                                 <LiveTimer since={activeEntry!.clock_in} />
@@ -128,7 +129,7 @@ export default function MyTimeClock({ activeEntry, recentEntries, weekTotalMinut
                                         onClick={handleStartBreak}
                                         className="flex-1 rounded-xl border-2 border-amber-400 px-5 py-3 text-sm font-semibold text-amber-600 hover:bg-amber-50 transition-colors"
                                     >
-                                        ☕ Take Break
+                                        <Icon name="coffee-cup" className="w-4 h-4 inline-block" /> Take Break
                                     </button>
                                 )}
                                 <button

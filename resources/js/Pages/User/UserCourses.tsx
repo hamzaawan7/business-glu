@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -123,7 +124,7 @@ export default function UserCourses({ assignments, availableCourses }: Props) {
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <h3 className="font-medium text-slate-900">{a.course?.title}</h3>
-                                                <p className="text-xs text-green-600 mt-1">✅ Completed {a.completed_at ? new Date(a.completed_at).toLocaleDateString() : ''}</p>
+                                                <p className="text-xs text-green-600 mt-1">Completed {a.completed_at ? new Date(a.completed_at).toLocaleDateString() : ''}</p>
                                             </div>
                                             <span className="text-xs font-medium px-2 py-1 rounded-full bg-green-100 text-green-700">100%</span>
                                         </div>
@@ -134,7 +135,7 @@ export default function UserCourses({ assignments, availableCourses }: Props) {
 
                         {assignments.length === 0 && (
                             <div className="text-center py-12">
-                                <div className="text-3xl mb-2">📚</div>
+                                <div className="text-3xl mb-2"><Icon name="book-open" className="w-4 h-4 inline-block" /></div>
                                 <p className="text-slate-400 text-sm">No courses assigned yet</p>
                                 <button onClick={() => setTab('browse')} className="text-sm text-[#495B67] hover:underline mt-2">Browse available courses</button>
                             </div>
@@ -146,7 +147,7 @@ export default function UserCourses({ assignments, availableCourses }: Props) {
                     <div className="space-y-3">
                         {availableCourses.length === 0 && (
                             <div className="text-center py-12">
-                                <div className="text-3xl mb-2">📚</div>
+                                <div className="text-3xl mb-2"><Icon name="book-open" className="w-4 h-4 inline-block" /></div>
                                 <p className="text-slate-400 text-sm">No courses available right now</p>
                             </div>
                         )}
@@ -166,9 +167,9 @@ export default function UserCourses({ assignments, availableCourses }: Props) {
                                     )}
                                 </div>
                                 <div className="flex items-center gap-3 mt-3 text-xs text-slate-400">
-                                    {c.category && <span>📁 {c.category.name}</span>}
-                                    <span>📖 {c.sections_count} sections</span>
-                                    {c.estimated_minutes && <span>⏱ {c.estimated_minutes} min</span>}
+                                    {c.category && <span>{c.category.name}</span>}
+                                    <span>{c.sections_count} sections</span>
+                                    {c.estimated_minutes && <span><Icon name="stopwatch" className="w-3.5 h-3.5 inline-block" /> {c.estimated_minutes} min</span>}
                                     <span className="ml-auto text-[#495B67] font-medium">Start →</span>
                                 </div>
                             </div>

@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -50,20 +51,20 @@ interface Props {
 }
 
 const fieldTypes: { value: string; label: string; icon: string }[] = [
-    { value: 'text', label: 'Short Text', icon: '📝' },
-    { value: 'textarea', label: 'Long Text', icon: '📄' },
-    { value: 'number', label: 'Number', icon: '#️⃣' },
-    { value: 'select', label: 'Dropdown', icon: '📋' },
-    { value: 'multiselect', label: 'Multi-Select', icon: '☑️' },
-    { value: 'checkbox', label: 'Checkbox', icon: '✅' },
-    { value: 'radio', label: 'Radio', icon: '🔘' },
-    { value: 'yes_no', label: 'Yes / No', icon: '👍' },
-    { value: 'date', label: 'Date', icon: '📅' },
-    { value: 'time', label: 'Time', icon: '🕐' },
-    { value: 'signature', label: 'Signature', icon: '✍️' },
-    { value: 'image', label: 'Image Upload', icon: '📸' },
-    { value: 'file', label: 'File Upload', icon: '📎' },
-    { value: 'location', label: 'Location', icon: '📍' },
+    { value: 'text', label: 'Short Text', icon: 'pencil' },
+    { value: 'textarea', label: 'Long Text', icon: 'document' },
+    { value: 'number', label: 'Number', icon: 'hashtag' },
+    { value: 'select', label: 'Dropdown', icon: 'clipboard-list' },
+    { value: 'multiselect', label: 'Multi-Select', icon: 'check-square' },
+    { value: 'checkbox', label: 'Checkbox', icon: 'check-circle' },
+    { value: 'radio', label: 'Radio', icon: 'radio-button' },
+    { value: 'yes_no', label: 'Yes / No', icon: 'hand-thumb-up' },
+    { value: 'date', label: 'Date', icon: 'calendar' },
+    { value: 'time', label: 'Time', icon: 'clock' },
+    { value: 'signature', label: 'Signature', icon: 'pen-tool' },
+    { value: 'image', label: 'Image Upload', icon: 'camera' },
+    { value: 'file', label: 'File Upload', icon: 'paperclip' },
+    { value: 'location', label: 'Location', icon: 'map-pin' },
 ];
 
 const statusColors: Record<string, string> = {
@@ -323,7 +324,7 @@ export default function Forms({ forms, members, filters, stats }: Props) {
                             className="text-xs border border-gray-300 rounded-lg px-2 py-1.5 focus:ring-brand-primary focus:border-brand-primary"
                         >
                             {fieldTypes.map(ft => (
-                                <option key={ft.value} value={ft.value}>{ft.icon} {ft.label}</option>
+                                <option key={ft.value} value={ft.value}>{ft.label}</option>
                             ))}
                         </select>
                         <input
@@ -347,7 +348,7 @@ export default function Forms({ forms, members, filters, stats }: Props) {
                             <button type="button" onClick={() => moveField(idx, 'down')} disabled={idx === builderFields.length - 1} className="text-xs text-brand-accent hover:text-brand-primary disabled:opacity-30 p-0.5">↓</button>
                         </div>
                         {builderFields.length > 1 && (
-                            <button type="button" onClick={() => removeField(field.tempId)} className="text-xs text-red-500 hover:text-red-700 font-medium">✕</button>
+                            <button type="button" onClick={() => removeField(field.tempId)} className="text-xs text-red-500 hover:text-red-700 font-medium"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                         )}
                     </div>
 
@@ -371,7 +372,7 @@ export default function Forms({ forms, members, filters, stats }: Props) {
                                         onChange={e => updateOption(field.tempId, oi, e.target.value)}
                                         className="flex-1 text-xs border border-gray-200 rounded px-2 py-1 focus:ring-brand-primary focus:border-brand-primary"
                                     />
-                                    <button type="button" onClick={() => removeOption(field.tempId, oi)} className="text-xs text-red-400 hover:text-red-600">✕</button>
+                                    <button type="button" onClick={() => removeOption(field.tempId, oi)} className="text-xs text-red-400 hover:text-red-600"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                                 </div>
                             ))}
                             <button type="button" onClick={() => addOption(field.tempId)} className="text-xs text-brand-primary hover:underline">+ Add option</button>
@@ -564,7 +565,7 @@ export default function Forms({ forms, members, filters, stats }: Props) {
                                 <div className="flex items-start gap-3">
                                     {/* Icon */}
                                     <div className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <span className="text-lg">{form.type === 'checklist' ? '✅' : '📋'}</span>
+                                        <span className="text-lg">{form.type === 'checklist' ? 'check-circle' : 'clipboard-list'}</span>
                                     </div>
 
                                     {/* Content */}

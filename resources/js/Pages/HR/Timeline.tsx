@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -39,18 +40,18 @@ interface Props {
 }
 
 const eventTypes = [
-    { value: 'hired', label: 'Hired', icon: '🎉', color: 'bg-green-100 text-green-700' },
-    { value: 'promotion', label: 'Promotion', icon: '⬆️', color: 'bg-blue-100 text-blue-700' },
-    { value: 'role_change', label: 'Role Change', icon: '🔄', color: 'bg-indigo-100 text-indigo-700' },
-    { value: 'department_change', label: 'Dept Change', icon: '🏢', color: 'bg-purple-100 text-purple-700' },
-    { value: 'salary_change', label: 'Salary Change', icon: '💰', color: 'bg-yellow-100 text-yellow-700' },
-    { value: 'review', label: 'Review', icon: '📋', color: 'bg-orange-100 text-orange-700' },
-    { value: 'award', label: 'Award', icon: '🏆', color: 'bg-amber-100 text-amber-700' },
-    { value: 'training', label: 'Training', icon: '📚', color: 'bg-cyan-100 text-cyan-700' },
-    { value: 'probation_end', label: 'Probation End', icon: '✅', color: 'bg-emerald-100 text-emerald-700' },
-    { value: 'anniversary', label: 'Anniversary', icon: '🎂', color: 'bg-pink-100 text-pink-700' },
-    { value: 'termination', label: 'Termination', icon: '👋', color: 'bg-red-100 text-red-700' },
-    { value: 'custom', label: 'Custom', icon: '📌', color: 'bg-slate-100 text-slate-600' },
+    { value: 'hired', label: 'Hired', icon: 'party-popper', color: 'bg-green-100 text-green-700' },
+    { value: 'promotion', label: 'Promotion', icon: 'arrow-up', color: 'bg-blue-100 text-blue-700' },
+    { value: 'role_change', label: 'Role Change', icon: 'arrow-path', color: 'bg-indigo-100 text-indigo-700' },
+    { value: 'department_change', label: 'Dept Change', icon: 'building', color: 'bg-purple-100 text-purple-700' },
+    { value: 'salary_change', label: 'Salary Change', icon: 'currency-dollar', color: 'bg-yellow-100 text-yellow-700' },
+    { value: 'review', label: 'Review', icon: 'clipboard-list', color: 'bg-orange-100 text-orange-700' },
+    { value: 'award', label: 'Award', icon: 'trophy', color: 'bg-amber-100 text-amber-700' },
+    { value: 'training', label: 'Training', icon: 'book-open', color: 'bg-cyan-100 text-cyan-700' },
+    { value: 'probation_end', label: 'Probation End', icon: 'check-circle', color: 'bg-emerald-100 text-emerald-700' },
+    { value: 'anniversary', label: 'Anniversary', icon: 'cake', color: 'bg-pink-100 text-pink-700' },
+    { value: 'termination', label: 'Termination', icon: 'hand-wave', color: 'bg-red-100 text-red-700' },
+    { value: 'custom', label: 'Custom', icon: 'pin', color: 'bg-slate-100 text-slate-600' },
 ];
 
 const getTypeConfig = (type: string) => eventTypes.find(t => t.value === type) || eventTypes[eventTypes.length - 1];
@@ -133,14 +134,14 @@ export default function Timeline({ events, employees, upcoming, stats, filters }
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total Events', value: stats.total_events, icon: '📅' },
-                        { label: 'Employees', value: stats.employees, icon: '👥' },
-                        { label: 'Upcoming (30d)', value: stats.upcoming, icon: '⏳' },
-                        { label: 'This Month', value: stats.this_month, icon: '📊' },
+                        { label: 'Total Events', value: stats.total_events, icon: 'calendar' },
+                        { label: 'Employees', value: stats.employees, icon: 'user-group' },
+                        { label: 'Upcoming (30d)', value: stats.upcoming, icon: 'hourglass' },
+                        { label: 'This Month', value: stats.this_month, icon: 'chart-bar' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-4">
                             <div className="flex items-center gap-2 mb-1">
-                                <span>{s.icon}</span>
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span>
                                 <span className="text-xs text-slate-500">{s.label}</span>
                             </div>
                             <span className="text-xl font-bold text-slate-900">{s.value}</span>
@@ -193,7 +194,7 @@ export default function Timeline({ events, employees, upcoming, stats, filters }
                                                         <div className="flex-1">
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cfg.color}`}>
-                                                                    {cfg.icon} {cfg.label}
+                                                                    <Icon name={cfg.icon} className="w-4 h-4 inline-block mr-1" /> {cfg.label}
                                                                 </span>
                                                                 <span className="text-xs text-slate-400">{new Date(ev.event_date).toLocaleDateString()}</span>
                                                             </div>
@@ -202,7 +203,7 @@ export default function Timeline({ events, employees, upcoming, stats, filters }
                                                             {ev.description && <p className="text-xs text-slate-400 mt-1">{ev.description}</p>}
                                                             {ev.file_name && (
                                                                 <a href={route('admin.timeline.download', ev.id)} className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline mt-1">
-                                                                    📎 {ev.file_name}
+                                                                    <Icon name="paperclip" className="w-3.5 h-3.5 inline-block mr-0.5" /> {ev.file_name}
                                                                 </a>
                                                             )}
                                                         </div>
@@ -227,7 +228,7 @@ export default function Timeline({ events, employees, upcoming, stats, filters }
                     {/* Upcoming sidebar */}
                     <div>
                         <div className="bg-white rounded-xl border border-slate-200 p-5">
-                            <h3 className="text-sm font-bold text-slate-900 mb-3">📅 Upcoming (30 days)</h3>
+                            <h3 className="text-sm font-bold text-slate-900 mb-3">Upcoming (30 days)</h3>
                             {upcoming.length === 0 ? (
                                 <p className="text-xs text-slate-400 text-center py-4">No upcoming events.</p>
                             ) : (
@@ -236,7 +237,7 @@ export default function Timeline({ events, employees, upcoming, stats, filters }
                                         const cfg = getTypeConfig(ev.type);
                                         return (
                                             <div key={ev.id} className="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
-                                                <span className="text-sm">{cfg.icon}</span>
+                                                <span className="text-sm"><Icon name={cfg.icon} className="w-4 h-4 inline-block" /></span>
                                                 <div className="flex-1 min-w-0">
                                                     <p className="text-xs font-medium text-slate-900 truncate">{ev.title}</p>
                                                     <p className="text-xs text-slate-400">{(ev as any).user?.name} · {new Date(ev.event_date).toLocaleDateString()}</p>
@@ -269,7 +270,7 @@ export default function Timeline({ events, employees, upcoming, stats, filters }
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Type *</label>
                                     <select value={form.data.type} onChange={e => form.setData('type', e.target.value)} className="w-full rounded-lg border-slate-200 text-sm">
-                                        {eventTypes.map(t => <option key={t.value} value={t.value}>{t.icon} {t.label}</option>)}
+                                        {eventTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                                     </select>
                                 </div>
                                 <div>

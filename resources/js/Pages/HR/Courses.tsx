@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -118,7 +119,7 @@ export default function Courses({ courses, filters, stats, categories }: Props) 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {courses.length === 0 && (
                         <div className="col-span-full text-center py-12">
-                            <div className="text-3xl mb-2">📚</div>
+                            <div className="text-3xl mb-2"><Icon name="book-open" className="w-4 h-4 inline-block" /></div>
                             <p className="text-slate-400 text-sm">No courses yet. Create your first course to get started.</p>
                         </div>
                     )}
@@ -137,9 +138,9 @@ export default function Courses({ courses, filters, stats, categories }: Props) 
                                 {c.description && <p className="text-xs text-slate-500 line-clamp-2 mb-3">{c.description}</p>}
 
                                 <div className="flex items-center gap-4 text-xs text-slate-400 mb-4">
-                                    <span>📖 {c.sections_count} sections</span>
-                                    {c.estimated_minutes && <span>⏱ {c.estimated_minutes} min</span>}
-                                    <span>👥 {c.assignments_count} assigned</span>
+                                    <span>{c.sections_count} sections</span>
+                                    {c.estimated_minutes && <span><Icon name="stopwatch" className="w-3.5 h-3.5 inline-block" /> {c.estimated_minutes} min</span>}
+                                    <span>{c.assignments_count} assigned</span>
                                 </div>
 
                                 {/* Progress bar */}
@@ -175,7 +176,7 @@ export default function Courses({ courses, filters, stats, categories }: Props) 
                                         onClick={() => setDeleteId(c.id)}
                                         className="px-3 py-2 text-xs text-red-500 hover:text-red-700"
                                     >
-                                        🗑
+                                        <Icon name="trash" className="w-4 h-4" />
                                     </button>
                                 </div>
                             </div>

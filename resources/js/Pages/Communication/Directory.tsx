@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -163,14 +164,14 @@ export default function Directory({ members, filters, departments, locations, st
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total Members', value: stats.total, icon: '👥' },
-                        { label: 'Visible', value: stats.visible, icon: '👁️' },
-                        { label: 'Departments', value: stats.departments, icon: '🏢' },
-                        { label: 'Locations', value: stats.locations, icon: '📍' },
+                        { label: 'Total Members', value: stats.total, icon: 'user-group' },
+                        { label: 'Visible', value: stats.visible, icon: '<Icon name="eye" className="w-4 h-4 inline-block" />' },
+                        { label: 'Departments', value: stats.departments, icon: 'building' },
+                        { label: 'Locations', value: stats.locations, icon: 'map-pin' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-4">
                             <div className="flex items-center gap-2 text-sm text-gray-500">
-                                <span>{s.icon}</span> {s.label}
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span> {s.label}
                             </div>
                             <div className="text-2xl font-bold text-gray-900 mt-1">{s.value}</div>
                         </div>
@@ -229,7 +230,7 @@ export default function Directory({ members, filters, departments, locations, st
                                 onClick={() => setViewMode('list')}
                                 className={`px-3 py-2 text-sm ${viewMode === 'list' ? 'bg-[#495B67] text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
                             >
-                                ☰ List
+                                <Icon name="bars-3" className="w-3.5 h-3.5 inline-block" />  List
                             </button>
                         </div>
                     </div>
@@ -237,7 +238,7 @@ export default function Directory({ members, filters, departments, locations, st
 
                 {members.length === 0 ? (
                     <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                        <div className="text-4xl mb-3">👥</div>
+                        <div className="text-4xl mb-3"><Icon name="user-group" className="w-4 h-4 inline-block" /></div>
                         <p className="text-gray-500 text-sm">No members found matching your filters.</p>
                     </div>
                 ) : viewMode === 'grid' ? (
@@ -246,7 +247,7 @@ export default function Directory({ members, filters, departments, locations, st
                         {Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)).map(([dept, deptMembers]) => (
                             <div key={dept}>
                                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                    🏢 {dept}
+                                    <Icon name="building" className="w-3.5 h-3.5 inline-block mr-0.5" /> {dept}
                                     <span className="text-xs font-normal text-gray-400">({deptMembers.length})</span>
                                 </h3>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -268,7 +269,7 @@ export default function Directory({ members, filters, departments, locations, st
                                                         ? 'bg-[#495B67] border-[#495B67] text-white'
                                                         : 'border-gray-300 hover:border-gray-400'
                                                 }`}>
-                                                    {selectedIds.includes(member.id) && <span className="text-xs">✓</span>}
+                                                    {selectedIds.includes(member.id) && <span className="text-xs"><Icon name="check" className="w-3 h-3 inline-block" /></span>}
                                                 </div>
                                             </div>
 
@@ -285,7 +286,7 @@ export default function Directory({ members, filters, departments, locations, st
                                                 </span>
                                                 {member.location && (
                                                     <p className="text-[10px] text-gray-400 mt-1.5 flex items-center gap-1">
-                                                        📍 {member.location}
+                                                        <Icon name="map-pin" className="w-3.5 h-3.5 inline-block" />  {member.location}
                                                     </p>
                                                 )}
                                                 {!member.directory_visible && (
@@ -314,7 +315,7 @@ export default function Directory({ members, filters, departments, locations, st
                                                 }`}
                                                 onClick={selectAll}
                                             >
-                                                {selectedIds.length === members.length && members.length > 0 && <span className="text-xs">✓</span>}
+                                                {selectedIds.length === members.length && members.length > 0 && <span className="text-xs"><Icon name="check" className="w-3 h-3 inline-block" /></span>}
                                             </div>
                                         </th>
                                         <th className="p-3 text-left font-medium text-gray-600">Name</th>
@@ -338,7 +339,7 @@ export default function Directory({ members, filters, departments, locations, st
                                                     }`}
                                                     onClick={() => toggleSelect(member.id)}
                                                 >
-                                                    {selectedIds.includes(member.id) && <span className="text-xs">✓</span>}
+                                                    {selectedIds.includes(member.id) && <span className="text-xs"><Icon name="check" className="w-3 h-3 inline-block" /></span>}
                                                 </div>
                                             </td>
                                             <td className="p-3">
@@ -363,9 +364,9 @@ export default function Directory({ members, filters, departments, locations, st
                                             <td className="p-3">
                                                 <div className="flex items-center gap-2 text-xs">
                                                     {member.phone && (
-                                                        <a href={`tel:${member.phone}`} className="text-[#495B67] hover:underline">📞</a>
+                                                        <a href={`tel:${member.phone}`} className="text-[#495B67] hover:underline"><Icon name="phone-call" className="w-4 h-4 inline-block" /></a>
                                                     )}
-                                                    <a href={`mailto:${member.email}`} className="text-[#495B67] hover:underline">✉️</a>
+                                                    <a href={`mailto:${member.email}`} className="text-[#495B67] hover:underline"><Icon name="envelope" className="w-3 h-3 inline-block" /></a>
                                                 </div>
                                             </td>
                                             <td className="p-3 text-right">
@@ -375,14 +376,14 @@ export default function Directory({ members, filters, departments, locations, st
                                                         className="p-1.5 text-gray-400 hover:text-gray-700 rounded"
                                                         title="View profile"
                                                     >
-                                                        👁️
+                                                        <Icon name="eye" className="w-4 h-4 inline-block" />
                                                     </button>
                                                     <button
                                                         onClick={() => openEdit(member)}
                                                         className="p-1.5 text-gray-400 hover:text-[#495B67] rounded"
                                                         title="Edit profile"
                                                     >
-                                                        ✏️
+                                                        <Icon name="pencil-square" className="w-4 h-4 inline-block" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -450,7 +451,7 @@ export default function Directory({ members, filters, departments, locations, st
                                 <div>
                                     <span className="text-gray-400 text-xs block">Directory Status</span>
                                     <span className={viewMember.directory_visible ? 'text-green-600' : 'text-red-500'}>
-                                        {viewMember.directory_visible ? '✓ Visible' : '✗ Hidden'}
+                                        {viewMember.directory_visible ? '<Icon name="check" className="w-3.5 h-3.5 inline-block" />  Visible' : '<Icon name="x-mark" className="w-3.5 h-3.5 inline-block" />  Hidden'}
                                     </span>
                                 </div>
                             </div>
@@ -462,7 +463,7 @@ export default function Directory({ members, filters, departments, locations, st
                                 onClick={() => { setViewMember(null); openEdit(viewMember); }}
                                 className="px-4 py-2 text-sm font-medium text-[#495B67] hover:bg-gray-100 rounded-lg transition-colors"
                             >
-                                ✏️ Edit Profile
+                                <Icon name="pencil-square" className="w-4 h-4 inline-block" /> Edit Profile
                             </button>
                             <button
                                 onClick={() => setViewMember(null)}

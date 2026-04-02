@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -40,7 +41,7 @@ interface Props {
     completedObjectIds: number[];
 }
 
-const typeIcons: Record<string, string> = { text: '📝', video: '🎬', document: '📄', image: '🖼️', link: '🔗', quiz: '❓' };
+const typeIcons: Record<string, string> = { text: 'pencil', video: 'video-camera', document: 'document', image: 'photo', link: 'link', quiz: 'question-mark-circle' };
 
 export default function UserCourseDetail({ course, assignment, completedObjectIds }: Props) {
     const [activeObjectId, setActiveObjectId] = useState<number | null>(null);
@@ -75,7 +76,7 @@ export default function UserCourseDetail({ course, assignment, completedObjectId
                     <div className="mt-4">
                         <div className="flex justify-between text-xs text-slate-500 mb-1">
                             <span>{assignment.progress_pct}% complete ({completedCount}/{totalObjects} items)</span>
-                            {assignment.completed_at && <span className="text-green-600">✅ Completed</span>}
+                            {assignment.completed_at && <span className="text-green-600">Completed</span>}
                         </div>
                         <div className="w-full bg-slate-100 rounded-full h-2.5">
                             <div
@@ -91,10 +92,10 @@ export default function UserCourseDetail({ course, assignment, completedObjectId
                     <div className="bg-white rounded-xl border border-slate-200 p-6">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
-                                <span className="text-xl">{typeIcons[activeObject.type]}</span>
+                                <span className="text-xl"><Icon name={typeIcons[activeObject.type]} className="w-4 h-4 inline-block" /></span>
                                 <h2 className="font-semibold text-slate-900">{activeObject.title}</h2>
                             </div>
-                            <button onClick={() => setActiveObjectId(null)} className="text-xs text-slate-400 hover:text-slate-600">✕ Close</button>
+                            <button onClick={() => setActiveObjectId(null)} className="text-xs text-slate-400 hover:text-slate-600"><Icon name="x-mark" className="w-3.5 h-3.5 inline-block" /> Close</button>
                         </div>
 
                         {/* Render content by type */}
@@ -118,7 +119,7 @@ export default function UserCourseDetail({ course, assignment, completedObjectId
                         )}
                         {activeObject.type === 'document' && activeObject.content && (
                             <a href={activeObject.content} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-lg text-sm text-slate-700 hover:bg-slate-200">
-                                📄 View Document
+                                <Icon name="document" className="w-4 h-4 inline-block" /> View Document
                             </a>
                         )}
 
@@ -129,12 +130,12 @@ export default function UserCourseDetail({ course, assignment, completedObjectId
                                 className="mt-6 w-full py-3 text-sm font-medium text-white rounded-lg"
                                 style={{ backgroundColor: '#495B67' }}
                             >
-                                ✓ Mark as Complete
+                                <Icon name="check" className="w-3.5 h-3.5 inline-block" />  Mark as Complete
                             </button>
                         )}
                         {completedObjectIds.includes(activeObject.id) && (
                             <div className="mt-6 py-3 text-center text-sm text-green-600 bg-green-50 rounded-lg">
-                                ✅ Completed
+                                <Icon name="check-circle" className="w-4 h-4 inline-block" /> Completed
                             </div>
                         )}
                     </div>
@@ -159,7 +160,7 @@ export default function UserCourseDetail({ course, assignment, completedObjectId
                                             className={`w-full flex items-center gap-3 px-5 py-3 text-left hover:bg-slate-50 transition ${isActive ? 'bg-[#495B67]/5' : ''}`}
                                         >
                                             <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${isDone ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-slate-400'}`}>
-                                                {isDone ? '✓' : typeIcons[obj.type]}
+                                                {isDone ? 'check' : typeIcons[obj.type]}
                                             </span>
                                             <div className="flex-1 min-w-0">
                                                 <span className={`text-sm ${isDone ? 'text-slate-400 line-through' : 'text-slate-700'}`}>{obj.title}</span>

@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -126,7 +127,7 @@ export default function UserDirectory({ members, departments, filters }: Props) 
 
                 {members.length === 0 ? (
                     <div className="text-center py-16">
-                        <div className="text-5xl mb-3">👥</div>
+                        <div className="text-5xl mb-3"><Icon name="user-group" className="w-4 h-4 inline-block" /></div>
                         <h3 className="text-lg font-semibold text-gray-700 mb-1">No results</h3>
                         <p className="text-sm text-gray-500">
                             Try a different search or filter.
@@ -137,7 +138,7 @@ export default function UserDirectory({ members, departments, filters }: Props) 
                         {Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)).map(([dept, deptMembers]) => (
                             <div key={dept}>
                                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                                    🏢 {dept}
+                                    <Icon name="building" className="w-3.5 h-3.5 inline-block mr-0.5" /> {dept}
                                     <span className="text-gray-300">·</span>
                                     <span className="font-normal">{deptMembers.length}</span>
                                 </h3>
@@ -162,7 +163,7 @@ export default function UserDirectory({ members, departments, filters }: Props) 
                                                     <p className="text-xs text-gray-500 truncate">{member.position}</p>
                                                 )}
                                                 {member.location && (
-                                                    <p className="text-[10px] text-gray-400 mt-0.5">📍 {member.location}</p>
+                                                    <p className="text-[10px] text-gray-400 mt-0.5"><Icon name="map-pin" className="w-3.5 h-3.5 inline-block" /> {member.location}</p>
                                                 )}
                                             </div>
                                             <span className={`flex-shrink-0 px-2 py-0.5 text-[10px] font-medium rounded-full ${roleColors[member.role] || 'bg-gray-100 text-gray-600'}`}>
@@ -187,7 +188,7 @@ export default function UserDirectory({ members, departments, filters }: Props) 
                                 onClick={() => setViewMember(null)}
                                 className="absolute top-3 right-3 text-white/60 hover:text-white text-lg"
                             >
-                                ✕
+                                <Icon name="x-mark" className="w-3.5 h-3.5 inline-block" /> 
                             </button>
                             <div className="w-18 h-18 rounded-full bg-white/20 text-white flex items-center justify-center text-xl font-bold mx-auto" style={{ width: 72, height: 72 }}>
                                 {getInitials(viewMember.name)}
@@ -209,30 +210,30 @@ export default function UserDirectory({ members, departments, filters }: Props) 
 
                             <div className="space-y-2.5">
                                 <div className="flex items-center gap-3 text-sm">
-                                    <span className="text-gray-400 w-5 text-center">✉️</span>
+                                    <span className="text-gray-400 w-5 text-center"><Icon name="envelope" className="w-3 h-3 inline-block" /></span>
                                     <a href={`mailto:${viewMember.email}`} className="text-[#495B67] hover:underline truncate">{viewMember.email}</a>
                                 </div>
                                 {viewMember.phone && (
                                     <div className="flex items-center gap-3 text-sm">
-                                        <span className="text-gray-400 w-5 text-center">📞</span>
+                                        <span className="text-gray-400 w-5 text-center"><Icon name="phone-call" className="w-4 h-4 inline-block" /></span>
                                         <a href={`tel:${viewMember.phone}`} className="text-[#495B67] hover:underline">{viewMember.phone}</a>
                                     </div>
                                 )}
                                 {viewMember.department && (
                                     <div className="flex items-center gap-3 text-sm">
-                                        <span className="text-gray-400 w-5 text-center">🏢</span>
+                                        <span className="text-gray-400 w-5 text-center"><Icon name="building" className="w-4 h-4 inline-block" /></span>
                                         <span className="text-gray-700">{viewMember.department}</span>
                                     </div>
                                 )}
                                 {viewMember.location && (
                                     <div className="flex items-center gap-3 text-sm">
-                                        <span className="text-gray-400 w-5 text-center">📍</span>
+                                        <span className="text-gray-400 w-5 text-center"><Icon name="map-pin" className="w-3 h-3 inline-block" /></span>
                                         <span className="text-gray-700">{viewMember.location}</span>
                                     </div>
                                 )}
                                 {viewMember.hire_date && (
                                     <div className="flex items-center gap-3 text-sm">
-                                        <span className="text-gray-400 w-5 text-center">📅</span>
+                                        <span className="text-gray-400 w-5 text-center"><Icon name="calendar" className="w-4 h-4 inline-block" /></span>
                                         <span className="text-gray-700">
                                             Joined {new Date(viewMember.hire_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                                         </span>
@@ -248,14 +249,14 @@ export default function UserDirectory({ members, departments, filters }: Props) 
                                     href={`tel:${viewMember.phone}`}
                                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-green-50 text-green-700 text-sm font-medium rounded-xl hover:bg-green-100 transition-colors"
                                 >
-                                    📞 Call
+                                    <Icon name="phone-call" className="w-4 h-4 inline-block" /> Call
                                 </a>
                             )}
                             <a
                                 href={`mailto:${viewMember.email}`}
                                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#495B67]/10 text-[#495B67] text-sm font-medium rounded-xl hover:bg-[#495B67]/20 transition-colors"
                             >
-                                ✉️ Email
+                                <Icon name="envelope" className="w-3.5 h-3.5 inline-block" />  Email
                             </a>
                         </div>
                     </div>

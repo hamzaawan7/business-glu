@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm } from '@inertiajs/react';
 import { useState, FormEventHandler, ChangeEvent } from 'react';
 
@@ -30,9 +31,9 @@ function formatSize(bytes: number): string {
 }
 
 const typeIcons: Record<string, string> = {
-    pdf: '📄', doc: '📝', docx: '📝', xls: '📊', xlsx: '📊',
-    png: '🖼️', jpg: '🖼️', jpeg: '🖼️', gif: '🖼️',
-    zip: '📦', rar: '📦', txt: '📃', csv: '📊',
+    pdf: 'document', doc: 'pencil', docx: 'pencil', xls: 'chart-bar', xlsx: 'chart-bar',
+    png: 'photo', jpg: 'photo', jpeg: 'photo', gif: 'photo',
+    zip: 'archive-box', rar: 'archive-box', txt: 'document-text', csv: 'chart-bar',
 };
 
 export default function UserDocuments({ documents, categories }: Props) {
@@ -107,7 +108,7 @@ export default function UserDocuments({ documents, categories }: Props) {
                     <div className="space-y-3">
                         {filtered.map(doc => (
                             <div key={doc.id} className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4">
-                                <div className="text-2xl">{typeIcons[doc.file_type.toLowerCase()] || '📎'}</div>
+                                <div className="text-2xl"><Icon name={typeIcons[doc.file_type.toLowerCase()] || 'paperclip'} className="w-4 h-4 inline-block" /></div>
                                 <div className="flex-1 min-w-0">
                                     <div className="font-medium text-slate-900 truncate">{doc.title}</div>
                                     <div className="text-xs text-slate-400">{doc.file_name} · {formatSize(doc.file_size)}</div>

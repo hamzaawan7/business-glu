@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, useRef, FormEventHandler, ChangeEvent } from 'react';
 
@@ -77,7 +78,7 @@ const statusDot: Record<string, string> = {
     archived: 'bg-gray-400',
 };
 
-const typeIcons: Record<string, string> = { announcement: '📢', news: '📰', event: '🎉', poll: '📊' };
+const typeIcons: Record<string, string> = { announcement: 'megaphone', news: 'newspaper', event: 'party-popper', poll: 'chart-bar' };
 const typeLabels: Record<string, string> = { announcement: 'Announcement', news: 'News', event: 'Event', poll: 'Poll' };
 const typeBg: Record<string, string> = {
     announcement: 'from-red-500 to-orange-500', news: 'from-blue-500 to-cyan-500',
@@ -126,7 +127,7 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                                 </div>
                             ) : (
                                 <div className={`h-16 bg-gradient-to-r ${typeBg[type] || 'from-gray-500 to-gray-600'} flex items-end px-3 pb-2`}>
-                                    <span className="text-white text-lg">{typeIcons[type] || '📢'}</span>
+                                    <span className="text-white text-lg"><Icon name={typeIcons[type] || 'megaphone'} className="w-4 h-4 inline-block" /></span>
                                 </div>
                             )}
 
@@ -180,15 +181,15 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                                     {allowReactions && (
                                         <div className="flex items-center gap-1 text-[8px] text-gray-400">
                                             <span className="flex -space-x-0.5">
-                                                <span className="inline-block">👍</span>
-                                                <span className="inline-block">❤️</span>
+                                                <span className="inline-block"><Icon name="hand-thumb-up" className="w-4 h-4 inline-block" /></span>
+                                                <span className="inline-block"><Icon name="heart" className="w-4 h-4 inline-block" /></span>
                                             </span>
                                             <span>12</span>
                                         </div>
                                     )}
                                     {allowComments && (
                                         <div className="flex items-center gap-0.5 text-[8px] text-gray-400">
-                                            💬 <span>3</span>
+                                            <Icon name="chat-bubble" className="w-4 h-4 inline-block" /> <span>3</span>
                                         </div>
                                     )}
                                     <span className="ml-auto text-[7px] text-gray-300">24 read</span>
@@ -211,7 +212,7 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                     </div>
                     {/* Bottom nav */}
                     <div className="bg-white border-t border-gray-100 px-4 py-2 flex items-center justify-around">
-                        {['🏠', '⏰', '📢', '💬', '👤'].map((icon, i) => (
+                        {['home', 'clock', 'megaphone', 'chat-bubble', 'user'].map((icon, i) => (
                             <div key={i} className={`flex flex-col items-center gap-0.5 ${i === 2 ? 'text-[#495B67]' : 'text-gray-300'}`}>
                                 <span className="text-sm">{icon}</span>
                                 <div className={`h-0.5 w-4 rounded-full ${i === 2 ? 'bg-[#495B67]' : 'bg-transparent'}`} />
@@ -391,13 +392,13 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
         onChange: (type: string, values: string[]) => void;
     }) => (
         <div className="space-y-2">
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider">👥 Audience</label>
+            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider">Audience</label>
             <div className="grid grid-cols-4 gap-1 bg-gray-100 p-1 rounded-xl">
                 {[
-                    { val: 'all', label: '🌍 All', desc: 'Everyone' },
-                    { val: 'department', label: '🏢 Dept', desc: 'By Department' },
-                    { val: 'role', label: '🔰 Role', desc: 'By Role' },
-                    { val: 'user', label: '👤 People', desc: 'Specific' },
+                    { val: 'all', label: 'All', desc: 'Everyone' },
+                    { val: 'department', label: 'Dept', desc: 'By Department' },
+                    { val: 'role', label: 'Role', desc: 'By Role' },
+                    { val: 'user', label: 'People', desc: 'Specific' },
                 ].map(opt => (
                     <button key={opt.val} type="button" onClick={() => onChange(opt.val, [])}
                         className={`px-2 py-2 text-[10px] font-medium rounded-lg transition-all text-center ${
@@ -447,7 +448,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             }`}>{m.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}</div>
                             <span className="font-medium">{m.name}</span>
                             <span className="text-gray-400 ml-auto text-[10px]">{m.email}</span>
-                            {audValues.includes(String(m.id)) && <span className="text-brand-primary">✓</span>}
+                            {audValues.includes(String(m.id)) && <span className="text-brand-primary"><Icon name="check" className="w-3 h-3 inline-block" /></span>}
                         </button>
                     ))}
                 </div>
@@ -487,7 +488,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             {/* Template picker (create only) */}
                             {isCreate && templates.length > 0 && (
                                 <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100 rounded-xl p-3">
-                                    <label className="block text-xs font-semibold text-purple-700 mb-1.5">✨ Start from a template</label>
+                                    <label className="block text-xs font-semibold text-purple-700 mb-1.5">Start from a template</label>
                                     <select value={(form.data as any).template_id || ''}
                                         onChange={e => {
                                             const tpl = templates.find((t: TemplateData) => t.id === Number(e.target.value));
@@ -526,10 +527,10 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                     <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Type</label>
                                     <select value={form.data.type} onChange={(e: ChangeEvent<HTMLSelectElement>) => form.setData('type' as any, e.target.value)}
                                         className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary">
-                                        <option value="announcement">📢 Announcement</option>
-                                        <option value="news">📰 News</option>
-                                        <option value="event">🎉 Event</option>
-                                        <option value="poll">📊 Poll</option>
+                                        <option value="announcement">Announcement</option>
+                                        <option value="news">News</option>
+                                        <option value="event">Event</option>
+                                        <option value="poll">Poll</option>
                                     </select>
                                 </div>
                                 <div>
@@ -542,7 +543,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
 
                             {/* YouTube URL */}
                             <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">🎬 YouTube Video</label>
+                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">YouTube Video</label>
                                 <input type="url" value={(form.data as any).youtube_url || ''} onChange={(e: ChangeEvent<HTMLInputElement>) => form.setData('youtube_url' as any, e.target.value)}
                                     placeholder="https://www.youtube.com/watch?v=..."
                                     className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary placeholder:text-gray-300" />
@@ -550,7 +551,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
 
                             {/* Media uploads */}
                             <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
-                                <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider">📎 Media & Files</h4>
+                                <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider">Media & Files</h4>
 
                                 <div className="grid grid-cols-3 gap-2">
                                     {/* Cover */}
@@ -561,7 +562,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                             className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 border-dashed transition-all text-center ${
                                                 (form.data as any).cover_image ? 'border-green-300 bg-green-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
                                             }`}>
-                                            <span className="text-xl">{(form.data as any).cover_image ? '✅' : '🖼️'}</span>
+                                            <span className="text-xl">{(form.data as any).cover_image ? 'check-circle' : 'photo'}</span>
                                             <span className="text-[10px] font-medium text-gray-500">Cover Image</span>
                                         </button>
                                     </div>
@@ -574,7 +575,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                             className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 border-dashed transition-all text-center ${
                                                 (form.data as any).upload_images?.length > 0 ? 'border-green-300 bg-green-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
                                             }`}>
-                                            <span className="text-xl">{(form.data as any).upload_images?.length > 0 ? `📸 ${(form.data as any).upload_images.length}` : '📷'}</span>
+                                            <span className="text-xl">{(form.data as any).upload_images?.length > 0 ? `<Icon name="camera" className="w-4 h-4 inline-block" /> ${(form.data as any).upload_images.length}` : 'camera'}</span>
                                             <span className="text-[10px] font-medium text-gray-500">Photos</span>
                                         </button>
                                     </div>
@@ -587,7 +588,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                             className={`w-full flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 border-dashed transition-all text-center ${
                                                 (form.data as any).upload_files?.length > 0 ? 'border-green-300 bg-green-50' : 'border-gray-200 hover:border-brand-primary hover:bg-brand-primary/5'
                                             }`}>
-                                            <span className="text-xl">{(form.data as any).upload_files?.length > 0 ? `📂 ${(form.data as any).upload_files.length}` : '📄'}</span>
+                                            <span className="text-xl">{(form.data as any).upload_files?.length > 0 ? `<Icon name="folder-open" className="w-4 h-4 inline-block" /> ${(form.data as any).upload_files.length}` : 'document'}</span>
                                             <span className="text-[10px] font-medium text-gray-500">Files</span>
                                         </button>
                                     </div>
@@ -622,13 +623,13 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
 
                             {/* Toggle options */}
                             <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">⚙️ Options</label>
+                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Options</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {[
-                                        { key: 'is_pinned', icon: '📌', label: 'Pin to top', desc: 'Shows first in feed' },
-                                        { key: 'is_popup', icon: '⚡', label: 'Pop-up alert', desc: 'Must acknowledge' },
-                                        { key: 'allow_comments', icon: '💬', label: 'Comments', desc: 'Allow team to comment' },
-                                        { key: 'allow_reactions', icon: '👍', label: 'Reactions', desc: 'Allow emoji reactions' },
+                                        { key: 'is_pinned', icon: 'pin', label: 'Pin to top', desc: 'Shows first in feed' },
+                                        { key: 'is_popup', icon: 'bolt', label: 'Pop-up alert', desc: 'Must acknowledge' },
+                                        { key: 'allow_comments', icon: 'chat-bubble', label: 'Comments', desc: 'Allow team to comment' },
+                                        { key: 'allow_reactions', icon: 'hand-thumb-up', label: 'Reactions', desc: 'Allow emoji reactions' },
                                     ].map(opt => (
                                         <button key={opt.key} type="button"
                                             onClick={() => form.setData(opt.key as any, !(form.data as any)[opt.key])}
@@ -637,7 +638,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                                     ? 'border-brand-primary bg-brand-primary/5'
                                                     : 'border-gray-100 hover:border-gray-300'
                                             }`}>
-                                            <span className="text-base">{opt.icon}</span>
+                                            <span className="text-base"><Icon name={opt.icon} className="w-4 h-4" /></span>
                                             <div>
                                                 <p className={`text-xs font-semibold ${(form.data as any)[opt.key] ? 'text-brand-primary' : 'text-gray-500'}`}>{opt.label}</p>
                                                 <p className="text-[9px] text-gray-400">{opt.desc}</p>
@@ -649,7 +650,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
 
                             {/* Scheduling */}
                             <div>
-                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">📅 Scheduling</label>
+                                <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Scheduling</label>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="relative">
                                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">Expires</span>
@@ -669,7 +670,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             {/* Publish options (create only) */}
                             {isCreate && (
                                 <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 rounded-xl p-4 space-y-3">
-                                    <h4 className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">🚀 Publishing</h4>
+                                    <h4 className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Publishing</h4>
                                     <button type="button"
                                         onClick={() => form.setData('publish_now' as any, !(form.data as any).publish_now)}
                                         className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
@@ -677,7 +678,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                         }`}>
                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-base ${
                                             (form.data as any).publish_now ? 'bg-emerald-500 text-white' : 'bg-emerald-100 text-emerald-500'
-                                        }`}>{(form.data as any).publish_now ? '✓' : '⏸'}</div>
+                                        }`}>{(form.data as any).publish_now ? 'check' : 'pause'}</div>
                                         <div className="text-left">
                                             <p className={`text-xs font-bold ${(form.data as any).publish_now ? 'text-emerald-700' : 'text-gray-500'}`}>
                                                 {(form.data as any).publish_now ? 'Publishing immediately' : 'Save as draft'}
@@ -716,14 +717,14 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                 className="px-6 py-2.5 bg-brand-primary text-white text-sm font-semibold rounded-xl hover:opacity-90 transition disabled:opacity-50 shadow-sm shadow-brand-primary/20">
                                 {form.processing ? (
                                     <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Saving…</span>
-                                ) : isCreate ? ((form.data as any).publish_now ? '🚀 Publish Now' : '💾 Save') : '💾 Save Changes'}
+                                ) : isCreate ? ((form.data as any).publish_now ? 'Publish Now' : 'Save') : 'Save Changes'}
                             </button>
                         </div>
                     </div>
 
                     {/* Right: Live Mobile Preview */}
                     <div className="hidden lg:flex w-[340px] bg-gradient-to-b from-gray-50 to-gray-100 border-l border-gray-200 flex-col items-center justify-center py-6 px-4 flex-shrink-0">
-                        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-4">📱 Live Preview</p>
+                        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-4">Live Preview</p>
                         <MobilePreview
                             title={form.data.title}
                             body={form.data.body}
@@ -750,12 +751,12 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
             <div className="space-y-6">
                 {flash.success && (
                     <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
-                        <span className="text-base">✅</span> {flash.success}
+                        <span className="text-base"><Icon name="check-circle" className="w-4 h-4 inline-block" /></span> {flash.success}
                     </div>
                 )}
                 {flash.error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
-                        <span className="text-base">⚠️</span> {flash.error}
+                        <span className="text-base"><Icon name="exclamation-triangle" className="w-4 h-4 inline-block" /></span> {flash.error}
                     </div>
                 )}
 
@@ -777,15 +778,15 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                 {/* Stats — modern glass cards */}
                 <div className="grid grid-cols-5 gap-3">
                     {[
-                        { label: 'Total', value: stats.total, icon: '📊', gradient: 'from-slate-500/10 to-slate-600/5' },
-                        { label: 'Published', value: stats.published, icon: '🟢', gradient: 'from-emerald-500/10 to-emerald-600/5' },
-                        { label: 'Draft', value: stats.draft, icon: '📝', gradient: 'from-slate-400/10 to-slate-500/5' },
-                        { label: 'Scheduled', value: stats.scheduled, icon: '⏰', gradient: 'from-sky-500/10 to-sky-600/5' },
-                        { label: 'Pinned', value: stats.pinned, icon: '📌', gradient: 'from-amber-500/10 to-amber-600/5' },
+                        { label: 'Total', value: stats.total, icon: 'chart-bar', gradient: 'from-slate-500/10 to-slate-600/5' },
+                        { label: 'Published', value: stats.published, icon: 'dot-green', gradient: 'from-emerald-500/10 to-emerald-600/5' },
+                        { label: 'Draft', value: stats.draft, icon: 'pencil', gradient: 'from-slate-400/10 to-slate-500/5' },
+                        { label: 'Scheduled', value: stats.scheduled, icon: 'clock', gradient: 'from-sky-500/10 to-sky-600/5' },
+                        { label: 'Pinned', value: stats.pinned, icon: 'pin', gradient: 'from-amber-500/10 to-amber-600/5' },
                     ].map(s => (
                         <div key={s.label} className={`bg-gradient-to-br ${s.gradient} backdrop-blur-xl rounded-xl border border-white/60 p-4 shadow-sm`}>
                             <div className="flex items-center justify-between">
-                                <span className="text-lg">{s.icon}</span>
+                                <span className="text-lg"><Icon name={s.icon} className="w-5 h-5" /></span>
                                 <span className="text-2xl font-bold font-heading text-gray-800">{s.value}</span>
                             </div>
                             <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mt-1">{s.label}</p>
@@ -800,7 +801,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             className={`px-5 py-2 text-sm font-semibold rounded-lg transition-all ${
                                 activeTab === tab ? 'bg-white text-brand-primary shadow-sm' : 'text-gray-400 hover:text-gray-600'
                             }`}>
-                            {tab === 'templates' ? `📄 Templates (${templates.length})` : '📢 Updates'}
+                            {tab === 'templates' ? `<Icon name="document" className="w-4 h-4 inline-block" /> Templates (${templates.length})` : 'Updates'}
                         </button>
                     ))}
                 </div>
@@ -814,18 +815,18 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             <select value={filters.status} onChange={e => applyFilter('status', e.target.value)}
                                 className="text-xs font-medium border-0 bg-gray-100 rounded-lg px-3 py-1.5 focus:ring-brand-primary text-gray-600">
                                 <option value="all">All Status</option>
-                                <option value="draft">📝 Draft</option>
-                                <option value="published">🟢 Published</option>
-                                <option value="scheduled">⏰ Scheduled</option>
-                                <option value="archived">📦 Archived</option>
+                                <option value="draft">Draft</option>
+                                <option value="published">Published</option>
+                                <option value="scheduled">Scheduled</option>
+                                <option value="archived">Archived</option>
                             </select>
                             <select value={filters.type} onChange={e => applyFilter('type', e.target.value)}
                                 className="text-xs font-medium border-0 bg-gray-100 rounded-lg px-3 py-1.5 focus:ring-brand-primary text-gray-600">
                                 <option value="all">All Types</option>
-                                <option value="announcement">📢 Announcement</option>
-                                <option value="news">📰 News</option>
-                                <option value="event">🎉 Event</option>
-                                <option value="poll">📊 Poll</option>
+                                <option value="announcement">Announcement</option>
+                                <option value="news">News</option>
+                                <option value="event">Event</option>
+                                <option value="poll">Poll</option>
                             </select>
                         </div>
 
@@ -834,7 +835,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             {updates.length === 0 && (
                                 <div className="bg-white rounded-2xl border border-gray-100 p-16 text-center shadow-sm">
                                     <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <span className="text-3xl">📢</span>
+                                        <span className="text-3xl"><Icon name="megaphone" className="w-4 h-4 inline-block" /></span>
                                     </div>
                                     <h3 className="text-base font-bold font-heading text-gray-800">No updates yet</h3>
                                     <p className="text-sm text-gray-400 mt-1 max-w-xs mx-auto">Create your first update to keep your team informed and engaged.</p>
@@ -870,11 +871,11 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                                             {update.status}
                                                         </span>
                                                         <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-blue-50 text-blue-600">
-                                                            {typeIcons[update.type]} {typeLabels[update.type]}
+                                                            <Icon name={typeIcons[update.type]} className="w-3.5 h-3.5 inline-block mr-1" /> {typeLabels[update.type]}
                                                         </span>
                                                         {update.category && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-purple-50 text-purple-600">{update.category}</span>}
-                                                        {update.is_pinned && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-amber-50 text-amber-600">📌 Pinned</span>}
-                                                        {update.is_popup && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-orange-50 text-orange-600">⚡ Pop-up</span>}
+                                                        {update.is_pinned && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-amber-50 text-amber-600">Pinned</span>}
+                                                        {update.is_popup && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-orange-50 text-orange-600">Pop-up</span>}
                                                     </div>
 
                                                     {/* Title */}
@@ -889,10 +890,10 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                                     <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-400">
                                                         {update.creator && <span className="font-medium">{update.creator.name}</span>}
                                                         <span>{update.published_at ? timeAgo(update.published_at) : timeAgo(update.created_at)}</span>
-                                                        <span className="flex items-center gap-0.5">🎯 {audienceLabel(update.audiences)}</span>
-                                                        {update.youtube_url && <span>🎬</span>}
-                                                        {update.images.length > 0 && <span>🖼️ {update.images.length}</span>}
-                                                        {update.attachments.length > 0 && <span>📎 {update.attachments.length}</span>}
+                                                        <span className="flex items-center gap-0.5">{audienceLabel(update.audiences)}</span>
+                                                        {update.youtube_url && <span><Icon name="video-camera" className="w-4 h-4 inline-block" /></span>}
+                                                        {update.images.length > 0 && <span>{update.images.length}</span>}
+                                                        {update.attachments.length > 0 && <span>{update.attachments.length}</span>}
                                                     </div>
                                                 </div>
 
@@ -970,7 +971,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                         {templates.length === 0 && (
                             <div className="bg-white rounded-2xl border border-gray-100 p-16 text-center shadow-sm">
                                 <div className="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                    <span className="text-3xl">📄</span>
+                                    <span className="text-3xl"><Icon name="document" className="w-4 h-4 inline-block" /></span>
                                 </div>
                                 <h3 className="text-base font-bold font-heading text-gray-800">No templates yet</h3>
                                 <p className="text-sm text-gray-400 mt-1 max-w-xs mx-auto">Templates let you create consistent updates faster. Build your first one!</p>
@@ -1008,7 +1009,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                                 <h4 className="text-sm font-bold text-gray-900 truncate">{tpl.name}</h4>
                                                 <div className="flex items-center gap-1.5 mt-1">
                                                     <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-blue-50 text-blue-600">
-                                                        {typeIcons[tpl.type]} {typeLabels[tpl.type]}
+                                                        <Icon name={typeIcons[tpl.type]} className="w-3.5 h-3.5 inline-block mr-1" /> {typeLabels[tpl.type]}
                                                     </span>
                                                     {tpl.category && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-purple-50 text-purple-600">{tpl.category}</span>}
                                                     {tpl.is_default && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-green-50 text-green-600">Default</span>}
@@ -1064,7 +1065,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
                         <div className="bg-purple-50 p-6 text-center">
                             <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto">
-                                <span className="text-2xl">💾</span>
+                                <span className="text-2xl"><Icon name="save" className="w-4 h-4 inline-block" /></span>
                             </div>
                             <h3 className="text-lg font-bold text-gray-900 mt-3">Save as Template</h3>
                             <p className="text-sm text-gray-500 mt-1">Give it a name so you can quickly reuse this format.</p>
@@ -1121,10 +1122,10 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                         <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Type</label>
                                         <select value={tplForm.data.type} onChange={e => tplForm.setData('type', e.target.value)}
                                             className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:ring-brand-primary focus:border-brand-primary">
-                                            <option value="announcement">📢 Announcement</option>
-                                            <option value="news">📰 News</option>
-                                            <option value="event">🎉 Event</option>
-                                            <option value="poll">📊 Poll</option>
+                                            <option value="announcement">Announcement</option>
+                                            <option value="news">News</option>
+                                            <option value="event">Event</option>
+                                            <option value="poll">Poll</option>
                                         </select>
                                     </div>
                                     <div>
@@ -1136,15 +1137,15 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                     {[
-                                        { key: 'allow_comments' as const, icon: '💬', label: 'Comments' },
-                                        { key: 'allow_reactions' as const, icon: '👍', label: 'Reactions' },
+                                        { key: 'allow_comments' as const, icon: 'chat-bubble', label: 'Comments' },
+                                        { key: 'allow_reactions' as const, icon: 'hand-thumb-up', label: 'Reactions' },
                                     ].map(opt => (
                                         <button key={opt.key} type="button"
                                             onClick={() => tplForm.setData(opt.key, !tplForm.data[opt.key])}
                                             className={`flex items-center gap-2 p-2.5 rounded-xl border-2 transition-all ${
                                                 tplForm.data[opt.key] ? 'border-brand-primary bg-brand-primary/5' : 'border-gray-100'
                                             }`}>
-                                            <span>{opt.icon}</span>
+                                            <span><Icon name={opt.icon} className="w-4 h-4" /></span>
                                             <span className={`text-xs font-semibold ${tplForm.data[opt.key] ? 'text-brand-primary' : 'text-gray-400'}`}>{opt.label}</span>
                                         </button>
                                     ))}
@@ -1154,14 +1155,14 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                 <button onClick={() => setShowTemplateModal(false)} className="px-4 py-2 text-sm text-gray-400 hover:text-gray-600 transition">Cancel</button>
                                 <button onClick={handleCreateTemplate as any} disabled={tplForm.processing}
                                     className="px-6 py-2.5 bg-brand-primary text-white text-sm font-bold rounded-xl hover:opacity-90 transition disabled:opacity-50 shadow-sm">
-                                    {tplForm.processing ? 'Saving…' : '💾 Save Template'}
+                                    {tplForm.processing ? 'Saving…' : 'Save Template'}
                                 </button>
                             </div>
                         </div>
 
                         {/* Preview side */}
                         <div className="hidden lg:flex w-[340px] bg-gradient-to-b from-gray-50 to-gray-100 border-l border-gray-200 flex-col items-center justify-center py-6 px-4 flex-shrink-0">
-                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-4">📱 Template Preview</p>
+                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-4">Template Preview</p>
                             <MobilePreview
                                 title={tplForm.data.title || tplForm.data.name}
                                 body={tplForm.data.body}
@@ -1197,9 +1198,9 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                         <h2 className="text-xl font-bold font-heading text-gray-900">{viewUpdate.title}</h2>
                                         <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                                             <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColors[viewUpdate.status]}`}>{viewUpdate.status}</span>
-                                            <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-blue-50 text-blue-600">{typeIcons[viewUpdate.type]} {typeLabels[viewUpdate.type]}</span>
+                                            <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-blue-50 text-blue-600"><Icon name={typeIcons[viewUpdate.type]} className="w-3.5 h-3.5 inline-block mr-1" /> {typeLabels[viewUpdate.type]}</span>
                                             {viewUpdate.category && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-purple-50 text-purple-600">{viewUpdate.category}</span>}
-                                            {viewUpdate.is_pinned && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-amber-50 text-amber-600">📌 Pinned</span>}
+                                            {viewUpdate.is_pinned && <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-amber-50 text-amber-600">Pinned</span>}
                                         </div>
                                     </div>
                                     <button onClick={() => setViewUpdate(null)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition flex-shrink-0">&times;</button>
@@ -1209,7 +1210,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                     {viewUpdate.creator && <span>by <strong className="text-gray-600">{viewUpdate.creator.name}</strong></span>}
                                     {viewUpdate.published_at && <span>{formatDate(viewUpdate.published_at)}</span>}
                                     {viewUpdate.expires_at && <span className="text-orange-500">Expires {formatDate(viewUpdate.expires_at)}</span>}
-                                    <span>🎯 {audienceLabel(viewUpdate.audiences)}</span>
+                                    <span>{audienceLabel(viewUpdate.audiences)}</span>
                                 </div>
 
                                 <div className="mt-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{viewUpdate.body}</div>
@@ -1233,7 +1234,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                                         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Attachments</p>
                                         {viewUpdate.attachments.map((att, i) => (
                                             <div key={i} className="flex items-center gap-2 text-xs text-gray-600 bg-gray-50 rounded-xl px-4 py-2.5 border border-gray-100">
-                                                📎 <span className="font-medium">{att.name}</span>
+                                                <Icon name="paperclip" className="w-4 h-4 inline-block" /> <span className="font-medium">{att.name}</span>
                                                 <span className="text-gray-400 ml-auto">({formatSize(att.size)})</span>
                                             </div>
                                         ))}
@@ -1242,11 +1243,11 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
 
                                 {/* Metrics footer */}
                                 <div className="flex items-center gap-4 mt-6 pt-4 border-t border-gray-100">
-                                    <div className="flex items-center gap-1.5 text-sm text-gray-500"><span>💬</span> {viewUpdate.comments_count}</div>
-                                    <div className="flex items-center gap-1.5 text-sm text-gray-500"><span>👍</span> {viewUpdate.reactions_count}</div>
-                                    <div className="flex items-center gap-1.5 text-sm text-gray-500"><span>👁</span> {viewUpdate.reads_count}/{teamCount}</div>
+                                    <div className="flex items-center gap-1.5 text-sm text-gray-500"><span><Icon name="chat-bubble" className="w-4 h-4 inline-block" /></span> {viewUpdate.comments_count}</div>
+                                    <div className="flex items-center gap-1.5 text-sm text-gray-500"><span><Icon name="hand-thumb-up" className="w-4 h-4 inline-block" /></span> {viewUpdate.reactions_count}</div>
+                                    <div className="flex items-center gap-1.5 text-sm text-gray-500"><span><Icon name="eye" className="w-4 h-4 inline-block" /></span> {viewUpdate.reads_count}/{teamCount}</div>
                                     <a href={route('admin.updates.analytics', viewUpdate.id)} className="ml-auto text-sm text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
-                                        📊 View Analytics →
+                                        <Icon name="chart-bar" className="w-4 h-4 inline-block" /> View Analytics →
                                     </a>
                                 </div>
                             </div>
@@ -1254,7 +1255,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
 
                         {/* Phone preview side */}
                         <div className="hidden lg:flex w-[340px] bg-gradient-to-b from-gray-50 to-gray-100 border-l border-gray-200 flex-col items-center justify-center py-6 px-4 flex-shrink-0">
-                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-4">📱 Mobile View</p>
+                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-4">Mobile View</p>
                             <MobilePreview
                                 title={viewUpdate.title}
                                 body={viewUpdate.body}

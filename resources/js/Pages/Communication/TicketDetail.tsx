@@ -124,10 +124,10 @@ export default function TicketDetail({ ticket, categories, teamMembers }: Props)
                     </div>
 
                     {ticket.resolved_at && (
-                        <p className="mt-3 text-xs text-green-600">✅ Resolved on {formatDate(ticket.resolved_at)}</p>
+                        <p className="mt-3 text-xs text-green-600">Resolved on {formatDate(ticket.resolved_at)}</p>
                     )}
                     {ticket.closed_at && (
-                        <p className="mt-1 text-xs text-slate-500">🔒 Closed on {formatDate(ticket.closed_at)}</p>
+                        <p className="mt-1 text-xs text-slate-500">Closed on {formatDate(ticket.closed_at)}</p>
                     )}
                 </div>
 

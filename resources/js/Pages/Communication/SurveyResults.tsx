@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, router } from '@inertiajs/react';
 
 interface AnalyticsItem {
@@ -126,14 +127,14 @@ export default function SurveyResults({ survey, analytics }: Props) {
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total Responses', value: totalResponses, icon: '📩' },
-                        { label: 'Questions', value: survey.questions?.length ?? 0, icon: '❓' },
-                        { label: 'Type', value: survey.type, icon: survey.type === 'poll' ? '📊' : '📝' },
-                        { label: 'Anonymous', value: survey.is_anonymous ? 'Yes' : 'No', icon: '🔒' },
+                        { label: 'Total Responses', value: totalResponses, icon: 'inbox-arrow-down' },
+                        { label: 'Questions', value: survey.questions?.length ?? 0, icon: 'question-mark-circle' },
+                        { label: 'Type', value: survey.type, icon: survey.type === 'poll' ? 'chart-bar' : 'pencil' },
+                        { label: 'Anonymous', value: survey.is_anonymous ? 'Yes' : 'No', icon: 'lock-closed' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-4">
                             <div className="flex items-center gap-2 text-sm text-gray-500">
-                                <span>{s.icon}</span> {s.label}
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span> {s.label}
                             </div>
                             <div className="text-2xl font-bold text-gray-900 mt-1">{s.value}</div>
                         </div>
@@ -143,7 +144,7 @@ export default function SurveyResults({ survey, analytics }: Props) {
                 {/* Analytics per question */}
                 {analytics.length === 0 ? (
                     <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                        <div className="text-4xl mb-3">📊</div>
+                        <div className="text-4xl mb-3"><Icon name="chart-bar" className="w-4 h-4 inline-block" /></div>
                         <p className="text-gray-500 text-sm">No responses yet. Share this survey with your team to start collecting data.</p>
                     </div>
                 ) : (

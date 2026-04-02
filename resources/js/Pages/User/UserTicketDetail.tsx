@@ -96,7 +96,7 @@ export default function UserTicketDetail({ ticket }: Props) {
                     </div>
 
                     {ticket.resolved_at && (
-                        <p className="mt-3 text-xs text-green-600">✅ Resolved on {formatDate(ticket.resolved_at)}</p>
+                        <p className="mt-3 text-xs text-green-600">Resolved on {formatDate(ticket.resolved_at)}</p>
                     )}
                 </div>
 

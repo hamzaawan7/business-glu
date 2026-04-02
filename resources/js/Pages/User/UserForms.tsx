@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -325,7 +326,7 @@ export default function UserForms({ forms }: Props) {
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-start gap-3">
                                         <div className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
-                                            <span className="text-lg">{form.type === 'checklist' ? '✅' : '📋'}</span>
+                                            <span className="text-lg">{form.type === 'checklist' ? 'check-circle' : 'clipboard-list'}</span>
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-2">
@@ -363,7 +364,7 @@ export default function UserForms({ forms }: Props) {
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-start gap-3">
                                         <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-                                            <span className="text-lg">✓</span>
+                                            <span className="text-lg"><Icon name="check" className="w-3 h-3 inline-block" /></span>
                                         </div>
                                         <div>
                                             <h3 className="text-sm font-medium text-brand-primary">{form.title}</h3>

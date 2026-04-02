@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -36,7 +37,7 @@ const statusColors: Record<string, string> = {
 };
 
 const typeIcons: Record<string, string> = {
-    general: '📅', meeting: '🤝', social: '🎉', training: '🎓', other: '📌',
+    general: 'calendar', meeting: 'handshake', social: 'party-popper', training: 'academic-cap', other: 'pin',
 };
 
 const typeLabels: Record<string, string> = {
@@ -181,14 +182,14 @@ export default function Events({ events, filters, stats }: Props) {
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total Events', value: stats.total, icon: '📅' },
-                        { label: 'Upcoming', value: stats.upcoming, icon: '🔜' },
-                        { label: 'Drafts', value: stats.draft, icon: '📝' },
-                        { label: 'Past', value: stats.past, icon: '✅' },
+                        { label: 'Total Events', value: stats.total, icon: 'calendar' },
+                        { label: 'Upcoming', value: stats.upcoming, icon: 'forward' },
+                        { label: 'Drafts', value: stats.draft, icon: 'pencil' },
+                        { label: 'Past', value: stats.past, icon: 'check-circle' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-4">
                             <div className="flex items-center gap-2 text-sm text-gray-500">
-                                <span>{s.icon}</span> {s.label}
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span> {s.label}
                             </div>
                             <div className="text-2xl font-bold text-gray-900 mt-1">{s.value}</div>
                         </div>
@@ -215,11 +216,11 @@ export default function Events({ events, filters, stats }: Props) {
                             className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-1 focus:ring-[#495B67] focus:border-[#495B67]"
                         >
                             <option value="all">All Types</option>
-                            <option value="general">📅 General</option>
-                            <option value="meeting">🤝 Meeting</option>
-                            <option value="social">🎉 Social</option>
-                            <option value="training">🎓 Training</option>
-                            <option value="other">📌 Other</option>
+                            <option value="general">General</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="social">Social</option>
+                            <option value="training">Training</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
                 </div>
@@ -227,7 +228,7 @@ export default function Events({ events, filters, stats }: Props) {
                 {/* Events List */}
                 {events.length === 0 ? (
                     <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                        <div className="text-4xl mb-3">📅</div>
+                        <div className="text-4xl mb-3"><Icon name="calendar" className="w-4 h-4 inline-block" /></div>
                         <p className="text-gray-500 text-sm">No events found. Create your first event to get started.</p>
                     </div>
                 ) : (
@@ -257,11 +258,11 @@ export default function Events({ events, filters, stats }: Props) {
                                                 {event.status}
                                             </span>
                                             <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-50 text-blue-600">
-                                                {typeIcons[event.type]} {typeLabels[event.type]}
+                                                <Icon name={typeIcons[event.type]} className="w-3.5 h-3.5 inline-block mr-1" /> {typeLabels[event.type]}
                                             </span>
                                             {event.is_recurring && (
                                                 <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-purple-50 text-purple-600">
-                                                    🔄 {event.recurrence_rule}
+                                                    <Icon name="arrow-path" className="w-3.5 h-3.5 inline-block" />  {event.recurrence_rule}
                                                 </span>
                                             )}
                                         </div>
@@ -270,13 +271,13 @@ export default function Events({ events, filters, stats }: Props) {
                                         )}
                                         <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
                                             <span>
-                                                🕐 {event.is_all_day ? 'All day' : formatTime(event.starts_at)}
+                                                <Icon name="clock" className="w-3.5 h-3.5 inline-block mr-0.5" /> {event.is_all_day ? 'All day' : formatTime(event.starts_at)}
                                                 {event.ends_at && !event.is_all_day && ` — ${formatTime(event.ends_at)}`}
                                             </span>
-                                            {event.location && <span>📍 {event.location}</span>}
-                                            <span>✅ {event.attending_count} attending</span>
-                                            {event.maybe_count > 0 && <span>🤔 {event.maybe_count} maybe</span>}
-                                            {event.declined_count > 0 && <span>❌ {event.declined_count} declined</span>}
+                                            {event.location && <span><Icon name="map-pin" className="w-3.5 h-3.5 inline-block" /> {event.location}</span>}
+                                            <span>{event.attending_count} attending</span>
+                                            {event.maybe_count > 0 && <span>{event.maybe_count} maybe</span>}
+                                            {event.declined_count > 0 && <span>{event.declined_count} declined</span>}
                                             <span>By {event.creator?.name ?? 'Unknown'}</span>
                                         </div>
                                     </div>
@@ -293,10 +294,10 @@ export default function Events({ events, filters, stats }: Props) {
                                             </button>
                                         )}
                                         <button onClick={() => openEdit(event)} className="p-1.5 text-gray-400 hover:text-[#495B67] rounded" title="Edit">
-                                            ✏️
+                                            <Icon name="pencil-square" className="w-4 h-4 inline-block" />
                                         </button>
                                         <button onClick={() => setDeleteConfirm(event)} className="p-1.5 text-gray-400 hover:text-red-500 rounded" title="Delete">
-                                            🗑️
+                                            <Icon name="trash" className="w-4 h-4 inline-block" />
                                         </button>
                                     </div>
                                 </div>
@@ -353,11 +354,11 @@ export default function Events({ events, filters, stats }: Props) {
                                         onChange={(e) => form.setData('type', e.target.value)}
                                         className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-1 focus:ring-[#495B67] focus:border-[#495B67]"
                                     >
-                                        <option value="general">📅 General</option>
-                                        <option value="meeting">🤝 Meeting</option>
-                                        <option value="social">🎉 Social</option>
-                                        <option value="training">🎓 Training</option>
-                                        <option value="other">📌 Other</option>
+                                        <option value="general">General</option>
+                                        <option value="meeting">Meeting</option>
+                                        <option value="social">Social</option>
+                                        <option value="training">Training</option>
+                                        <option value="other">Other</option>
                                     </select>
                                 </div>
                             </div>
@@ -401,7 +402,7 @@ export default function Events({ events, filters, stats }: Props) {
                                         onChange={(e) => form.setData('is_recurring', e.target.checked)}
                                         className="rounded border-gray-300 text-[#495B67] focus:ring-[#495B67]"
                                     />
-                                    🔄 Recurring event
+                                    <Icon name="arrow-path" className="w-3.5 h-3.5 inline-block" />  Recurring event
                                 </label>
                             </div>
 
@@ -478,14 +479,14 @@ export default function Events({ events, filters, stats }: Props) {
                                     {viewEvent.status}
                                 </span>
                                 <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-50 text-blue-600">
-                                    {typeIcons[viewEvent.type]} {typeLabels[viewEvent.type]}
+                                    <Icon name={typeIcons[viewEvent.type]} className="w-3.5 h-3.5 inline-block mr-1" /> {typeLabels[viewEvent.type]}
                                 </span>
                             </div>
                             <h2 className="text-xl font-bold text-gray-900">{viewEvent.title}</h2>
                         </div>
                         <div className="px-6 py-4 space-y-3">
                             <div className="flex items-center gap-3 text-sm text-gray-600">
-                                <span>🕐</span>
+                                <span><Icon name="clock" className="w-4 h-4 inline-block" /></span>
                                 <span>
                                     {formatDate(viewEvent.starts_at)}
                                     {!viewEvent.is_all_day && ` at ${formatTime(viewEvent.starts_at)}`}
@@ -494,27 +495,27 @@ export default function Events({ events, filters, stats }: Props) {
                             </div>
                             {viewEvent.location && (
                                 <div className="flex items-center gap-3 text-sm text-gray-600">
-                                    <span>📍</span> <span>{viewEvent.location}</span>
+                                    <span><Icon name="map-pin" className="w-3 h-3 inline-block" /></span> <span>{viewEvent.location}</span>
                                 </div>
                             )}
                             {viewEvent.description && (
                                 <div className="text-sm text-gray-700 whitespace-pre-wrap mt-2">{viewEvent.description}</div>
                             )}
                             <div className="flex items-center gap-4 text-sm bg-gray-50 rounded-lg p-3">
-                                <span className="text-green-600">✅ {viewEvent.attending_count} attending</span>
-                                <span className="text-yellow-600">🤔 {viewEvent.maybe_count} maybe</span>
-                                <span className="text-red-500">❌ {viewEvent.declined_count} declined</span>
+                                <span className="text-green-600">{viewEvent.attending_count} attending</span>
+                                <span className="text-yellow-600">{viewEvent.maybe_count} maybe</span>
+                                <span className="text-red-500">{viewEvent.declined_count} declined</span>
                             </div>
                             {viewEvent.is_recurring && (
                                 <div className="text-xs text-purple-600 bg-purple-50 rounded-lg px-3 py-2">
-                                    🔄 Recurs {viewEvent.recurrence_rule}{viewEvent.recurrence_end && ` until ${formatDate(viewEvent.recurrence_end)}`}
+                                    <Icon name="arrow-path" className="w-3.5 h-3.5 inline-block" />  Recurs {viewEvent.recurrence_rule}{viewEvent.recurrence_end && ` until ${formatDate(viewEvent.recurrence_end)}`}
                                 </div>
                             )}
                             <p className="text-xs text-gray-400">Created by {viewEvent.creator?.name ?? 'Unknown'}</p>
                         </div>
                         <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-2">
                             <button onClick={() => { setViewEvent(null); openEdit(viewEvent); }} className="px-4 py-2 text-sm text-[#495B67] hover:bg-gray-100 rounded-lg">
-                                ✏️ Edit
+                                <Icon name="pencil-square" className="w-4 h-4 inline-block" /> Edit
                             </button>
                             <button onClick={() => setViewEvent(null)} className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 rounded-lg">
                                 Close

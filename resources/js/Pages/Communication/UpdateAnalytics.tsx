@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, router } from '@inertiajs/react';
 
 interface UserRef { id: number; name: string; email?: string; }
@@ -47,7 +48,7 @@ interface Props {
 }
 
 const typeLabels: Record<string, string> = {
-    announcement: '📢 Announcement', news: '📰 News', event: '🎉 Event', poll: '📊 Poll',
+    announcement: 'Announcement', news: 'News', event: 'Event', poll: 'Poll',
 };
 
 export default function UpdateAnalytics({ update, reads, unreadMembers, reactions, comments, teamCount }: Props) {
@@ -77,7 +78,7 @@ export default function UpdateAnalytics({ update, reads, unreadMembers, reaction
                                 <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-50 text-blue-600">{typeLabels[update.type] || update.type}</span>
                                 {update.category && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-purple-50 text-purple-600">{update.category}</span>}
                                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${update.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>{update.status}</span>
-                                {update.is_pinned && <span className="text-xs">📌</span>}
+                                {update.is_pinned && <span className="text-xs"><Icon name="pin" className="w-4 h-4 inline-block" /></span>}
                             </div>
                             {update.creator && <p className="text-xs text-brand-accent mt-2">by {update.creator.name} • {update.published_at ? formatDate(update.published_at) : formatDate(update.created_at)}</p>}
                         </div>
@@ -120,7 +121,7 @@ export default function UpdateAnalytics({ update, reads, unreadMembers, reaction
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Read list */}
                     <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                        <h3 className="text-sm font-semibold text-brand-primary mb-3">✅ Read ({reads.length})</h3>
+                        <h3 className="text-sm font-semibold text-brand-primary mb-3">Read ({reads.length})</h3>
                         {reads.length === 0 ? (
                             <p className="text-xs text-brand-accent">No one has read this yet.</p>
                         ) : (
@@ -140,9 +141,9 @@ export default function UpdateAnalytics({ update, reads, unreadMembers, reaction
 
                     {/* Unread list */}
                     <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                        <h3 className="text-sm font-semibold text-brand-primary mb-3">❌ Unread ({unreadMembers.length})</h3>
+                        <h3 className="text-sm font-semibold text-brand-primary mb-3">Unread ({unreadMembers.length})</h3>
                         {unreadMembers.length === 0 ? (
-                            <p className="text-xs text-green-600">Everyone has read this! 🎉</p>
+                            <p className="text-xs text-green-600">Everyone has read this! <Icon name="party-popper" className="w-4 h-4 inline-block" /></p>
                         ) : (
                             <div className="space-y-2 max-h-80 overflow-y-auto">
                                 {unreadMembers.map((m, i) => (

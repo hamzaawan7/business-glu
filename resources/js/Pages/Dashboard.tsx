@@ -79,7 +79,7 @@ export default function Dashboard({ stats }: DashboardProps) {
                 {/* Welcome banner */}
                 <div className="bg-gradient-to-r from-brand-primary to-brand-primary-light rounded-xl p-6 text-white">
                     <h2 className="text-2xl font-bold font-heading">
-                        {greeting()}, {user.name.split(' ')[0]}! 👋
+                        {greeting()}, {user.name.split(' ')[0]}!
                     </h2>
                     <p className="mt-1 text-white/80 text-sm">
                         Here's what's happening with your team today.

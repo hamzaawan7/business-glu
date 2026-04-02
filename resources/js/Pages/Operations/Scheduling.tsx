@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -336,7 +337,7 @@ export default function Scheduling({ dates, shifts, members, weekStart, weekEnd,
                                                             <span className="text-[10px] text-amber-600 font-medium">DRAFT</span>
                                                         )}
                                                         {shift.is_recurring && (
-                                                            <span className="text-[10px] text-brand-accent">🔁</span>
+                                                            <span className="text-[10px] text-brand-accent"><Icon name="arrow-path" className="w-3 h-3 inline-block" /></span>
                                                         )}
                                                     </button>
                                                 ))}

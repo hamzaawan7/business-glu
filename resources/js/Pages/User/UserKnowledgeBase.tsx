@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -125,7 +126,7 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
                                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
                             >
-                                {cat.icon} {cat.name} ({cat.published_articles_count})
+                                <Icon name={cat.icon || "folder-open"} className="w-4 h-4 inline-block" /> {cat.name} ({cat.published_articles_count})
                             </button>
                         ))}
                     </div>
@@ -133,7 +134,7 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
 
                 {articles.length === 0 ? (
                     <div className="text-center py-16">
-                        <div className="text-5xl mb-3">📚</div>
+                        <div className="text-5xl mb-3"><Icon name="book-open" className="w-4 h-4 inline-block" /></div>
                         <h3 className="text-lg font-semibold text-gray-700 mb-1">No articles found</h3>
                         <p className="text-sm text-gray-500">
                             {filters.search || filters.category !== 'all'
@@ -147,7 +148,7 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
                         {pinnedArticles.length > 0 && (
                             <>
                                 <div className="flex items-center gap-2 text-xs font-semibold text-amber-700 uppercase tracking-wider">
-                                    📌 Pinned
+                                    <Icon name="pin" className="w-4 h-4 inline-block" /> Pinned
                                 </div>
                                 {pinnedArticles.map(article => (
                                     <button
@@ -159,7 +160,7 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
                                     >
                                         <div className="flex items-start gap-3">
                                             <div className="text-2xl flex-shrink-0 mt-0.5">
-                                                {article.category?.icon ?? '📄'}
+                                                <Icon name={article.category?.icon ?? 'document'} className="w-4 h-4 inline-block" />
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2">
@@ -172,7 +173,7 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
                                                 <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-400">
                                                     {article.category && <span>{article.category.name}</span>}
                                                     <span>By {article.author?.name ?? 'Unknown'}</span>
-                                                    <span>👁️ {article.views_count}</span>
+                                                    <span><Icon name="eye" className="w-4 h-4 inline-block" /> {article.views_count}</span>
                                                     {article.published_at && <span>{timeAgo(article.published_at)}</span>}
                                                 </div>
                                             </div>
@@ -198,7 +199,7 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
                             >
                                 <div className="flex items-start gap-3">
                                     <div className="text-2xl flex-shrink-0 mt-0.5">
-                                        {article.category?.icon ?? '📄'}
+                                        <Icon name={article.category?.icon ?? 'document'} className="w-4 h-4 inline-block" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
@@ -211,7 +212,7 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
                                         <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-400">
                                             {article.category && <span>{article.category.name}</span>}
                                             <span>By {article.author?.name ?? 'Unknown'}</span>
-                                            <span>👁️ {article.views_count}</span>
+                                            <span><Icon name="eye" className="w-4 h-4 inline-block" /> {article.views_count}</span>
                                             {article.published_at && <span>{timeAgo(article.published_at)}</span>}
                                         </div>
                                     </div>
@@ -232,20 +233,20 @@ export default function UserKnowledgeBase({ articles, categories, filters }: Pro
                                 <div className="flex items-center gap-2">
                                     {viewArticle.category && (
                                         <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-50 text-blue-600">
-                                            {viewArticle.category.icon} {viewArticle.category.name}
+                                            <Icon name={viewArticle.category.icon || "folder-open"} className="w-3.5 h-3.5 inline-block mr-1" /> {viewArticle.category.name}
                                         </span>
                                     )}
-                                    {viewArticle.is_pinned && <span className="text-xs">📌</span>}
+                                    {viewArticle.is_pinned && <span className="text-xs"><Icon name="pin" className="w-4 h-4 inline-block" /></span>}
                                 </div>
                                 <button onClick={() => setViewArticle(null)} className="text-gray-400 hover:text-gray-600 text-lg">
-                                    ✕
+                                    <Icon name="x-mark" className="w-3.5 h-3.5 inline-block" /> 
                                 </button>
                             </div>
                             <h2 className="text-xl font-bold text-gray-900 mt-2">{viewArticle.title}</h2>
                             <p className="text-xs text-gray-400 mt-1">
                                 By {viewArticle.author?.name ?? 'Unknown'}
                                 {viewArticle.published_at && ` · ${timeAgo(viewArticle.published_at)}`}
-                                {` · 👁️ ${viewArticle.views_count} views`}
+                                {` · <Icon name="eye" className="w-4 h-4 inline-block" /> ${viewArticle.views_count} views`}
                             </p>
                         </div>
 

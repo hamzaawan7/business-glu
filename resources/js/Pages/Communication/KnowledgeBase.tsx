@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -40,7 +41,7 @@ const statusColors: Record<string, string> = {
     archived: 'bg-gray-100 text-gray-500',
 };
 
-const categoryIcons = ['📁', '📚', '📋', '📖', '🔧', '💡', '🎯', '📌', '🏢', '⚙️', '🔒', '📝', '🎓', '💼', '🗂️'];
+const categoryIcons = ['folder-open', 'book-open', 'clipboard-list', 'book-open', 'wrench', 'light-bulb', 'target', 'pin', 'building', 'cog', 'lock-closed', 'pencil', 'academic-cap', 'briefcase', 'folder-stack'];
 
 export default function KnowledgeBase({ articles, categories, filters, stats }: Props) {
     const page = usePage();
@@ -68,7 +69,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
     const catForm = useForm({
         name: '',
         description: '',
-        icon: '📁',
+        icon: 'folder-open',
     });
 
     function openCreateArticle() {
@@ -126,7 +127,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
 
     function openCreateCategory() {
         catForm.reset();
-        catForm.setData({ name: '', description: '', icon: '📁' });
+        catForm.setData({ name: '', description: '', icon: 'folder-open' });
         setEditingCategory(null);
         setShowCategoryModal(true);
     }
@@ -203,14 +204,14 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total Articles', value: stats.total, icon: '📄' },
-                        { label: 'Published', value: stats.published, icon: '✅' },
-                        { label: 'Drafts', value: stats.draft, icon: '📝' },
-                        { label: 'Categories', value: stats.categories, icon: '📁' },
+                        { label: 'Total Articles', value: stats.total, icon: 'document' },
+                        { label: 'Published', value: stats.published, icon: 'check-circle' },
+                        { label: 'Drafts', value: stats.draft, icon: 'pencil' },
+                        { label: 'Categories', value: stats.categories, icon: 'folder-open' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-4">
                             <div className="flex items-center gap-2 text-sm text-gray-500">
-                                <span>{s.icon}</span> {s.label}
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span> {s.label}
                             </div>
                             <div className="text-2xl font-bold text-gray-900 mt-1">{s.value}</div>
                         </div>
@@ -223,13 +224,13 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                         onClick={() => setActiveTab('articles')}
                         className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'articles' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                     >
-                        📄 Articles ({stats.total})
+                        <Icon name="document" className="w-4 h-4 inline-block" /> Articles ({stats.total})
                     </button>
                     <button
                         onClick={() => setActiveTab('categories')}
                         className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'categories' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                     >
-                        📁 Categories ({stats.categories})
+                        <Icon name="folder-open" className="w-4 h-4 inline-block" /> Categories ({stats.categories})
                     </button>
                 </div>
 
@@ -272,7 +273,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                 >
                                     <option value="all">All Categories</option>
                                     {categories.map(c => (
-                                        <option key={c.id} value={c.id}>{c.icon} {c.name}</option>
+                                        <option key={c.id} value={c.id}>{c.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -281,7 +282,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                         {/* Articles list */}
                         {articles.length === 0 ? (
                             <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                                <div className="text-4xl mb-3">📚</div>
+                                <div className="text-4xl mb-3"><Icon name="book-open" className="w-4 h-4 inline-block" /></div>
                                 <p className="text-gray-500 text-sm">No articles found. Create your first article to get started.</p>
                             </div>
                         ) : (
@@ -291,7 +292,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                         <div className="flex items-start gap-4">
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2 flex-wrap mb-1">
-                                                    {article.is_pinned && <span className="text-xs">📌</span>}
+                                                    {article.is_pinned && <span className="text-xs"><Icon name="pin" className="w-4 h-4 inline-block" /></span>}
                                                     <h3
                                                         className="font-semibold text-gray-900 hover:text-[#495B67] cursor-pointer"
                                                         onClick={() => setViewArticle(article)}
@@ -303,14 +304,14 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                                     </span>
                                                     {article.category && (
                                                         <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-50 text-blue-600">
-                                                            {article.category.icon} {article.category.name}
+                                                            <Icon name={article.category.icon || "folder-open"} className="w-3.5 h-3.5 inline-block mr-1" /> {article.category.name}
                                                         </span>
                                                     )}
                                                 </div>
                                                 <p className="text-sm text-gray-500 line-clamp-2">{article.excerpt}</p>
                                                 <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
                                                     <span>By {article.author?.name ?? 'Unknown'}</span>
-                                                    <span>👁️ {article.views_count} views</span>
+                                                    <span><Icon name="eye" className="w-4 h-4 inline-block" /> {article.views_count} views</span>
                                                     {article.published_at && (
                                                         <span>Published {new Date(article.published_at).toLocaleDateString()}</span>
                                                     )}
@@ -328,10 +329,10 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                                     </button>
                                                 )}
                                                 <button onClick={() => openEditArticle(article)} className="p-1.5 text-gray-400 hover:text-[#495B67] rounded" title="Edit">
-                                                    ✏️
+                                                    <Icon name="pencil-square" className="w-4 h-4 inline-block" />
                                                 </button>
                                                 <button onClick={() => setDeleteConfirm(article)} className="p-1.5 text-gray-400 hover:text-red-500 rounded" title="Delete">
-                                                    🗑️
+                                                    <Icon name="trash" className="w-4 h-4 inline-block" />
                                                 </button>
                                             </div>
                                         </div>
@@ -345,7 +346,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                     <div>
                         {categories.length === 0 ? (
                             <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                                <div className="text-4xl mb-3">📁</div>
+                                <div className="text-4xl mb-3"><Icon name="folder-open" className="w-4 h-4 inline-block" /></div>
                                 <p className="text-gray-500 text-sm">No categories yet. Create one to organize your articles.</p>
                             </div>
                         ) : (
@@ -354,7 +355,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                     <div key={cat.id} className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-all">
                                         <div className="flex items-start justify-between">
                                             <div>
-                                                <div className="text-2xl mb-2">{cat.icon}</div>
+                                                <div className="text-2xl mb-2"><Icon name={cat.icon || "folder-open"} className="w-7 h-7" /></div>
                                                 <h3 className="font-semibold text-gray-900">{cat.name}</h3>
                                                 {cat.description && (
                                                     <p className="text-xs text-gray-500 mt-1">{cat.description}</p>
@@ -362,8 +363,8 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                                 <p className="text-xs text-gray-400 mt-2">{cat.articles_count} article{cat.articles_count !== 1 ? 's' : ''}</p>
                                             </div>
                                             <div className="flex gap-1">
-                                                <button onClick={() => openEditCategory(cat)} className="p-1 text-gray-400 hover:text-[#495B67]">✏️</button>
-                                                <button onClick={() => setDeleteCatConfirm(cat)} className="p-1 text-gray-400 hover:text-red-500">🗑️</button>
+                                                <button onClick={() => openEditCategory(cat)} className="p-1 text-gray-400 hover:text-[#495B67]"><Icon name="pencil-square" className="w-4 h-4 inline-block" /></button>
+                                                <button onClick={() => setDeleteCatConfirm(cat)} className="p-1 text-gray-400 hover:text-red-500"><Icon name="trash" className="w-4 h-4 inline-block" /></button>
                                             </div>
                                         </div>
                                     </div>
@@ -402,7 +403,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                 >
                                     <option value="">Uncategorized</option>
                                     {categories.map(c => (
-                                        <option key={c.id} value={c.id}>{c.icon} {c.name}</option>
+                                        <option key={c.id} value={c.id}>{c.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -458,19 +459,19 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                     <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
                         <div className="px-6 py-4 border-b border-gray-200">
                             <div className="flex items-center gap-2 mb-1">
-                                {viewArticle.is_pinned && <span>📌</span>}
+                                {viewArticle.is_pinned && <span><Icon name="pin" className="w-4 h-4 inline-block" /></span>}
                                 <span className={`px-2 py-0.5 text-[10px] font-medium rounded-full ${statusColors[viewArticle.status]}`}>
                                     {viewArticle.status}
                                 </span>
                                 {viewArticle.category && (
                                     <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-50 text-blue-600">
-                                        {viewArticle.category.icon} {viewArticle.category.name}
+                                        <Icon name={viewArticle.category.icon || "folder-open"} className="w-3.5 h-3.5 inline-block mr-1" /> {viewArticle.category.name}
                                     </span>
                                 )}
                             </div>
                             <h2 className="text-xl font-bold text-gray-900">{viewArticle.title}</h2>
                             <p className="text-xs text-gray-400 mt-1">
-                                By {viewArticle.author?.name ?? 'Unknown'} · 👁️ {viewArticle.views_count} views
+                                By {viewArticle.author?.name ?? 'Unknown'} · <Icon name="eye" className="w-4 h-4 inline-block" /> {viewArticle.views_count} views
                             </p>
                         </div>
                         <div className="px-6 py-4">
@@ -480,7 +481,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                         </div>
                         <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-2">
                             <button onClick={() => { setViewArticle(null); openEditArticle(viewArticle); }} className="px-4 py-2 text-sm text-[#495B67] hover:bg-gray-100 rounded-lg">
-                                ✏️ Edit
+                                <Icon name="pencil-square" className="w-4 h-4 inline-block" /> Edit
                             </button>
                             <button onClick={() => setViewArticle(null)} className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 rounded-lg">
                                 Close
@@ -533,7 +534,7 @@ export default function KnowledgeBase({ articles, categories, filters, stats }: 
                                                     : 'border-gray-200 hover:border-gray-300'
                                             }`}
                                         >
-                                            {icon}
+                                            <Icon name={icon} className="w-5 h-5" />
                                         </button>
                                     ))}
                                 </div>

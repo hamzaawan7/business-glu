@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, router, useForm } from '@inertiajs/react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -168,8 +169,8 @@ export default function Chat({ conversations, users, currentUserId }: Props) {
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-slate-900">Chat</h2>
                             <div className="flex gap-1">
-                                <button onClick={() => { setShowNewChat(true); setShowNewGroup(false); }} className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 text-sm" title="New message">✉️</button>
-                                <button onClick={() => { setShowNewGroup(true); setShowNewChat(false); }} className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 text-sm" title="New group">👥</button>
+                                <button onClick={() => { setShowNewChat(true); setShowNewGroup(false); }} className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 text-sm" title="New message"><Icon name="envelope" className="w-3 h-3 inline-block" /></button>
+                                <button onClick={() => { setShowNewGroup(true); setShowNewChat(false); }} className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 text-sm" title="New group"><Icon name="user-group" className="w-4 h-4 inline-block" /></button>
                             </div>
                         </div>
                     </div>
@@ -251,7 +252,7 @@ export default function Chat({ conversations, users, currentUserId }: Props) {
                                                 )}
                                                 <div className={`px-3 py-2 rounded-2xl text-sm relative group ${isMine ? 'text-white rounded-br-md' : 'bg-slate-100 text-slate-900 rounded-bl-md'}`} style={isMine ? { backgroundColor: '#495B67' } : undefined}>
                                                     {msg.type === 'image' && msg.file_path && <img src={`/storage/${msg.file_path}`} className="max-w-full rounded-lg mb-1" alt="" />}
-                                                    {msg.type === 'file' && msg.file_name && <a href={`/storage/${msg.file_path}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-1 underline text-xs">📎 {msg.file_name}</a>}
+                                                    {msg.type === 'file' && msg.file_name && <a href={`/storage/${msg.file_path}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-1 underline text-xs">{msg.file_name}</a>}
                                                     <p className="whitespace-pre-wrap break-words">{msg.body}</p>
                                                     <div className={`flex items-center gap-1 mt-0.5 ${isMine ? 'justify-end' : ''}`}>
                                                         <span className={`text-[9px] ${isMine ? 'text-white/50' : 'text-slate-300'}`}>{formatTime(msg.created_at)}</span>
@@ -269,19 +270,19 @@ export default function Chat({ conversations, users, currentUserId }: Props) {
                             {replyTo && (
                                 <div className="px-5 py-2 bg-slate-50 border-t border-slate-100 flex items-center gap-2">
                                     <div className="flex-1 text-xs text-slate-500 truncate">Replying to <span className="font-medium">{replyTo.user.name}</span>: {replyTo.body.slice(0, 60)}</div>
-                                    <button onClick={() => setReplyTo(null)} className="text-slate-400 hover:text-slate-600 text-sm">✕</button>
+                                    <button onClick={() => setReplyTo(null)} className="text-slate-400 hover:text-slate-600 text-sm"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                                 </div>
                             )}
 
                             <form onSubmit={sendMessage} className="px-5 py-3 border-t border-slate-100 flex items-center gap-2">
                                 <label className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 cursor-pointer text-sm">
-                                    📎
+                                    <Icon name="paperclip" className="w-4 h-4 inline-block" />
                                     <input type="file" className="hidden" onChange={e => { const file = e.target.files?.[0]; if (file) messageForm.setData('file', file); }} />
                                 </label>
                                 {messageForm.data.file && (
                                     <span className="text-xs text-slate-400 max-w-[100px] truncate">
                                         {messageForm.data.file.name}
-                                        <button type="button" onClick={() => messageForm.setData('file', null)} className="ml-1 text-slate-400 hover:text-red-500">✕</button>
+                                        <button type="button" onClick={() => messageForm.setData('file', null)} className="ml-1 text-slate-400 hover:text-red-500"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                                     </span>
                                 )}
                                 <input type="text" value={messageForm.data.body} onChange={e => messageForm.setData('body', e.target.value)} placeholder="Type a message..." className="flex-1 rounded-full border-slate-200 text-sm px-4 py-2 focus:ring-[#495B67] focus:border-[#495B67]" autoFocus />
@@ -293,7 +294,7 @@ export default function Chat({ conversations, users, currentUserId }: Props) {
                     ) : (
                         <div className="flex-1 flex items-center justify-center">
                             <div className="text-center">
-                                <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3" style={{ backgroundColor: '#495B6710' }}>💬</div>
+                                <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3" style={{ backgroundColor: '#495B6710' }}><Icon name="chat-bubble" className="w-4 h-4 inline-block" /></div>
                                 <p className="text-slate-400 text-sm">Select a conversation or start a new one</p>
                             </div>
                         </div>

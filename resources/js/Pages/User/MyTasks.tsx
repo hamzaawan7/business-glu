@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, usePage, router } from '@inertiajs/react';
 
 interface SubtaskData {
@@ -206,7 +207,7 @@ export default function MyTasks({ tasks, filters, stats }: Props) {
                                                     </span>
                                                 )}
                                                 {task.location && (
-                                                    <span className="text-xs text-brand-accent">📍 {task.location}</span>
+                                                    <span className="text-xs text-brand-accent"><Icon name="map-pin" className="w-3.5 h-3.5 inline-block" /> {task.location}</span>
                                                 )}
                                                 {task.creator && (
                                                     <span className="text-xs text-brand-accent">

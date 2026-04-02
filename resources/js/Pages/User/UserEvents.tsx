@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -24,7 +25,7 @@ interface Props {
 }
 
 const typeIcons: Record<string, string> = {
-    general: '📅', meeting: '🤝', social: '🎉', training: '🎓', other: '📌',
+    general: 'calendar', meeting: 'handshake', social: 'party-popper', training: 'academic-cap', other: 'pin',
 };
 
 function formatDate(dateStr: string) {
@@ -81,7 +82,7 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                 {/* No events */}
                 {upcomingEvents.length === 0 && pastEvents.length === 0 && (
                     <div className="text-center py-16">
-                        <div className="text-5xl mb-3">📅</div>
+                        <div className="text-5xl mb-3"><Icon name="calendar" className="w-4 h-4 inline-block" /></div>
                         <h3 className="text-lg font-semibold text-gray-700 mb-1">No events yet</h3>
                         <p className="text-sm text-gray-500">When events are created, they'll appear here.</p>
                     </div>
@@ -91,7 +92,7 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                 {upcomingEvents.length > 0 && (
                     <div>
                         <div className="flex items-center gap-2 text-xs font-semibold text-[#495B67] uppercase tracking-wider mb-3">
-                            🔜 Upcoming ({upcomingEvents.length})
+                            <Icon name="forward" className="w-3.5 h-3.5 inline-block" />  Upcoming ({upcomingEvents.length})
                         </div>
                         <div className="space-y-3">
                             {upcomingEvents.map(event => (
@@ -118,10 +119,10 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                                                 {event.title}
                                             </button>
                                             <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-400 flex-wrap">
-                                                <span>{typeIcons[event.type]} {event.type}</span>
+                                                <span><Icon name={typeIcons[event.type]} className="w-4 h-4 inline-block" /> {event.type}</span>
                                                 <span>{event.is_all_day ? 'All day' : formatTime(event.starts_at)}</span>
-                                                {event.location && <span>📍 {event.location}</span>}
-                                                <span>✅ {event.attending_count} going</span>
+                                                {event.location && <span><Icon name="map-pin" className="w-3.5 h-3.5 inline-block" /> {event.location}</span>}
+                                                <span>{event.attending_count} going</span>
                                                 <span className="text-[#495B67] font-medium">{daysUntil(event.starts_at)}</span>
                                             </div>
 
@@ -137,7 +138,7 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                                                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                                         }`}
                                                     >
-                                                        {status === 'attending' ? '✅ Going' : status === 'maybe' ? '🤔 Maybe' : '❌ Can\'t go'}
+                                                        {status === 'attending' ? 'Going' : status === 'maybe' ? 'Maybe' : 'Can\'t go'}
                                                     </button>
                                                 ))}
                                             </div>
@@ -153,7 +154,7 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                 {pastEvents.length > 0 && (
                     <div>
                         <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                            📋 Past Events ({pastEvents.length})
+                            <Icon name="clipboard-list" className="w-4 h-4 inline-block" /> Past Events ({pastEvents.length})
                         </div>
                         <div className="space-y-3">
                             {pastEvents.map(event => (
@@ -171,8 +172,8 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                                             <h3 className="font-medium text-gray-700 text-sm">{event.title}</h3>
                                             <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-400">
                                                 <span>{formatDate(event.starts_at)}</span>
-                                                {event.location && <span>📍 {event.location}</span>}
-                                                <span>✅ {event.attending_count} attended</span>
+                                                {event.location && <span><Icon name="map-pin" className="w-3.5 h-3.5 inline-block" /> {event.location}</span>}
+                                                <span>{event.attending_count} attended</span>
                                                 {event.my_rsvp && (
                                                     <span className="text-[#495B67] font-medium">
                                                         You: {event.my_rsvp}
@@ -195,17 +196,17 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                         <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-2xl">{typeIcons[viewEvent.type]}</span>
+                                    <span className="text-2xl"><Icon name={typeIcons[viewEvent.type]} className="w-4 h-4 inline-block" /></span>
                                     <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-50 text-blue-600">{viewEvent.type}</span>
                                 </div>
-                                <button onClick={() => setViewEvent(null)} className="text-gray-400 hover:text-gray-600 text-lg">✕</button>
+                                <button onClick={() => setViewEvent(null)} className="text-gray-400 hover:text-gray-600 text-lg"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                             </div>
                             <h2 className="text-xl font-bold text-gray-900 mt-2">{viewEvent.title}</h2>
                         </div>
                         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
                             <div className="space-y-2 text-sm text-gray-600">
                                 <div className="flex items-center gap-2">
-                                    <span>🗓️</span>
+                                    <span><Icon name="calendar" className="w-4 h-4 inline-block" /></span>
                                     <span>
                                         {formatDate(viewEvent.starts_at)}
                                         {!viewEvent.is_all_day && ` at ${formatTime(viewEvent.starts_at)}`}
@@ -214,11 +215,11 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                                 </div>
                                 {viewEvent.location && (
                                     <div className="flex items-center gap-2">
-                                        <span>📍</span> <span>{viewEvent.location}</span>
+                                        <span><Icon name="map-pin" className="w-3 h-3 inline-block" /></span> <span>{viewEvent.location}</span>
                                     </div>
                                 )}
                                 <div className="flex items-center gap-2">
-                                    <span>👤</span> <span>Organized by {viewEvent.creator?.name ?? 'Unknown'}</span>
+                                    <span><Icon name="user" className="w-4 h-4 inline-block" /></span> <span>Organized by {viewEvent.creator?.name ?? 'Unknown'}</span>
                                 </div>
                             </div>
 
@@ -229,7 +230,7 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                             )}
 
                             <div className="bg-gray-50 rounded-lg p-3 text-sm">
-                                <span className="text-green-600">✅ {viewEvent.attending_count} attending</span>
+                                <span className="text-green-600">{viewEvent.attending_count} attending</span>
                             </div>
 
                             {/* RSVP in modal */}
@@ -246,7 +247,7 @@ export default function UserEvents({ upcomingEvents, pastEvents }: Props) {
                                                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                             }`}
                                         >
-                                            {status === 'attending' ? '✅ Going' : status === 'maybe' ? '🤔 Maybe' : '❌ Can\'t go'}
+                                            {status === 'attending' ? 'Going' : status === 'maybe' ? 'Maybe' : 'Can\'t go'}
                                         </button>
                                     ))}
                                 </div>

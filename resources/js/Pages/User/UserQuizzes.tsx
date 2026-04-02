@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, router } from '@inertiajs/react';
 
 interface Attempt {
@@ -68,14 +69,14 @@ export default function UserQuizzes({ quizzes, myAttempts }: Props) {
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Assigned', value: quizzes.length, icon: '📋' },
-                        { label: 'Completed', value: passedCount, icon: '✅' },
-                        { label: 'Pending', value: pendingCount, icon: '⏳' },
-                        { label: 'Avg Score', value: scoredQuizzes.length ? `${avgScore}%` : '—', icon: '📊' },
+                        { label: 'Assigned', value: quizzes.length, icon: 'clipboard-list' },
+                        { label: 'Completed', value: passedCount, icon: 'check-circle' },
+                        { label: 'Pending', value: pendingCount, icon: 'hourglass' },
+                        { label: 'Avg Score', value: scoredQuizzes.length ? `${avgScore}%` : '—', icon: 'chart-bar' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-4">
                             <div className="flex items-center gap-2 mb-1">
-                                <span>{s.icon}</span>
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span>
                                 <span className="text-xs text-slate-500">{s.label}</span>
                             </div>
                             <span className="text-xl font-bold text-slate-900">{s.value}</span>
@@ -138,7 +139,7 @@ export default function UserQuizzes({ quizzes, myAttempts }: Props) {
                                         } disabled:opacity-50`}
                                         style={!hasPassed ? { backgroundColor: '#495B67' } : undefined}
                                     >
-                                        {hasPassed ? (canRetry ? 'Retake Quiz' : 'Completed ✓') : status === 'in_progress' ? 'Continue Quiz' : 'Start Quiz'}
+                                        {hasPassed ? (canRetry ? 'Retake Quiz' : 'Completed <Icon name="check" className="w-3.5 h-3.5 inline-block" /> ') : status === 'in_progress' ? 'Continue Quiz' : 'Start Quiz'}
                                     </button>
                                 </div>
                             );

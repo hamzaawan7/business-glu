@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -43,16 +44,16 @@ const statusColors: Record<string, string> = {
     archived: 'bg-gray-100 text-gray-400',
 };
 
-const typeIcons: Record<string, string> = { survey: '📝', poll: '📊' };
+const typeIcons: Record<string, string> = { survey: 'pencil', poll: 'chart-bar' };
 
 const questionTypes = [
     { value: 'single_choice', label: 'Single Choice', icon: '○' },
-    { value: 'multiple_choice', label: 'Multiple Choice', icon: '☐' },
+    { value: 'multiple_choice', label: 'Multiple Choice', icon: 'check-square' },
     { value: 'text', label: 'Short Text', icon: 'Aa' },
     { value: 'textarea', label: 'Long Text', icon: '¶' },
-    { value: 'rating', label: 'Rating (1-5)', icon: '★' },
-    { value: 'yes_no', label: 'Yes / No', icon: '✓✗' },
-    { value: 'nps', label: 'NPS (0-10)', icon: '📈' },
+    { value: 'rating', label: 'Rating (1-5)', icon: 'star' },
+    { value: 'yes_no', label: 'Yes / No', icon: 'x-mark' },
+    { value: 'nps', label: 'NPS (0-10)', icon: 'arrow-trending-up' },
 ];
 
 function emptyQuestion(): QuestionData {
@@ -232,14 +233,14 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total Surveys', value: stats.total, icon: '📋' },
-                        { label: 'Active', value: stats.active, icon: '✅' },
-                        { label: 'Drafts', value: stats.draft, icon: '📝' },
-                        { label: 'Closed', value: stats.closed, icon: '🔒' },
+                        { label: 'Total Surveys', value: stats.total, icon: 'clipboard-list' },
+                        { label: 'Active', value: stats.active, icon: 'check-circle' },
+                        { label: 'Drafts', value: stats.draft, icon: 'pencil' },
+                        { label: 'Closed', value: stats.closed, icon: 'lock-closed' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-4">
                             <div className="flex items-center gap-2 text-sm text-gray-500">
-                                <span>{s.icon}</span> {s.label}
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span> {s.label}
                             </div>
                             <div className="text-2xl font-bold text-gray-900 mt-1">{s.value}</div>
                         </div>
@@ -266,8 +267,8 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                             className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-1 focus:ring-[#495B67] focus:border-[#495B67]"
                         >
                             <option value="all">All Types</option>
-                            <option value="survey">📝 Surveys</option>
-                            <option value="poll">📊 Polls</option>
+                            <option value="survey">Surveys</option>
+                            <option value="poll">Polls</option>
                         </select>
                     </div>
                 </div>
@@ -275,7 +276,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                 {/* Survey List */}
                 {surveys.length === 0 ? (
                     <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                        <div className="text-4xl mb-3">📋</div>
+                        <div className="text-4xl mb-3"><Icon name="clipboard-list" className="w-4 h-4 inline-block" /></div>
                         <p className="text-gray-500 text-sm">No surveys found. Create your first survey to start collecting feedback.</p>
                     </div>
                 ) : (
@@ -284,7 +285,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                             <div key={survey.id} className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-all">
                                 <div className="flex items-start gap-4">
                                     <div className="w-10 h-10 rounded-lg bg-[#495B67]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <span className="text-lg">{typeIcons[survey.type] ?? '📋'}</span>
+                                        <span className="text-lg"><Icon name={typeIcons[survey.type] || 'clipboard-list'} className="w-4 h-4 inline-block" /></span>
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -306,13 +307,13 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                         )}
                                         <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
                                             <span>By {survey.creator?.name ?? 'Unknown'}</span>
-                                            <span>❓ {survey.questions_count} question{survey.questions_count !== 1 ? 's' : ''}</span>
-                                            <span>📩 {survey.responses_count} response{survey.responses_count !== 1 ? 's' : ''}</span>
+                                            <span>{survey.questions_count} question{survey.questions_count !== 1 ? 's' : ''}</span>
+                                            <span><Icon name="inbox-arrow-down" className="w-3.5 h-3.5 inline-block" /> {survey.responses_count} response{survey.responses_count !== 1 ? 's' : ''}</span>
                                             {survey.responses_count > 0 && teamCount > 0 && (
-                                                <span>📊 {Math.round((survey.responses_count / teamCount) * 100)}% completion</span>
+                                                <span>{Math.round((survey.responses_count / teamCount) * 100)}% completion</span>
                                             )}
                                             {survey.closes_at && (
-                                                <span>⏰ Closes {new Date(survey.closes_at).toLocaleDateString()}</span>
+                                                <span>Closes {new Date(survey.closes_at).toLocaleDateString()}</span>
                                             )}
                                         </div>
                                     </div>
@@ -333,10 +334,10 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                             </button>
                                         )}
                                         <button onClick={() => openEdit(survey)} className="p-1.5 text-gray-400 hover:text-[#495B67] rounded" title="Edit">
-                                            ✏️
+                                            <Icon name="pencil-square" className="w-4 h-4 inline-block" />
                                         </button>
                                         <button onClick={() => setDeleteConfirm(survey)} className="p-1.5 text-gray-400 hover:text-red-500 rounded" title="Delete">
-                                            🗑️
+                                            <Icon name="trash" className="w-4 h-4 inline-block" />
                                         </button>
                                     </div>
                                 </div>
@@ -386,8 +387,8 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                             onChange={(e) => form.setData('type', e.target.value)}
                                             className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-1 focus:ring-[#495B67] focus:border-[#495B67]"
                                         >
-                                            <option value="survey">📝 Survey</option>
-                                            <option value="poll">📊 Poll</option>
+                                            <option value="survey">Survey</option>
+                                            <option value="poll">Poll</option>
                                         </select>
                                     </div>
                                     <div>
@@ -410,7 +411,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                             onChange={(e) => form.setData('is_anonymous', e.target.checked)}
                                             className="rounded border-gray-300 text-[#495B67] focus:ring-[#495B67]"
                                         />
-                                        🔒 Anonymous responses
+                                        <Icon name="lock-closed" className="w-4 h-4 inline-block" /> Anonymous responses
                                     </label>
                                     <label className="flex items-center gap-2 text-sm text-gray-700">
                                         <input
@@ -419,7 +420,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                             onChange={(e) => form.setData('allow_multiple', e.target.checked)}
                                             className="rounded border-gray-300 text-[#495B67] focus:ring-[#495B67]"
                                         />
-                                        🔄 Allow multiple submissions
+                                        <Icon name="arrow-path" className="w-3.5 h-3.5 inline-block" />  Allow multiple submissions
                                     </label>
                                 </div>
 
@@ -441,7 +442,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                                         <button type="button" onClick={() => moveQuestion(qIndex, 'up')} disabled={qIndex === 0} className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30">↑</button>
                                                         <button type="button" onClick={() => moveQuestion(qIndex, 'down')} disabled={qIndex === questions.length - 1} className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30">↓</button>
                                                         {questions.length > 1 && (
-                                                            <button type="button" onClick={() => removeQuestion(qIndex)} className="p-1 text-red-400 hover:text-red-600">✕</button>
+                                                            <button type="button" onClick={() => removeQuestion(qIndex)} className="p-1 text-red-400 hover:text-red-600"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                                                         )}
                                                     </div>
                                                 </div>
@@ -470,7 +471,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                                                 className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-1 focus:ring-[#495B67] focus:border-[#495B67]"
                                                             >
                                                                 {questionTypes.map(qt => (
-                                                                    <option key={qt.value} value={qt.value}>{qt.icon} {qt.label}</option>
+                                                                    <option key={qt.value} value={qt.value}>{qt.label}</option>
                                                                 ))}
                                                             </select>
                                                         </div>
@@ -490,7 +491,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                                             <label className="text-xs font-medium text-gray-600">Options</label>
                                                             {q.options.map((opt, oIndex) => (
                                                                 <div key={oIndex} className="flex items-center gap-2">
-                                                                    <span className="text-xs text-gray-400 w-4">{q.type === 'single_choice' ? '○' : '☐'}</span>
+                                                                    <span className="text-xs text-gray-400 w-4">{q.type === 'single_choice' ? '○' : 'check-square'}</span>
                                                                     <input
                                                                         type="text"
                                                                         value={opt}
@@ -499,7 +500,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                                                         className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:ring-1 focus:ring-[#495B67] focus:border-[#495B67]"
                                                                     />
                                                                     {q.options.length > 2 && (
-                                                                        <button type="button" onClick={() => removeOption(qIndex, oIndex)} className="text-red-400 hover:text-red-600 text-xs">✕</button>
+                                                                        <button type="button" onClick={() => removeOption(qIndex, oIndex)} className="text-red-400 hover:text-red-600 text-xs"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                                                                     )}
                                                                 </div>
                                                             ))}
@@ -513,7 +514,7 @@ export default function Surveys({ surveys, filters, stats, teamCount }: Props) {
                                                     {q.type === 'rating' && (
                                                         <div className="flex gap-1">
                                                             {[1, 2, 3, 4, 5].map(n => (
-                                                                <span key={n} className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-xs text-gray-400">{n}★</span>
+                                                                <span key={n} className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-xs text-gray-400">{n}<Icon name="star" className="w-3.5 h-3.5 inline-block" /> </span>
                                                             ))}
                                                         </div>
                                                     )}

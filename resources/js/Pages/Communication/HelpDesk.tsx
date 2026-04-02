@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -267,7 +268,7 @@ export default function HelpDesk({ tickets, filters, stats, categories, teamMemb
                                             </select>
                                         </td>
                                         <td className="px-4 py-3 text-xs text-slate-500">
-                                            💬 {t.replies_count}
+                                            <Icon name="chat-bubble" className="w-3.5 h-3.5 inline-block mr-0.5" /> {t.replies_count}
                                         </td>
                                         <td className="px-4 py-3 text-xs text-slate-400">
                                             {timeAgo(t.created_at)}

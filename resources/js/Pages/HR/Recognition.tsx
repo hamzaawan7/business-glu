@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -44,7 +45,7 @@ export default function Recognition({ recognitions, stats, topRecipients, badges
         points: '' as string | number,
     });
 
-    const badgeForm = useForm({ name: '', emoji: '⭐', description: '' });
+    const badgeForm = useForm({ name: '', emoji: 'star', description: '' });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -115,7 +116,7 @@ export default function Recognition({ recognitions, stats, topRecipients, badges
                             <div key={r.id} className="bg-white rounded-xl border border-slate-200 p-5">
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-start gap-3">
-                                        <div className="text-2xl">{r.badge?.emoji || '🌟'}</div>
+                                        <div className="text-2xl">{r.badge?.emoji || 'sparkles'}</div>
                                         <div>
                                             <p className="text-sm text-slate-900">
                                                 <span className="font-semibold">{r.sender?.name}</span>
@@ -127,7 +128,7 @@ export default function Recognition({ recognitions, stats, topRecipients, badges
                                             <div className="flex gap-3 mt-2 text-xs text-slate-400">
                                                 <span>{new Date(r.created_at).toLocaleDateString()}</span>
                                                 {r.points > 0 && <span className="text-amber-500 font-medium">+{r.points} pts</span>}
-                                                {r.visibility === 'private' && <span className="text-slate-400">🔒 Private</span>}
+                                                {r.visibility === 'private' && <span className="text-slate-400">Private</span>}
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +240,7 @@ export default function Recognition({ recognitions, stats, topRecipients, badges
                             <div className="flex justify-end gap-2 pt-2">
                                 <button type="button" onClick={() => setShowSend(false)} className="px-4 py-2 text-sm rounded-lg border border-slate-200 hover:bg-slate-50">Cancel</button>
                                 <button type="submit" disabled={form.processing} className="px-4 py-2 text-sm text-white rounded-lg disabled:opacity-50" style={{ backgroundColor: '#495B67' }}>
-                                    {form.processing ? 'Sending…' : 'Send 🎉'}
+                                    {form.processing ? 'Sending…' : 'Send <Icon name="party-popper" className="w-4 h-4 inline-block" />'}
                                 </button>
                             </div>
                         </form>

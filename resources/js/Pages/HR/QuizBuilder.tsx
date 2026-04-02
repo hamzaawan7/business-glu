@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -160,14 +161,14 @@ export default function QuizBuilder({ quiz, employees, assignments, quizStats }:
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                        { label: 'Total Attempts', value: quizStats.total_attempts, icon: '📝' },
-                        { label: 'Avg Score', value: `${quizStats.avg_score}%`, icon: '📊' },
-                        { label: 'Pass Rate', value: `${quizStats.pass_rate}%`, icon: '✅' },
-                        { label: 'Unique Takers', value: quizStats.unique_takers, icon: '👥' },
+                        { label: 'Total Attempts', value: quizStats.total_attempts, icon: 'pencil' },
+                        { label: 'Avg Score', value: `${quizStats.avg_score}%`, icon: 'chart-bar' },
+                        { label: 'Pass Rate', value: `${quizStats.pass_rate}%`, icon: 'check-circle' },
+                        { label: 'Unique Takers', value: quizStats.unique_takers, icon: 'user-group' },
                     ].map(s => (
                         <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-4">
                             <div className="flex items-center gap-2 mb-1">
-                                <span>{s.icon}</span>
+                                <span><Icon name={s.icon} className="w-5 h-5" /></span>
                                 <span className="text-xs text-slate-500">{s.label}</span>
                             </div>
                             <span className="text-xl font-bold text-slate-900">{s.value}</span>
@@ -218,7 +219,7 @@ export default function QuizBuilder({ quiz, employees, assignments, quizStats }:
                                                         placeholder={`Option ${idx + 1}`}
                                                     />
                                                     {answers.length > 2 && (
-                                                        <button type="button" onClick={() => removeAnswer(idx)} className="text-red-400 hover:text-red-600 text-xs">✕</button>
+                                                        <button type="button" onClick={() => removeAnswer(idx)} className="text-red-400 hover:text-red-600 text-xs"><Icon name="x-mark" className="w-3 h-3 inline-block" /></button>
                                                     )}
                                                 </div>
                                             ))}

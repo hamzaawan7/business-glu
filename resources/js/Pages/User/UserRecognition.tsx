@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -69,7 +70,7 @@ export default function UserRecognition({ feed, myStats, badges, employees }: Pr
                     className="w-full rounded-xl py-3 text-sm font-medium text-white transition-colors"
                     style={{ backgroundColor: '#495B67' }}
                 >
-                    🎉 Recognize a Colleague
+                    <Icon name="party-popper" className="w-4 h-4 inline-block" /> Recognize a Colleague
                 </button>
 
                 {/* Recognition Wall */}
@@ -77,7 +78,7 @@ export default function UserRecognition({ feed, myStats, badges, employees }: Pr
                     <h3 className="text-base font-semibold text-slate-900 mb-3">Recognition Wall</h3>
                     {feed.length === 0 ? (
                         <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm text-center">
-                            <div className="text-4xl mb-2">🌟</div>
+                            <div className="text-4xl mb-2"><Icon name="sparkles" className="w-3 h-3 inline-block" /></div>
                             <h3 className="text-base font-semibold text-slate-700">No recognitions yet</h3>
                             <p className="text-sm text-slate-400 mt-1">Be the first to recognize a colleague!</p>
                         </div>
@@ -86,7 +87,7 @@ export default function UserRecognition({ feed, myStats, badges, employees }: Pr
                             {feed.map(r => (
                                 <div key={r.id} className="bg-white rounded-xl border border-slate-200 p-4">
                                     <div className="flex items-start gap-3">
-                                        <div className="text-2xl">{r.badge?.emoji || '🌟'}</div>
+                                        <div className="text-2xl">{r.badge?.emoji || 'sparkles'}</div>
                                         <div className="flex-1">
                                             <p className="text-sm text-slate-900">
                                                 <span className="font-semibold">{r.sender?.name}</span>
@@ -113,7 +114,7 @@ export default function UserRecognition({ feed, myStats, badges, employees }: Pr
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowSend(false)}>
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4" onClick={e => e.stopPropagation()}>
                         <form onSubmit={submit} className="p-6 space-y-4">
-                            <h2 className="text-lg font-bold text-slate-900">🎉 Recognize Someone</h2>
+                            <h2 className="text-lg font-bold text-slate-900">Recognize Someone</h2>
 
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Who are you recognizing? *</label>
@@ -143,7 +144,7 @@ export default function UserRecognition({ feed, myStats, badges, employees }: Pr
                             <div className="flex justify-end gap-2 pt-2">
                                 <button type="button" onClick={() => setShowSend(false)} className="px-4 py-2 text-sm rounded-lg border border-slate-200 hover:bg-slate-50">Cancel</button>
                                 <button type="submit" disabled={form.processing} className="px-4 py-2 text-sm text-white rounded-lg disabled:opacity-50" style={{ backgroundColor: '#495B67' }}>
-                                    {form.processing ? 'Sending…' : 'Send Recognition 🎉'}
+                                    {form.processing ? 'Sending…' : 'Send Recognition <Icon name="party-popper" className="w-4 h-4 inline-block" />'}
                                 </button>
                             </div>
                         </form>

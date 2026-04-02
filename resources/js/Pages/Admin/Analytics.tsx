@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -249,7 +250,7 @@ export default function Analytics({ team, attendance, tasks, forms, training, co
                                                 <p className="text-sm font-medium text-slate-900 truncate">{p.user?.name ?? 'Unknown'}</p>
                                                 <p className="text-xs text-slate-400">{p.user?.position || p.user?.department || '—'}</p>
                                             </div>
-                                            <span className="text-sm font-bold" style={{ color: '#495B67' }}>{p.recognitions} 🏆</span>
+                                            <span className="text-sm font-bold" style={{ color: '#495B67' }}>{p.recognitions} <Icon name="trophy" className="w-4 h-4 inline-block" /></span>
                                         </div>
                                     ))}
                                 </div>

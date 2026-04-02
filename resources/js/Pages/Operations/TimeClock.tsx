@@ -179,7 +179,7 @@ export default function TimeClock({ entries, clockedInCount, date, myActiveEntry
                                             <p className="text-sm font-medium text-brand-primary">{entry.user?.name}</p>
                                             <p className="text-xs text-brand-accent">
                                                 Since {new Date(entry.clock_in).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                {entry.is_on_break && <span className="ml-2 text-amber-600 font-medium">☕ On Break</span>}
+                                                {entry.is_on_break && <span className="ml-2 text-amber-600 font-medium">On Break</span>}
                                             </p>
                                         </div>
                                     </div>

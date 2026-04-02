@@ -1,4 +1,5 @@
 import UserLayout from '@/Layouts/UserLayout';
+import Icon from '@/Components/Icon';
 import { Head, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -189,7 +190,7 @@ export default function UserSurveyTake({ survey, existingResponse }: Props) {
                                                 : 'bg-white text-gray-600 border-gray-200 hover:border-[#495B67]'
                                         } disabled:opacity-50`}
                                     >
-                                        {n}★
+                                        {n}<Icon name="star" className="w-3.5 h-3.5 inline-block" /> 
                                     </button>
                                 ))}
                             </div>
@@ -210,7 +211,7 @@ export default function UserSurveyTake({ survey, existingResponse }: Props) {
                                                 : 'bg-white text-gray-600 border-gray-200 hover:border-[#495B67]'
                                         } disabled:opacity-50`}
                                     >
-                                        {opt === 'Yes' ? '👍' : '👎'} {opt}
+                                        {opt === 'Yes' ? 'hand-thumb-up' : 'hand-thumb-down'} {opt}
                                     </button>
                                 ))}
                             </div>
@@ -261,10 +262,10 @@ export default function UserSurveyTake({ survey, existingResponse }: Props) {
                 {/* Survey header */}
                 <div className="bg-white rounded-xl border border-gray-200 p-5">
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">{survey.type === 'poll' ? '📊' : '📝'}</span>
+                        <span className="text-2xl">{survey.type === 'poll' ? 'chart-bar' : 'pencil'}</span>
                         <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-50 text-blue-600">{survey.type}</span>
                         {survey.is_anonymous && (
-                            <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-purple-50 text-purple-600">🔒 Anonymous</span>
+                            <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-purple-50 text-purple-600">Anonymous</span>
                         )}
                     </div>
                     <h1 className="text-xl font-bold text-gray-900">{survey.title}</h1>
@@ -288,14 +289,14 @@ export default function UserSurveyTake({ survey, existingResponse }: Props) {
                 {/* Already responded banner */}
                 {alreadyResponded && (
                     <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm">
-                        ✅ You've already submitted your response to this survey. Thank you!
+                        <Icon name="check-circle" className="w-4 h-4 inline-block" /> You've already submitted your response to this survey. Thank you!
                     </div>
                 )}
 
                 {/* Closed banner */}
                 {isClosed && (
                     <div className="bg-gray-50 border border-gray-200 text-gray-600 px-4 py-3 rounded-lg text-sm">
-                        🔒 This survey is closed and no longer accepting responses.
+                        <Icon name="lock-closed" className="w-4 h-4 inline-block" /> This survey is closed and no longer accepting responses.
                     </div>
                 )}
 

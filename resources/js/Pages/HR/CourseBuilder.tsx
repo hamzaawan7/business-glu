@@ -1,4 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
+import Icon from '@/Components/Icon';
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, FormEventHandler } from 'react';
 
@@ -42,7 +43,7 @@ interface Props {
     existingAssignees: AssignmentData[];
 }
 
-const typeIcons: Record<string, string> = { text: '📝', video: '🎬', document: '📄', image: '🖼️', link: '🔗', quiz: '❓' };
+const typeIcons: Record<string, string> = { text: 'pencil', video: 'video-camera', document: 'document', image: 'photo', link: 'link', quiz: 'question-mark-circle' };
 const typeLabels: Record<string, string> = { text: 'Text', video: 'Video', document: 'Document', image: 'Image', link: 'Link', quiz: 'Quiz' };
 const statusColors: Record<string, string> = { draft: 'bg-slate-100 text-slate-600', published: 'bg-green-100 text-green-700', archived: 'bg-amber-100 text-amber-700' };
 
@@ -111,10 +112,10 @@ export default function CourseBuilder({ course, teamMembers, existingAssignees }
                             </div>
                             {course.description && <p className="text-sm text-slate-500">{course.description}</p>}
                             <div className="flex items-center gap-4 mt-2 text-xs text-slate-400">
-                                {course.category && <span>📁 {course.category.name}</span>}
-                                {course.estimated_minutes && <span>⏱ {course.estimated_minutes} min</span>}
-                                <span>📖 {course.sections.length} sections</span>
-                                <span>👥 {course.assignments_count} assigned ({course.completed_count} completed)</span>
+                                {course.category && <span>{course.category.name}</span>}
+                                {course.estimated_minutes && <span><Icon name="stopwatch" className="w-3.5 h-3.5 inline-block" /> {course.estimated_minutes} min</span>}
+                                <span>{course.sections.length} sections</span>
+                                <span>{course.assignments_count} assigned ({course.completed_count} completed)</span>
                             </div>
                         </div>
                         <div className="flex gap-2">
@@ -154,7 +155,7 @@ export default function CourseBuilder({ course, teamMembers, existingAssignees }
                                             + Add Content
                                         </button>
                                         <button onClick={() => router.delete(route('admin.courses.destroy-section', section.id), { preserveScroll: true })} className="text-xs text-red-400 hover:text-red-600">
-                                            🗑
+                                            <Icon name="trash" className="w-4 h-4" />
                                         </button>
                                     </div>
                                 </div>
@@ -166,7 +167,7 @@ export default function CourseBuilder({ course, teamMembers, existingAssignees }
                                     {section.objects.map((obj) => (
                                         <div key={obj.id} className="flex items-center justify-between px-5 py-3">
                                             <div className="flex items-center gap-3">
-                                                <span className="text-lg">{typeIcons[obj.type]}</span>
+                                                <span className="text-lg"><Icon name={typeIcons[obj.type]} className="w-4 h-4 inline-block" /></span>
                                                 <div>
                                                     <span className="text-sm font-medium text-slate-700">{obj.title}</span>
                                                     <span className="text-xs text-slate-400 ml-2">{typeLabels[obj.type]}</span>
@@ -278,7 +279,7 @@ export default function CourseBuilder({ course, teamMembers, existingAssignees }
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Type</label>
                                     <select value={objectForm.data.type} onChange={(e) => objectForm.setData('type', e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white">
-                                        {Object.entries(typeLabels).map(([k, v]) => <option key={k} value={k}>{typeIcons[k]} {v}</option>)}
+                                        {Object.entries(typeLabels).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                                     </select>
                                 </div>
                                 <div>

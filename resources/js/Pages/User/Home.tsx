@@ -35,7 +35,7 @@ export default function UserHome({ stats }: UserHomeProps) {
                 <div className="bg-gradient-to-r from-brand-primary to-brand-primary-light rounded-2xl p-5 text-white">
                     <p className="text-sm text-white/70">{greeting()}</p>
                     <h1 className="text-xl font-bold font-heading mt-0.5">
-                        {user.name.split(' ')[0]} 👋
+                        {user.name.split(' ')[0]}
                     </h1>
                     <p className="text-sm text-white/80 mt-2">
                         Here's your day at a glance.
