@@ -40,7 +40,7 @@ class FeedController extends Controller
             ->where('date', '<=', now()->addDays(7)->toDateString())
             ->count();
         $openTasks      = Task::where('tenant_id', $tenantId)
-            ->where('assigned_to', $user->id)
+            ->whereHas('assignees', fn ($q) => $q->where('users.id', $user->id))
             ->whereNotIn('status', ['completed', 'cancelled'])
             ->count();
         $unreadMessages = 0; // TODO: implement chat unread count
