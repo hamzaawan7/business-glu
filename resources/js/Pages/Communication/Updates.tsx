@@ -239,6 +239,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
     const [saveTemplateFor, setSaveTemplateFor] = useState<UpdateData | null>(null);
     const [templateName, setTemplateName] = useState('');
     const [activeTab, setActiveTab] = useState<'updates' | 'templates'>('updates');
+    const [wizardStep, setWizardStep] = useState(0);
 
     /* ─── Create Form ────────────────────────────────────── */
     const coverRef = useRef<HTMLInputElement>(null);
@@ -288,6 +289,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
     /* ─── Helpers ────────────────────────────────────────── */
     const openCreate = (tpl?: TemplateData) => {
         createForm.reset();
+        setWizardStep(0);
         if (tpl) {
             createForm.setData({
                 ...createForm.data,
@@ -300,6 +302,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
     };
 
     const openEdit = (update: UpdateData) => {
+        setWizardStep(0);
         const audType = update.audiences.length > 0 ? update.audiences[0].type : 'all';
         const audVals = update.audiences.filter(a => a.value).map(a => a.value!);
         editForm.setData({
@@ -475,18 +478,18 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
             { id: 'publish', label: isCreate ? 'Publish' : 'Save', icon: 'rocket' },
         ];
 
-        const StepWizard = () => {
-            const [step, setStep] = useState(0);
-            const canNext = step < STEPS.length - 1;
-            const canPrev = step > 0;
+        const step = wizardStep;
+        const setStep = setWizardStep;
+        const canNext = step < STEPS.length - 1;
+        const canPrev = step > 0;
 
-            /* step validation — require title+body before advancing from step 0 */
-            const isStepValid = (s: number) => {
-                if (s === 0) return !!form.data.title?.trim() && !!form.data.body?.trim();
-                return true;
-            };
+        /* step validation — require title+body before advancing from step 0 */
+        const isStepValid = (s: number) => {
+            if (s === 0) return !!form.data.title?.trim() && !!form.data.body?.trim();
+            return true;
+        };
 
-            return (
+        const wizardContent = (
                 <div className="flex-1 flex flex-col min-w-0">
                     {/* Header with step indicators */}
                     <div className="px-6 py-4 border-b border-gray-100">
@@ -865,13 +868,12 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                     </div>
                 </div>
             );
-        };
 
         return (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-4 px-4 z-50 overflow-y-auto">
                 <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl mb-8 flex overflow-hidden" style={{ minHeight: 'min(85vh, 680px)' }}>
                     {/* Left: Multi-step Form */}
-                    <StepWizard />
+                    {wizardContent}
 
                     {/* Right: Fixed Live Mobile Preview */}
                     <div className="hidden lg:flex w-[340px] bg-gradient-to-b from-gray-50 to-gray-100 border-l border-gray-200 flex-col items-center justify-center py-6 px-4 flex-shrink-0">
