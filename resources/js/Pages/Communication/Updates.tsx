@@ -97,13 +97,13 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
     return (
         <div className="flex flex-col items-center">
             {/* Phone frame */}
-            <div className="relative w-[260px] h-[500px] bg-gray-900 rounded-[36px] p-[8px] shadow-2xl shadow-black/20">
+            <div className="relative w-[260px] h-[480px] bg-gray-900 rounded-[32px] p-[6px] shadow-2xl shadow-black/20">
                 {/* Notch */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-gray-900 rounded-b-2xl z-20" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-4 bg-gray-900 rounded-b-xl z-20" />
                 {/* Screen */}
-                <div className="w-full h-full bg-white rounded-[28px] overflow-hidden flex flex-col">
+                <div className="w-full h-full bg-white rounded-[26px] overflow-hidden flex flex-col">
                     {/* Status bar */}
-                    <div className="bg-white px-6 pt-2 pb-0.5 flex items-center justify-between text-[9px] font-medium text-gray-900">
+                    <div className="bg-[#495B67] px-5 pt-3 pb-0 flex items-center justify-between text-[9px] font-medium text-white/80">
                         <span>{time}</span>
                         <div className="flex items-center gap-1">
                             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
@@ -111,10 +111,10 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                         </div>
                     </div>
                     {/* App header */}
-                    <div className="bg-[#495B67] px-4 py-1.5">
+                    <div className="bg-[#495B67] px-4 pt-0.5 pb-1.5">
                         <div className="flex items-center gap-1.5">
-                            <svg className="w-3.5 h-3.5 text-white/80" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
-                            <span className="text-white font-semibold text-xs">Updates</span>
+                            <svg className="w-3 h-3 text-white/80" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+                            <span className="text-white font-semibold text-[11px]">Updates</span>
                         </div>
                     </div>
                     {/* Post content preview */}
@@ -211,11 +211,11 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                         </div>
                     </div>
                     {/* Bottom nav */}
-                    <div className="bg-white border-t border-gray-100 px-4 py-2 flex items-center justify-around">
+                    <div className="bg-white border-t border-gray-100 px-4 py-1.5 flex items-center justify-around">
                         {['home', 'clock', 'megaphone', 'chat-bubble', 'user'].map((iconName, i) => (
-                            <div key={i} className={`flex flex-col items-center gap-0.5 ${i === 2 ? 'text-[#495B67]' : 'text-gray-300'}`}>
-                                <Icon name={iconName} className="w-4 h-4" />
-                                <div className={`h-0.5 w-4 rounded-full ${i === 2 ? 'bg-[#495B67]' : 'bg-transparent'}`} />
+                            <div key={i} className={`flex flex-col items-center ${i === 2 ? 'text-[#495B67]' : 'text-gray-300'}`}>
+                                <Icon name={iconName} className="w-3.5 h-3.5" />
+                                <div className={`h-0.5 w-3 rounded-full mt-0.5 ${i === 2 ? 'bg-[#495B67]' : 'bg-transparent'}`} />
                             </div>
                         ))}
                     </div>
@@ -1139,7 +1139,7 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             {templates.map(tpl => (
                                 <div key={tpl.id} className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all overflow-hidden">
                                     {/* Phone preview area */}
-                                    <div className="bg-gradient-to-b from-gray-50 to-gray-100 flex justify-center overflow-hidden" style={{ height: 290 }}>
+                                    <div className="bg-gradient-to-b from-gray-50 to-gray-100 flex justify-center overflow-hidden" style={{ height: 280 }}>
                                         <div className="transform scale-[0.55] origin-top shrink-0">
                                             <MobilePreview
                                                 title={tpl.title || tpl.name}
