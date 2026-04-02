@@ -25,6 +25,7 @@ use App\Http\Controllers\EmployeeIdController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\ViewSwitchController;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -250,7 +251,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 | Simplified mobile-first view for all authenticated users.
 */
 Route::middleware(['auth', 'verified'])->prefix('app')->name('user.')->group(function () {
-    Route::get('/', fn () => Inertia::render('User/Home'))->name('home');
+    Route::get('/', [FeedController::class, 'home'])->name('home');
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed');
     Route::get('/time-clock', [TimeClockController::class, 'myTimeClock'])->name('time-clock');
     Route::get('/schedule', [SchedulingController::class, 'mySchedule'])->name('schedule');
     Route::get('/chat', [ChatController::class, 'userChat'])->name('chat');
