@@ -9,12 +9,26 @@ use Illuminate\Database\Seeder;
 class TemplateSeeder extends Seeder
 {
     /**
-     * Seed realistic update templates for both tenants.
+     * Seed realistic update templates for all tenants.
+     * Dynamically finds tenants and their owner to avoid hardcoded IDs.
      */
     public function run(): void
     {
-        $this->seedTenant('acme-corp', 4);
-        $this->seedTenant('demo', 2);
+        // Find all tenants and seed templates for each
+        $owners = User::whereIn('role', ['owner', 'super_admin'])
+            ->whereNotNull('tenant_id')
+            ->get();
+
+        foreach ($owners as $owner) {
+            // Skip if this tenant already has templates (avoid duplicates on re-run)
+            $existing = UpdateTemplate::where('tenant_id', $owner->tenant_id)->count();
+            if ($existing > 0) {
+                echo "Skipping {$owner->tenant_id} — already has {$existing} templates.\n";
+                continue;
+            }
+            $this->seedTenant($owner->tenant_id, $owner->id);
+            echo "Seeded 15 templates for {$owner->tenant_id} (user {$owner->id}).\n";
+        }
     }
 
     private function seedTenant(string $tenantId, int $ownerId): void
