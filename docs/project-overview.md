@@ -43,7 +43,7 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 
 ## Current Status
 
-> **Last updated:** July 2025
+> **Last updated:** April 2026
 
 ### What's Built & Working ✅
 
@@ -138,6 +138,18 @@ The platform is organized into **3 hubs + cross-cutting infrastructure**:
 - Pin-to-top functionality
 - Image lightbox and responsive gallery layouts on employee feed
 - Admin and employee views
+
+**Unified Feed (Social Timeline)**
+- Aggregated feed combining Updates + Events into a single social-media-style timeline
+- FeedController with home() (dashboard stats) and index() (full feed) endpoints
+- Filter tabs: All / Updates / Events with counts
+- Pinned updates section always at top
+- Update cards: avatar, type/category badges, unread indicators, cover images, YouTube embeds, image gallery with lightbox, file attachments, reactions bar with emoji picker, threaded comments
+- Event cards: date blocks (month/day), timing badges (Today/Tomorrow/In N days), location, RSVP buttons (Attending/Maybe/Decline), attendance counts
+- Pop-up overlay for must-acknowledge updates
+- Home page dashboard with real data: welcome greeting, clock-in CTA, stats grid (shifts/tasks/messages), upcoming events preview, recent updates preview
+- Replaced "Updates" nav item with "Feed" in user sidebar
+- Seeded demo data: 10 updates + 6 events per tenant with comments, reactions, RSVPs
 
 **Employee Directory**
 - Employee profiles with department and role info
@@ -301,6 +313,7 @@ Internal communication suite to keep everyone connected and informed.
 |--------|-----------------|--------|
 | **Team Chat** | 1:1 & group conversations, channels, file sharing, real-time messaging, read receipts | ✅ Complete |
 | **Updates Feed** | Rich post builder, templates, audience targeting, media uploads (cover/gallery/files/YouTube), scheduling & expiry, per-post analytics, reminders, pop-up alerts, reactions, comments, read tracking | ✅ Enhanced |
+| **Unified Feed** | Social-media-style timeline aggregating Updates + Events; filter tabs, pinned posts, RSVP, reaction picker, comments, popup alerts, home dashboard with real data | ✅ Complete |
 | **Employee Directory** | Profiles, search & filter, departments, contact actions | ✅ Complete |
 | **Knowledge Base** | Articles, categories, rich content, search, access permissions | ✅ Complete |
 | **Surveys & Polls** | Survey builder, question types, analytics, distribution, anonymous responses | ✅ Complete |
@@ -387,6 +400,7 @@ business-glu/
 │   │   │   ├── DocumentController.php         → Document management & compliance
 │   │   │   ├── EmployeeIdController.php       → Digital employee ID cards
 │   │   │   ├── EventController.php            → Events & RSVP
+│   │   │   ├── FeedController.php             → Unified feed (aggregates Updates + Events)
 │   │   │   ├── FormController.php             → Forms & checklists builder
 │   │   │   ├── KnowledgeBaseController.php    → Knowledge base articles
 │   │   │   ├── OnboardingController.php       → Company creation after registration
@@ -443,7 +457,8 @@ business-glu/
 │   ├── migrations/                            → 28 migration files
 │   ├── migrations/tenant/                     → Tenant-scoped database schema
 │   └── seeders/
-│       └── DatabaseSeeder.php                 → Demo tenant + 3 test users
+│       ├── DatabaseSeeder.php                 → Demo tenant + 3 test users
+│       └── FeedSeeder.php                     → 10 updates + 6 events per tenant with comments, reactions, RSVPs
 ├── resources/
 │   ├── js/
 │   │   ├── Components/                        → Shared UI components
@@ -461,7 +476,7 @@ business-glu/
 │   │       ├── Operations/                    → TimeClock, Scheduling, Tasks, Forms
 │   │       ├── Profile/                       → Edit.tsx + partials
 │   │       ├── Team/                          → AcceptInvitation.tsx, InvitationExpired.tsx
-│   │       ├── User/                          → Home + all user-facing module pages
+│   │       ├── User/                          → Home + UserFeed + all user-facing module pages
 │   │       └── Welcome.tsx                    → Public landing page
 │   └── css/app.css                            → Tailwind + Google Fonts imports
 ├── routes/

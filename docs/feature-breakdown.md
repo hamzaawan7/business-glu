@@ -220,6 +220,28 @@ Social media-style company communication feed. Think of it as your company's int
 | 22 | **Per-Post Analytics** | Dedicated analytics page per update: read rate %, reactions breakdown with per-emoji user lists, comments list, read/unread member lists | 🟡 Medium | ✅ Done |
 | 23 | **YouTube Video Embeds** | Embed YouTube videos in updates with responsive iframe player; auto-extract embed URL from standard/short YouTube links | 🟡 Medium | ✅ Done |
 
+### 3.2b Unified Feed (Social Timeline)
+
+Aggregated social-media-style timeline combining Updates + Events (and future: Tasks, Forms) into one scrollable feed. Replaces the separate "Updates" and "Events" nav in the employee app with a single "Feed" view — like ConnectTeam's notification feed or a Facebook-style timeline.
+
+> **Added April 2026** — FeedController, UserFeed.tsx, Home.tsx dashboard rewrite.
+
+| # | Feature | Description | Priority | Status |
+|---|---------|-------------|----------|--------|
+| 1 | **Unified Feed Page** | Single feed combining Updates + Events, sorted by date (newest first); pinned updates always at top | 🔴 High | ✅ Done |
+| 2 | **Filter Tabs** | All / Updates / Events tabs with item counts; instant client-side filtering | 🔴 High | ✅ Done |
+| 3 | **Update Cards** | Rich cards with avatar, type/category badges, unread indicator, cover images, YouTube embeds, image gallery with lightbox, file attachments | 🔴 High | ✅ Done |
+| 4 | **Event Cards** | Date block (month/day), timing badge (Today/Tomorrow/In N days), location, RSVP buttons, attendance count | 🔴 High | ✅ Done |
+| 5 | **Reactions & Comments** | Inline reaction picker (like/love/celebrate/laugh/wow/sad), threaded comments, delete own comments | 🔴 High | ✅ Done |
+| 6 | **RSVP from Feed** | Attending/Maybe/Decline buttons directly on event cards in the feed | 🟡 Medium | ✅ Done |
+| 7 | **Pop-up Alerts** | Must-acknowledge updates appear as a fullscreen overlay on feed load; dismiss marks as read | 🔴 High | ✅ Done |
+| 8 | **Home Dashboard** | Welcome greeting, clock-in CTA, stats grid (shifts/tasks/messages), upcoming events with date blocks, recent updates with read status | 🔴 High | ✅ Done |
+| 9 | **Feed Nav Item** | Replaced "Updates" sidebar link with "Feed" in employee navigation | 🔴 High | ✅ Done |
+| 10 | **"Show on Feed" toggle** | Admin toggle per event to control whether it appears in the unified feed | 🟡 Medium | 🔲 Planned |
+| 11 | **Task Notifications in Feed** | Surface task assignments and completions as feed items | 🟡 Medium | 🔲 Planned |
+| 12 | **Form Submissions in Feed** | Surface form completion notifications as feed items | 🟢 Low | 🔲 Planned |
+| 13 | **Push Notification → Feed** | Push notifications link directly to feed items when tapped | 🟡 Medium | 🔲 Future (mobile) |
+
 ### 3.3 Employee Directory
 
 Digital company phonebook.
@@ -466,7 +488,7 @@ Mobile employee identification.
 
 ### Phase 3 — Communications Hub ✅
 - [x] Team Chat (1:1 & group conversations, channels, file sharing, real-time messaging, read receipts)
-- [x] Updates Feed (posts, reactions, comments, read tracking, rich content)
+- [x] Updates Feed (posts, reactions, comments, read tracking, rich content)\n- [x] Unified Feed (social timeline aggregating Updates + Events with RSVP, reactions, filters, home dashboard)
 - [x] Employee Directory (profiles, search & filter, departments, contact actions)
 - [x] Knowledge Base (articles, categories, rich content, search, access permissions)
 - [x] Surveys & Polls (survey builder, question types, analytics, distribution, anonymous responses)
