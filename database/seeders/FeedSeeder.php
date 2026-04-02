@@ -16,12 +16,30 @@ class FeedSeeder extends Seeder
 {
     /**
      * Seed dummy Updates + Events so the Feed page has realistic content.
-     * Seeds for BOTH tenants: acme-corp (user 4) and demo (users 2 & 3).
+     * Dynamically finds tenants and their users to work on any environment.
      */
     public function run(): void
     {
-        $this->seedTenant('acme-corp', 4);
-        $this->seedTenant('demo', 2, 3);
+        $owners = User::whereIn('role', ['owner', 'super_admin'])
+            ->whereNotNull('tenant_id')
+            ->get();
+
+        foreach ($owners as $owner) {
+            // Skip if this tenant already has updates (avoid duplicates on re-run)
+            $existing = Update::where('tenant_id', $owner->tenant_id)->count();
+            if ($existing > 0) {
+                echo "Skipping {$owner->tenant_id} — already has {$existing} updates.\n";
+                continue;
+            }
+
+            // Find another user in the same tenant (for comments/reactions variety)
+            $member = User::where('tenant_id', $owner->tenant_id)
+                ->where('id', '!=', $owner->id)
+                ->first();
+
+            $this->seedTenant($owner->tenant_id, $owner->id, $member?->id);
+            echo "Seeded feed data for {$owner->tenant_id}.\n";
+        }
     }
 
     private function seedTenant(string $tenantId, int $ownerId, ?int $memberId = null): void
