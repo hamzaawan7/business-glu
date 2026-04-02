@@ -73,6 +73,12 @@ const updateTypeBadgeColors: Record<string, string> = {
 const eventTypeIcons: Record<string, string> = { general: 'calendar', meeting: 'handshake', social: 'party-popper', training: 'academic-cap', other: 'pin' };
 const eventTypeLabels: Record<string, string> = { general: 'General', meeting: 'Meeting', social: 'Social', training: 'Training', other: 'Other' };
 const reactionIcons = ['hand-thumb-up', 'heart', 'face-smile', 'party-popper', 'face-surprised', 'face-frown'];
+const reactionIconMap: Record<string, string> = {
+    'like': 'hand-thumb-up', 'love': 'heart', 'celebrate': 'party-popper',
+    'laugh': 'face-smile', 'wow': 'face-surprised', 'sad': 'face-frown',
+    'hand-thumb-up': 'hand-thumb-up', 'heart': 'heart', 'face-smile': 'face-smile',
+    'party-popper': 'party-popper', 'face-surprised': 'face-surprised', 'face-frown': 'face-frown',
+};
 
 /* ═══ Helpers ════════════════════════════════════════════ */
 
@@ -308,7 +314,7 @@ export default function UserFeed({ pinnedItems, feedItems, popupUpdate: initialP
                                         : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
                                 } ${!update.allow_reactions ? 'cursor-default opacity-60' : 'cursor-pointer'}`}
                                 disabled={!update.allow_reactions}>
-                                <Icon name={reactionKey} className="w-3.5 h-3.5" /><span className="font-semibold">{count}</span>
+                                <Icon name={reactionIconMap[reactionKey] || reactionKey} className="w-3.5 h-3.5" /><span className="font-semibold">{count}</span>
                             </button>
                         ))}
                     </div>

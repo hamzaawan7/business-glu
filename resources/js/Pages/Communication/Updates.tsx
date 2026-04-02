@@ -102,16 +102,15 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-4 bg-gray-900 rounded-b-xl z-20" />
                 {/* Screen */}
                 <div className="w-full h-full bg-white rounded-[26px] overflow-hidden flex flex-col">
-                    {/* Status bar */}
-                    <div className="bg-[#495B67] px-5 pt-3 pb-0 flex items-center justify-between text-[9px] font-medium text-white/80">
-                        <span>{time}</span>
-                        <div className="flex items-center gap-1">
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                    {/* Status bar + App header (single div to avoid hairline seam) */}
+                    <div className="bg-[#495B67] px-4 pt-3 pb-1.5">
+                        <div className="flex items-center justify-between text-[9px] font-medium text-white/80 px-1 mb-1">
+                            <span>{time}</span>
+                            <div className="flex items-center gap-1">
+                                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                            </div>
                         </div>
-                    </div>
-                    {/* App header */}
-                    <div className="bg-[#495B67] px-4 pt-0.5 pb-1.5">
                         <div className="flex items-center gap-1.5">
                             <svg className="w-3 h-3 text-white/80" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
                             <span className="text-white font-semibold text-[11px]">Updates</span>
@@ -122,19 +121,19 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                         <div className="m-2.5 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                             {/* Cover or gradient */}
                             {coverImage ? (
-                                <div className="h-24 overflow-hidden">
+                                <div className="h-14 overflow-hidden">
                                     <img src={coverImage} alt="" className="w-full h-full object-cover" />
                                 </div>
                             ) : (
-                                <div className={`h-16 bg-gradient-to-r ${typeBg[type] || 'from-gray-500 to-gray-600'} flex items-end px-3 pb-2`}>
-                                    <span className="text-white text-lg"><Icon name={typeIcons[type] || 'megaphone'} className="w-4 h-4 inline-block" /></span>
+                                <div className={`h-10 bg-gradient-to-r ${typeBg[type] || 'from-gray-500 to-gray-600'} flex items-center px-2.5`}>
+                                    <Icon name={typeIcons[type] || 'megaphone'} className="w-3.5 h-3.5 text-white" />
                                 </div>
                             )}
 
-                            <div className="p-3">
+                            <div className="p-2.5">
                                 {/* Author row */}
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-6 h-6 rounded-full bg-[#495B67] text-white flex items-center justify-center text-[8px] font-bold">
+                                <div className="flex items-center gap-1.5 mb-1.5">
+                                    <div className="w-5 h-5 rounded-full bg-[#495B67] text-white flex items-center justify-center text-[7px] font-bold">
                                         {creatorName ? creatorName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : 'AD'}
                                     </div>
                                     <div>
@@ -177,19 +176,19 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                                 )}
 
                                 {/* Reactions preview */}
-                                <div className="flex items-center gap-3 mt-2.5 pt-2 border-t border-gray-50">
+                                <div className="flex items-center gap-3 mt-2 pt-1.5 border-t border-gray-50">
                                     {allowReactions && (
-                                        <div className="flex items-center gap-1 text-[8px] text-gray-400">
-                                            <span className="flex -space-x-0.5">
-                                                <span className="inline-block"><Icon name="hand-thumb-up" className="w-4 h-4 inline-block" /></span>
-                                                <span className="inline-block"><Icon name="heart" className="w-4 h-4 inline-block" /></span>
-                                            </span>
+                                        <div className="flex items-center gap-1.5 text-[7px] text-gray-400">
+                                            <Icon name="hand-thumb-up" className="w-3 h-3" />
                                             <span>12</span>
+                                            <Icon name="heart" className="w-3 h-3 ml-0.5" />
+                                            <span>5</span>
                                         </div>
                                     )}
                                     {allowComments && (
-                                        <div className="flex items-center gap-0.5 text-[8px] text-gray-400">
-                                            <Icon name="chat-bubble" className="w-4 h-4 inline-block" /> <span>3</span>
+                                        <div className="flex items-center gap-1 text-[7px] text-gray-400">
+                                            <Icon name="chat-bubble" className="w-3 h-3" />
+                                            <span>3</span>
                                         </div>
                                     )}
                                     <span className="ml-auto text-[7px] text-gray-300">24 read</span>
@@ -197,16 +196,12 @@ const MobilePreview = ({ title, body, type, category, coverImage, hasImages, has
                             </div>
                         </div>
 
-                        {/* Ghost cards below */}
-                        <div className="mx-2.5 mb-2 space-y-2">
-                            <div className="bg-white rounded-xl border border-gray-100 p-3 opacity-40">
-                                <div className="h-2 w-24 bg-gray-200 rounded-full mb-2" />
-                                <div className="h-1.5 w-full bg-gray-100 rounded-full mb-1" />
-                                <div className="h-1.5 w-3/4 bg-gray-100 rounded-full" />
-                            </div>
-                            <div className="bg-white rounded-xl border border-gray-100 p-3 opacity-20">
-                                <div className="h-2 w-20 bg-gray-200 rounded-full mb-2" />
-                                <div className="h-1.5 w-full bg-gray-100 rounded-full" />
+                        {/* Ghost card below */}
+                        <div className="mx-2.5 mb-2">
+                            <div className="bg-white rounded-xl border border-gray-100 p-2.5 opacity-30">
+                                <div className="h-1.5 w-20 bg-gray-200 rounded-full mb-1.5" />
+                                <div className="h-1 w-full bg-gray-100 rounded-full mb-1" />
+                                <div className="h-1 w-3/4 bg-gray-100 rounded-full" />
                             </div>
                         </div>
                     </div>
@@ -1139,8 +1134,8 @@ export default function Updates({ updates, filters, stats, teamCount, teamMember
                             {templates.map(tpl => (
                                 <div key={tpl.id} className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all overflow-hidden">
                                     {/* Phone preview area */}
-                                    <div className="bg-gradient-to-b from-gray-50 to-gray-100 flex justify-center overflow-hidden" style={{ height: 280 }}>
-                                        <div className="transform scale-[0.55] origin-top shrink-0">
+                                    <div className="bg-gradient-to-b from-gray-50 to-gray-100 flex justify-center overflow-hidden py-4" style={{ height: 280 }}>
+                                        <div className="transform scale-[0.52] origin-top shrink-0">
                                             <MobilePreview
                                                 title={tpl.title || tpl.name}
                                                 body={tpl.body || ''}

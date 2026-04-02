@@ -227,7 +227,7 @@ class FeedSeeder extends Seeder
         }
 
         // ── Add Reactions ─────────────────────────────────────
-        $emojis = ['like', 'love', 'celebrate', 'laugh', 'wow', 'sad'];
+        $emojis = ['hand-thumb-up', 'heart', 'face-smile', 'party-popper', 'face-surprised', 'face-frown'];
         foreach ($allUpdates as $i => $update) {
             if (!$update->allow_reactions) continue;
 
