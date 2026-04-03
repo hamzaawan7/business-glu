@@ -1,0 +1,374 @@
+{
+  "handoff": {
+    "generated": "2026-04-03",
+    "purpose": "Complete project context and session handoff for onboarding a new developer to Business Glu",
+    "repository": {
+      "name": "business-glu",
+      "owner": "hamzaawan7",
+      "url": "https://github.com/hamzaawan7/business-glu",
+      "branch": "main",
+      "latest_commit": "3c0cbc8",
+      "no_pending_changes": true
+    }
+  },
+
+  "project_summary": {
+    "name": "Business Glu",
+    "description": "All-in-one workforce management SaaS platform for deskless and frontline workers. Replaces disconnected scheduling, time-tracking, chat, HR, and training tools with one platform.",
+    "target_users": "Small-to-medium businesses with field, retail, hospitality, healthcare, construction, cleaning, and other on-the-go teams.",
+    "business_model": "Multi-tenant SaaS — Free / Pro / Enterprise tiers (pricing not yet implemented)."
+  },
+
+  "tech_stack": {
+    "backend": "Laravel 12 (PHP 8.2)",
+    "frontend": "React 19 + TypeScript",
+    "routing": "Inertia.js (server-driven SPA — NO separate REST API for web app)",
+    "styling": "Tailwind CSS (brand color #495B67, fonts: Montserrat headings / Lato body)",
+    "build_tool": "Vite",
+    "auth": "Laravel Breeze (Inertia/React stack)",
+    "multi_tenancy": "stancl/tenancy v3.9 (database-per-tenant isolation)",
+    "database_dev": "SQLite",
+    "database_prod": "MySQL 8.0",
+    "realtime": "Laravel Broadcasting + Reverb (WebSocket)",
+    "file_storage": "Laravel Storage (local dev → AWS S3 prod planned)",
+    "mobile_future": "React Native (Expo) — not started"
+  },
+
+  "key_architecture_decisions": [
+    "Inertia.js means NO separate REST API. Controllers return Inertia::render('Page', $data) which renders React components directly.",
+    "Multi-tenancy uses stancl/tenancy. Each company gets its own database. The tenant_id column is a string referencing tenants.id.",
+    "Two layouts: AdminLayout.tsx (manager/admin dashboard) and UserLayout.tsx (employee app). Admins toggle via ViewSwitchController.",
+    "RBAC with 3 roles: super_admin, owner, member. Permissions are checked via role-based middleware and frontend conditionals.",
+    "Central database holds: users, tenants, domains, tenant_users. Per-tenant databases hold everything else."
+  ],
+
+  "production_environment": {
+    "server_ip": "64.225.5.237",
+    "os": "Ubuntu 24.04 LTS",
+    "ssh_access": "ssh root@64.225.5.237",
+    "web_server": "Nginx",
+    "php": "PHP 8.2 with PHP-FPM",
+    "database": "MySQL 8.0",
+    "process_manager": "Supervisor (queue workers)",
+    "app_directory": "/var/www/business-glu",
+    "deployment_guide": "docs/deployment.md (786 lines, comprehensive step-by-step)"
+  },
+
+  "production_users": [
+    {
+      "id": 1,
+      "email": "mlkhamzaawan4210@gmail.com",
+      "role": "owner",
+      "tenant": "acme-corp",
+      "notes": "Primary test account"
+    },
+    {
+      "id": 2,
+      "email": "curtislane23@comcast.net",
+      "role": "owner",
+      "tenant": "lane-enterprises",
+      "notes": "Client/stakeholder account"
+    }
+  ],
+
+  "local_dev_users": [
+    {
+      "id": 1,
+      "email": "admin@businessglu.com",
+      "role": "super_admin",
+      "tenant": null,
+      "notes": "Central admin"
+    },
+    {
+      "id": 2,
+      "email": "owner@demo.com",
+      "role": "owner",
+      "tenant": "demo",
+      "notes": "Demo tenant owner"
+    },
+    {
+      "id": 3,
+      "email": "member@demo.com",
+      "role": "member",
+      "tenant": "demo",
+      "notes": "Demo tenant member"
+    },
+    {
+      "id": 4,
+      "email": null,
+      "role": "owner",
+      "tenant": "acme-corp",
+      "notes": "Local acme-corp owner"
+    }
+  ],
+
+  "production_data_state": {
+    "as_of": "2026-04-03",
+    "tenants": ["acme-corp", "lane-enterprises"],
+    "per_tenant": {
+      "acme-corp": { "updates": 10, "events": 6 },
+      "lane-enterprises": { "updates": 10, "events": 6 }
+    },
+    "totals": {
+      "updates": 20,
+      "events": 12,
+      "comments": 30,
+      "reactions": 18,
+      "reads": 10,
+      "audiences": 20,
+      "templates": 30,
+      "rsvps": 10
+    },
+    "notes": "All feed data was seeded via FeedSeeder and TemplateSeeder. Both tenants have identical dummy data."
+  },
+
+  "features_completed": {
+    "phase_1_foundation": [
+      "Authentication (registration, login, password reset, email verification)",
+      "RBAC (super_admin, owner, member roles)",
+      "Multi-tenancy with stancl/tenancy v3.9 (database-per-tenant)",
+      "Admin Dashboard (AdminLayout) + Employee App (UserLayout)",
+      "View switching (admin ↔ employee view)"
+    ],
+    "phase_2_operations": [
+      "Time Clock (clock in/out, break tracking, GPS, manual entries, admin review)",
+      "Scheduling (shift builder, drag-and-drop, recurring shifts, swap requests, availability)",
+      "Forms (form builder, submissions, PDF export, conditional logic, Kanban view)",
+      "Quick Tasks (CRUD, assignments, priorities, due dates, Kanban board)"
+    ],
+    "phase_3_communications": [
+      "Team Chat (1:1 and group messaging, file sharing, reply threads, read receipts, polling-based real-time)",
+      "Updates Feed (rich post builder, templates, audience targeting, media uploads, reactions, comments, analytics)",
+      "Unified Feed (social timeline aggregating Updates + Events)",
+      "Directory (employee directory with search, filters, profile cards)",
+      "Knowledge Base (articles, categories, search, permissions)",
+      "Surveys & Polls (survey builder, response collection, analytics)",
+      "Events (event creation, calendar view, RSVP, reminders)",
+      "Help Desk (ticket system, assignments, SLA tracking, categories)"
+    ],
+    "phase_4_hr_people": [
+      "Courses & Quizzes (course builder, lesson management, quiz engine, progress tracking)",
+      "Documents (file management, permissions, version history, categories)",
+      "Time Off (request/approve workflow, balances, policy management, calendar)",
+      "Recognition & Rewards (peer recognition, badges, points, leaderboard)",
+      "Employee Timeline (activity history, milestones, performance notes)",
+      "Org Chart (visual hierarchy, interactive navigation, department views)",
+      "Digital Employee ID (mobile ID cards, custom fields, instant issuance)",
+      "Analytics & Reporting (cross-module dashboard — team, operations, training, communications)",
+      "Activity Log & Audit Trail (immutable action history, filters, expandable details)"
+    ]
+  },
+
+  "features_not_yet_built": [
+    "REST API for mobile app / external integrations",
+    "React Native mobile app (Expo)",
+    "Subscription/billing (Stripe integration)",
+    "Push notifications",
+    "Webhooks",
+    "Advanced permissions (custom role builder)",
+    "Multi-location support",
+    "Integrations (payroll, POS, calendar sync)",
+    "White-label / custom branding per tenant",
+    "Advanced scheduling (auto-scheduling, labor cost optimization)",
+    "Geofencing for time clock"
+  ],
+
+  "recent_session_changes": {
+    "summary": "Documentation, UI polish, bug fixes, seeding, and deployment",
+    "changes": [
+      {
+        "commit": "fbb421b",
+        "description": "Created docs/developer-overview.md (371 lines). Updated docs/project-overview.md and docs/feature-breakdown.md to cover the new Unified Feed feature."
+      },
+      {
+        "commit": "052df61",
+        "description": "Created TemplateSeeder with 15 realistic update templates (Company Announcement, Policy Update, Safety Alert, Office Closure, Weekly Newsletter, etc.)."
+      },
+      {
+        "commit": "d2e6ff1",
+        "description": "Made TemplateSeeder dynamic — auto-discovers tenants instead of hardcoded IDs. Needed because production has different user IDs than local."
+      },
+      {
+        "commit": "292e01c",
+        "description": "Fixed template preview cards in Updates.tsx — tightened phone frame (260x480), fixed empty space below previews."
+      },
+      {
+        "commit": "cae2ed9",
+        "description": "Fixed mobile preview — merged status bar into app header (eliminated hairline seam between two same-color divs)."
+      },
+      {
+        "commit": "96cbcf1",
+        "description": "Mobile preview UI polish: orange gradient h-16→h-10, reaction icons w-3 h-3 with individual counts. Fixed reaction icons showing as words ('like','love') instead of SVG icons by adding reactionIconMap in UserFeed.tsx. Updated FeedSeeder to use correct SVG icon names."
+      },
+      {
+        "commit": "0165932",
+        "description": "Fixed 500 error on production: FeedController::home() was using 'assigned_to' column on tasks table, but tasks use a pivot table 'task_user' via assignees() relationship. Changed to whereHas('assignees', ...)."
+      },
+      {
+        "commit": "3c0cbc8",
+        "description": "Made FeedSeeder dynamic — auto-discovers tenants and users, skips tenants that already have data. Ran on production to seed both tenants."
+      }
+    ]
+  },
+
+  "known_issues_and_gotchas": [
+    {
+      "issue": "tenants:migrate --force fails on production",
+      "explanation": "This is expected — tables already exist. It's not a real error. Only run migrations when there are new migration files.",
+      "severity": "info"
+    },
+    {
+      "issue": "Reaction icons stored inconsistently",
+      "explanation": "Legacy seeded data stored reactions as words (like, love, celebrate). The UI sends SVG icon names (hand-thumb-up, heart, party-popper). A reactionIconMap in UserFeed.tsx handles both formats. The FeedSeeder now uses the correct SVG names. Production data was fixed.",
+      "severity": "resolved"
+    },
+    {
+      "issue": "Tasks use pivot table, not assigned_to column",
+      "explanation": "The tasks table does NOT have an assigned_to column. Tasks are assigned via the task_user pivot table and the assignees() relationship. Any query filtering tasks by user must use whereHas('assignees', ...).",
+      "severity": "resolved"
+    },
+    {
+      "issue": "SQLite vs MySQL differences",
+      "explanation": "Local dev uses SQLite, production uses MySQL. Some queries may behave differently. Always test on production after deployment.",
+      "severity": "warning"
+    },
+    {
+      "issue": "FeedSeeder skip logic",
+      "explanation": "The FeedSeeder skips tenants that already have updates (to prevent duplicates on re-run). To re-seed a tenant, you must first delete its existing updates, comments, reactions, reads, audiences, events, and RSVPs manually via tinker.",
+      "severity": "info"
+    }
+  ],
+
+  "deployment_quick_reference": {
+    "steps": [
+      "ssh root@64.225.5.237",
+      "cd /var/www/business-glu",
+      "git pull origin main",
+      "composer install --no-interaction --prefer-dist --optimize-autoloader",
+      "npm ci",
+      "npm run build",
+      "php artisan migrate --force",
+      "php artisan config:cache",
+      "php artisan route:cache",
+      "php artisan view:cache",
+      "supervisorctl restart all",
+      "systemctl restart php8.2-fpm"
+    ],
+    "full_guide": "See docs/deployment.md for the complete 786-line deployment guide including initial server setup, SSL, Nginx config, supervisor, cron, and troubleshooting."
+  },
+
+  "local_dev_quick_start": {
+    "steps": [
+      "git clone git@github.com:hamzaawan7/business-glu.git",
+      "cd business-glu",
+      "composer install",
+      "npm install",
+      "cp .env.example .env",
+      "php artisan key:generate",
+      "php artisan migrate --seed",
+      "php artisan db:seed --class=TemplateSeeder",
+      "php artisan db:seed --class=FeedSeeder",
+      "npm run dev (terminal 1)",
+      "php artisan serve (terminal 2)"
+    ],
+    "notes": "Local uses SQLite by default. The .env.example should have DB_CONNECTION=sqlite. Create the database file with: touch database/database.sqlite"
+  },
+
+  "project_documentation": {
+    "files": [
+      {
+        "path": "docs/developer-overview.md",
+        "description": "Comprehensive developer onboarding — architecture, setup, conventions, feature list, codebase tour (371 lines). START HERE."
+      },
+      {
+        "path": "docs/project-overview.md",
+        "description": "High-level project vision, architecture diagram, feature status, and roadmap (507 lines)."
+      },
+      {
+        "path": "docs/feature-breakdown.md",
+        "description": "Detailed breakdown of every feature with implementation notes."
+      },
+      {
+        "path": "docs/deployment.md",
+        "description": "Full production deployment guide — server setup, Nginx, SSL, supervisor, cron, troubleshooting (786 lines)."
+      },
+      {
+        "path": "docs/brand-guidelines.md",
+        "description": "Brand colors (#495B67), fonts (Montserrat/Lato), UI conventions."
+      }
+    ]
+  },
+
+  "key_files_to_know": {
+    "backend": {
+      "routes": [
+        "routes/web.php — All web routes (Inertia pages)",
+        "routes/admin.php — Admin/manager routes",
+        "routes/user.php — Employee app routes"
+      ],
+      "controllers": "app/Http/Controllers/ — One controller per feature (UpdateController, EventController, FeedController, etc.)",
+      "models": "app/Models/ — Eloquent models with relationships",
+      "middleware": "app/Http/Middleware/ — Tenant resolution, role checking",
+      "seeders": [
+        "database/seeders/DatabaseSeeder.php — Main seeder",
+        "database/seeders/TemplateSeeder.php — 15 update templates per tenant",
+        "database/seeders/FeedSeeder.php — 10 updates + 6 events with comments/reactions per tenant"
+      ]
+    },
+    "frontend": {
+      "pages": "resources/js/Pages/ — React page components organized by feature",
+      "layouts": [
+        "resources/js/Layouts/AdminLayout.tsx — Admin dashboard shell",
+        "resources/js/Layouts/UserLayout.tsx — Employee app shell"
+      ],
+      "components": "resources/js/Components/ — Shared UI components",
+      "types": "resources/js/types/ — TypeScript interfaces",
+      "key_pages": {
+        "feed": "resources/js/Pages/User/UserFeed.tsx",
+        "updates_admin": "resources/js/Pages/Communication/Updates.tsx",
+        "scheduling": "resources/js/Pages/Scheduling/",
+        "time_clock": "resources/js/Pages/TimeClock/",
+        "chat": "resources/js/Pages/Communication/Chat.tsx"
+      }
+    },
+    "config": {
+      "tenancy": "config/tenancy.php",
+      "tailwind": "tailwind.config.js",
+      "vite": "vite.config.ts",
+      "typescript": "tsconfig.json"
+    }
+  },
+
+  "conventions": {
+    "backend": [
+      "Controllers are thin — business logic in models or service classes where possible",
+      "Form requests for validation (app/Http/Requests/)",
+      "Resources for API responses (app/Http/Resources/)",
+      "tenant_id is always a string, not an integer",
+      "All tenant-scoped models have a tenant_id column"
+    ],
+    "frontend": [
+      "Tailwind utility classes — no custom CSS files",
+      "Brand color: #495B67 (used as 'brand' in Tailwind config)",
+      "Rounded corners: rounded-xl on cards",
+      "Consistent spacing: p-6 for card padding",
+      "SVG icons via a custom Icon component (no emoji in UI)",
+      "Montserrat for headings, Lato for body text"
+    ],
+    "git": [
+      "Main branch only (no feature branches currently)",
+      "Commit messages: 'feat:', 'fix:', 'ui:', 'docs:' prefixes",
+      "All changes committed and pushed before deployment"
+    ]
+  },
+
+  "recommended_first_steps_for_new_dev": [
+    "1. Read docs/developer-overview.md (most important — gives full context)",
+    "2. Read docs/project-overview.md for the big picture",
+    "3. Clone the repo and get it running locally (see local_dev_quick_start above)",
+    "4. Log in as owner@demo.com and explore both admin and employee views",
+    "5. Read docs/deployment.md if you'll be deploying to production",
+    "6. Browse the routes files (routes/web.php, routes/admin.php, routes/user.php) to understand the URL structure",
+    "7. Look at a feature end-to-end: e.g., Updates → UpdateController.php → Updates.tsx → Update model"
+  ]
+}
