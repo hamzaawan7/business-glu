@@ -191,6 +191,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/courses/sections/{section}/objects', [CourseController::class, 'storeObject'])->name('courses.store-object');
     Route::patch('/courses/objects/{object}', [CourseController::class, 'updateObject'])->name('courses.update-object');
     Route::delete('/courses/objects/{object}', [CourseController::class, 'destroyObject'])->name('courses.destroy-object');
+    Route::post('/courses/{course}/reorder-sections', [CourseController::class, 'reorderSections'])->name('courses.reorder-sections');
+    Route::post('/courses/sections/{section}/reorder-objects', [CourseController::class, 'reorderObjects'])->name('courses.reorder-objects');
+    Route::post('/courses/upload', [CourseController::class, 'upload'])->name('courses.upload');
     Route::post('/courses/{course}/assign', [CourseController::class, 'assign'])->name('courses.assign');
     Route::delete('/courses/assignments/{assignment}', [CourseController::class, 'removeAssignment'])->name('courses.remove-assignment');
     Route::post('/courses/categories', [CourseController::class, 'storeCategory'])->name('courses.store-category');

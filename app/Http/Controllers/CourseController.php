@@ -9,6 +9,7 @@ use App\Models\CourseObject;
 use App\Models\CourseObjectProgress;
 use App\Models\CourseSection;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -212,16 +213,24 @@ class CourseController extends Controller
         $data = $request->validate([
             'type'             => 'required|in:text,video,document,image,link,quiz',
             'title'            => 'required|string|max:255',
-            'content'          => 'nullable|string|max:50000',
+            'content'          => 'nullable|string|max:100000',
+            'file'             => 'nullable|file|max:51200',
             'duration_minutes' => 'nullable|integer|min:1',
         ]);
+
+        $content = $data['content'] ?? null;
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store("courses/{$course->id}", 'public');
+            $content = '/storage/' . $path;
+        }
 
         $maxOrder = $section->objects()->max('sort_order') ?? 0;
 
         $section->objects()->create([
             'type'             => $data['type'],
             'title'            => $data['title'],
-            'content'          => $data['content'] ?? null,
+            'content'          => $content,
             'duration_minutes' => $data['duration_minutes'] ?? null,
             'sort_order'       => $maxOrder + 1,
         ]);
@@ -236,10 +245,17 @@ class CourseController extends Controller
 
         $data = $request->validate([
             'title'            => 'required|string|max:255',
-            'content'          => 'nullable|string|max:50000',
+            'content'          => 'nullable|string|max:100000',
+            'file'             => 'nullable|file|max:51200',
             'duration_minutes' => 'nullable|integer|min:1',
         ]);
 
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store("courses/{$course->id}", 'public');
+            $data['content'] = '/storage/' . $path;
+        }
+
+        unset($data['file']);
         $object->update($data);
 
         return back()->with('flash', ['success' => 'Content updated.']);
@@ -252,6 +268,54 @@ class CourseController extends Controller
         $object->delete();
 
         return back()->with('flash', ['success' => 'Content removed.']);
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  ADMIN — Reorder & Upload
+    // ─────────────────────────────────────────────────────────
+
+    public function reorderSections(Request $request, Course $course): JsonResponse
+    {
+        $this->authorizeTenant($request, $course);
+
+        $data = $request->validate([
+            'order'   => 'required|array',
+            'order.*' => 'integer',
+        ]);
+
+        foreach ($data['order'] as $index => $sectionId) {
+            $course->sections()->where('id', $sectionId)->update(['sort_order' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function reorderObjects(Request $request, CourseSection $section): JsonResponse
+    {
+        $course = $section->course;
+        $this->authorizeTenant($request, $course);
+
+        $data = $request->validate([
+            'order'   => 'required|array',
+            'order.*' => 'integer',
+        ]);
+
+        foreach ($data['order'] as $index => $objectId) {
+            $section->objects()->where('id', $objectId)->update(['sort_order' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function upload(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|max:51200',
+        ]);
+
+        $path = $request->file('file')->store('courses/uploads', 'public');
+
+        return response()->json(['url' => '/storage/' . $path]);
     }
 
     // ─────────────────────────────────────────────────────────

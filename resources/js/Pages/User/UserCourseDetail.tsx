@@ -99,10 +99,18 @@ export default function UserCourseDetail({ course, assignment, completedObjectId
                         </div>
 
                         {/* Render content by type */}
-                        {activeObject.type === 'text' && (
-                            <div className="prose prose-sm max-w-none text-slate-700 whitespace-pre-wrap">
-                                {activeObject.content}
-                            </div>
+                        {activeObject.type === 'text' && activeObject.content && (
+                            <div
+                                className="prose prose-sm max-w-none text-slate-700
+                                    [&_h2]:text-lg [&_h2]:font-bold [&_h2]:mt-4 [&_h2]:mb-2
+                                    [&_h3]:text-base [&_h3]:font-semibold [&_h3]:mt-3 [&_h3]:mb-1
+                                    [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5
+                                    [&_blockquote]:border-l-4 [&_blockquote]:border-slate-300 [&_blockquote]:pl-4 [&_blockquote]:italic
+                                    [&_a]:text-[#495B67] [&_a]:underline
+                                    [&_mark]:bg-yellow-200 [&_mark]:px-0.5 [&_mark]:rounded
+                                    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:my-3"
+                                dangerouslySetInnerHTML={{ __html: activeObject.content }}
+                            />
                         )}
                         {activeObject.type === 'video' && activeObject.content && (
                             <div className="aspect-video bg-slate-100 rounded-lg overflow-hidden">
