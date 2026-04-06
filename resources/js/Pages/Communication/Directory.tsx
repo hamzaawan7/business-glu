@@ -459,12 +459,21 @@ export default function Directory({ members, filters, departments, locations, st
 
                         {/* Actions */}
                         <div className="px-6 py-4 border-t border-gray-100 flex justify-between">
-                            <button
-                                onClick={() => { setViewMember(null); openEdit(viewMember); }}
-                                className="px-4 py-2 text-sm font-medium text-[#495B67] hover:bg-gray-100 rounded-lg transition-colors"
-                            >
-                                <Icon name="pencil-square" className="w-4 h-4 inline-block" /> Edit Profile
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => { setViewMember(null); openEdit(viewMember); }}
+                                    className="px-4 py-2 text-sm font-medium text-[#495B67] hover:bg-gray-100 rounded-lg transition-colors"
+                                >
+                                    <Icon name="pencil-square" className="w-4 h-4 inline-block" /> Edit Profile
+                                </button>
+                                <button
+                                    onClick={() => { setViewMember(null); router.get(route('directory.user-training', viewMember.id)); }}
+                                    className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors hover:opacity-90"
+                                    style={{ backgroundColor: '#495B67' }}
+                                >
+                                    <Icon name="book-open" className="w-4 h-4 inline-block" /> Training
+                                </button>
+                            </div>
                             <button
                                 onClick={() => setViewMember(null)}
                                 className="px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"

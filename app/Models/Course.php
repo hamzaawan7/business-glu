@@ -18,14 +18,18 @@ class Course extends Model
         'cover_image',
         'status',
         'is_mandatory',
+        'auto_assign_new_hires',
         'estimated_minutes',
         'published_at',
+        'scheduled_publish_at',
     ];
 
     protected $casts = [
-        'is_mandatory'      => 'boolean',
-        'estimated_minutes' => 'integer',
-        'published_at'      => 'datetime',
+        'is_mandatory'           => 'boolean',
+        'auto_assign_new_hires'  => 'boolean',
+        'estimated_minutes'      => 'integer',
+        'published_at'           => 'datetime',
+        'scheduled_publish_at'   => 'datetime',
     ];
 
     /* ── Relations ────────────────────────────────────── */

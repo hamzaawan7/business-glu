@@ -145,6 +145,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/directory', [DirectoryController::class, 'index'])->name('directory.index');
     Route::patch('/directory/{member}', [DirectoryController::class, 'updateProfile'])->name('directory.update-profile');
     Route::post('/directory/bulk-department', [DirectoryController::class, 'bulkUpdateDepartment'])->name('directory.bulk-department');
+    Route::get('/directory/{user}/training', [CourseController::class, 'userTrainingOverview'])->name('directory.user-training');
     Route::get('/knowledge-base', [KnowledgeBaseController::class, 'index'])->name('kb.index');
     Route::post('/knowledge-base/categories', [KnowledgeBaseController::class, 'storeCategory'])->name('kb.store-category');
     Route::patch('/knowledge-base/categories/{category}', [KnowledgeBaseController::class, 'updateCategory'])->name('kb.update-category');
@@ -198,6 +199,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/courses/assignments/{assignment}', [CourseController::class, 'removeAssignment'])->name('courses.remove-assignment');
     Route::post('/courses/categories', [CourseController::class, 'storeCategory'])->name('courses.store-category');
     Route::delete('/courses/categories/{category}', [CourseController::class, 'destroyCategory'])->name('courses.destroy-category');
+    Route::get('/courses/templates', [CourseController::class, 'templates'])->name('courses.templates');
+    Route::post('/courses/from-template', [CourseController::class, 'createFromTemplate'])->name('courses.from-template');
+    Route::post('/courses/{course}/duplicate', [CourseController::class, 'duplicateCourse'])->name('courses.duplicate');
+    Route::post('/courses/{course}/save-as-template', [CourseController::class, 'saveAsTemplate'])->name('courses.save-as-template');
+    Route::post('/courses/{course}/segment-assign', [CourseController::class, 'segmentAssign'])->name('courses.segment-assign');
+    Route::delete('/courses/audience-rules/{rule}', [CourseController::class, 'removeAudienceRule'])->name('courses.remove-audience-rule');
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::patch('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
@@ -394,6 +401,7 @@ Route::middleware(['auth', 'verified'])->prefix('help-desk')->name('help-desk.')
 Route::middleware(['auth', 'verified'])->prefix('courses')->name('courses.')->group(function () {
     Route::get('/{course}', [CourseController::class, 'userCourseDetail'])->name('detail');
     Route::post('/objects/{object}/complete', [CourseController::class, 'completeObject'])->name('complete-object');
+    Route::get('/certificates/{certificate}/download', [CourseController::class, 'downloadCertificate'])->name('certificate-download');
 });
 
 /*
